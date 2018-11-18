@@ -1,0 +1,103 @@
+mat-icon {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+mat-icon:hover {
+  cursor: pointer;
+}
+ul {
+  list-style: none;
+}
+
+.recipe {
+  width: 100%;
+  min-height: 100%;
+  overflow: auto;
+  position: relative;
+  text-align: center;
+  font-family: "ProductSansRegular", sans-serif;
+  background: #ee9ca7; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #ffdde1,
+    #ee9ca7
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #ffdde1,
+    #ee9ca7
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+.banner {
+  width: 100%;
+  height: 45vh;
+  position: absolute;
+  background-color: lightsteelblue;
+}
+.recipeCard {
+  width: 1200px; /* min-height: 1200px; */
+  padding: 10px;
+  margin-bottom: 50px;
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  left: 50%;
+  transform: translate(-50%);
+  top: 20vh;
+  background-color: white;
+}
+.rImage {
+  height: 300px;
+  width: 300px;
+  background-color: coral;
+}
+.rDesc {
+  height: 300px;
+  width: 900px;
+  background-color: darkmagenta;
+}
+.tes {
+  float: left;
+}
+.rInfo {
+  height: 250px;
+  width: 100%;
+  background-color: lawngreen;
+}
+.rData {
+  height: 50px;
+  width: 100%;
+  background-color: lightseagreen;
+}
+.rLower {
+  min-height: 300px;
+  width: 1200px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  background-color: deepskyblue;
+}
+.ingredients {
+  width: 300px;
+  height: 100%;
+  text-align: left;
+  background-color: darkorange;
+}
+.method {
+  height: 100%;
+  width: 900px;
+  text-align: left;
+  background-color: antiquewhite;
+}
+.up {
+  color: orange;
+}
+.down {
+  color: blue;
+}

@@ -1,0 +1,48 @@
+<div class="navbar">
+  <div class="navbar-content">
+    <div class="logo-area">
+      <div class="logo-container" [routerLinkActive]="['active']" [routerLink]="['/']">
+        <a class="logo" [routerLink]="['/']">Recipeasy</a>
+      </div>
+    </div>
+
+    <div class="navbar-area">
+      <div class="nav-item" [routerLinkActive]="['active']" [routerLink]="['/']">
+        <div class="nav-link-area"><a class="nav-link" [routerLinkActive]="['active']" [routerLink]="['/']">Home</a></div>
+      </div>
+      <div *ngIf="authService.loggedIn()" class="nav-item dropdown">
+        <div class="nav-link-area" [routerLinkActive]="['active']" [routerLink]="['/recipes/saved']"><a class="nav-link drp-btn"
+            [routerLinkActive]="['active']" [routerLink]="['/recipes']">Saved</a></div>
+        <ul class="drp-nav">
+          <li class="nav-sub-item"><a class="nav-sub-link" [routerLinkActive]="['active']" [routerLink]="['/recipes/saved']">Recipes</a></li>
+          <li class="nav-sub-item"><a class="nav-sub-link" [routerLinkActive]="['active']" [routerLink]="['/cookbooks']">Cookbooks</a></li>
+        </ul>
+      </div>
+      <div *ngIf="authService.loggedIn()" class="nav-item" [routerLinkActive]="['active']" [routerLink]="['recipes/saved']">
+        <div class="nav-link-area"><a class="nav-link" [routerLinkActive]="['active']" [routerLink]="['recipes/saved']">Published</a></div>
+      </div>
+      <div *ngIf="authService.loggedIn()" class="nav-item" [routerLinkActive]="['active']" [routerLink]="['recipes/create']">
+        <div class="nav-link-area"><a class="nav-link" [routerLinkActive]="['active']" [routerLink]="['recipes/create']">Create</a></div>
+      </div>
+    </div>
+
+    <div class="account-area">
+      <div class="account-container">
+        <div *ngIf="!authService.loggedIn()" class="nav-item" [routerLinkActive]="['active']" [routerLink]="['/login']">
+          <div class="nav-link-area">
+            <a class="nav-link" [routerLinkActive]="['active']" [routerLink]="['/login']">Log in</a>
+          </div>
+        </div>
+        <div *ngIf="!authService.loggedIn()" class="nav-item" [routerLinkActive]="['active']" [routerLink]="['/register']">
+          <div class="nav-link-area"><a class="nav-link" [routerLinkActive]="['active']" [routerLink]="['/register']">Register</a></div>
+        </div>
+        <div *ngIf="authService.loggedIn()" class="nav-item" [routerLinkActive]="['active']" [routerLink]="['/profile']">
+          <div class="nav-link-area"><a class="nav-link" [routerLinkActive]="['active']" [routerLink]="['/profile']">Profile</a></div>
+        </div>
+        <div *ngIf="authService.loggedIn()" class="nav-item" (click)="onLogoutClick()" href="#">
+          <div class="nav-link-area"><a class="nav-link" (click)="onLogoutClick()" href="#">Log out</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

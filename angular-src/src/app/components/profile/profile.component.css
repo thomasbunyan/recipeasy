@@ -1,0 +1,15 @@
+.profile-page {
+  min-height: 100%;
+  overflow: hidden;
+}
+
+.profile-card {
+  margin: auto;
+  background-color: #fff;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  border-radius: 5px;
+  text-align: center;
+  margin-top: 20px;
+  padding: 20px;
+  width: 300px;
+}

@@ -1,0 +1,12 @@
+<div class="profile-page">
+  <div *ngIf="user">
+    <div class="profile-card">
+      <h2>{{ user.username }}</h2>
+      <p>{{ user.email }}</p>
+      <div class="profile-stats">
+        <p>Recipe/Cookbook views: 1525</p>
+        <p>Score: 144</p>
+      </div>
+    </div>
+  </div>
+</div>

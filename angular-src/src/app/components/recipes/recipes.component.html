@@ -1,0 +1,112 @@
+<div class="dash" (scroll)="onWindowScroll($event)" (click)="windowClick($event)" oncontextmenu="return false;">
+  <div class="content">
+    <div class="search-bar">
+      <div class="bar" [ngClass]="{ sticky: scrolledPast }" id="bar">
+        <input class="search-input" type="text" [(ngModel)]="filterQuery" (input)="updateSearch()" placeholder="Search for a recipe or cookbook" />
+        <div class="filter" (click)="filterActive = !filterActive"><mat-icon class="filter-icon">filter_list</mat-icon></div>
+        <div class="filter-menu" [ngClass]="{ showFilter: filterActive, showTopOptions: sortType == 'top' }">
+          <div class="filterSort">
+            <div id="sortHot" class="sortItem" [ngClass]="{ selectedItem: sortType == 'hot' }" (click)="sortType = 'hot'">HOT</div>
+            <div id="sortTop" class="sortItem" [ngClass]="{ selectedItem: sortType == 'top' }" (click)="sortType = 'top'">TOP</div>
+            <div id="sortNew" class="sortItem" [ngClass]="{ selectedItem: sortType == 'new' }" (click)="sortType = 'new'">NEW</div>
+          </div>
+          <div class="filterTime" *ngIf="sortType == 'top'">
+            <div id="timeDay" class="timeItem" [ngClass]="{ selectedItem: timeType == 'day' }" (click)="timeType = 'day'">DAY</div>
+            <div id="timeWeek" class="timeItem" [ngClass]="{ selectedItem: timeType == 'week' }" (click)="timeType = 'week'">WEEK</div>
+            <div id="timeMonth" class="timeItem" [ngClass]="{ selectedItem: timeType == 'month' }" (click)="timeType = 'month'">MONTH</div>
+            <div id="timeYear" class="timeItem" [ngClass]="{ selectedItem: timeType == 'year' }" (click)="timeType = 'year'">YEAR</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="main-area">
+      <div class="cookbookTitle">
+        <h2 class="tTitle">Cookbooks</h2>
+        <div class="tNav">
+          <mat-icon class="scrollButton" (click)="scrollCookbooks('left', ref)" [ngClass]="{ unclickable: cookbookPos === 'left' }">chevron_left</mat-icon>
+          <mat-icon class="scrollButton" (click)="scrollCookbooks('right', ref)" [ngClass]="{ unclickable: cookbookPos === 'right' }">chevron_right</mat-icon>
+        </div>
+      </div>
+      <div class="cookbooks" #ref>
+        <div class="cookbook" *ngFor="let cookbook of cookbooks">
+          <div class="tImage">
+            <img src="../../../assets/imgs/christmas.png" class="tPic" />
+            <div class="tImageOverlay"><mat-icon class="tImageFav">favorite_border</mat-icon></div>
+          </div>
+          <div class="tInfo">
+            <h4>{{ cookbook.name }}</h4>
+            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit.</p>
+            <p class="tFol">15,352 followers.</p>
+          </div>
+        </div>
+      </div>
+      <div class="recipeTitle"><h2 class="rTitle">Recipes</h2></div>
+      <div class="recipes">
+        <table class="recipeTable noHighlight" style="border-collapse: collapse">
+          <thead>
+            <tr>
+              <th></th>
+              <th>recipe</th>
+              <th>type</th>
+              <th><mat-icon title="Cooking time">access_time</mat-icon></th>
+              <th><mat-icon title="Added">calendar_today</mat-icon></th>
+              <th></th>
+              <th>views</th>
+              <th>score</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="recipeItem" *ngFor="let recipe of searchList; let i = index" (click)="viewRecipe(recipe._id)" (contextmenu)="onRightClick($event, recipe, optionsMenu)">
+              <td>
+                <mat-icon class="newIcon" *ngIf="!isSaved(recipe._id)" (click)="$event.stopPropagation(); toggleSave(recipe._id)">favorite_border</mat-icon>
+                <mat-icon class="newIcon icoFilled" *ngIf="isSaved(recipe._id)" (click)="$event.stopPropagation(); toggleSave(recipe._id)">favorite</mat-icon>
+              </td>
+              <td>{{ recipe.name }}</td>
+              <td>{{ recipe.mealType }}</td>
+              <td>{{ getTotalTime(recipe) }}</td>
+              <td title="{{recipe.date}}">{{ getTimeAgo(recipe.date) }}</td>
+              <td>
+                <mat-icon class="newIcon moreOptions" (click)="$event.stopPropagation(); moreOptions($event, recipe, optionsMenu)">more_horiz</mat-icon>
+                <div class="moreOptionsPanel" [ngClass]="{ hide: !recipe.showOptions, cookBookSelector: updateParent }" (click)="$event.stopPropagation()" #optionsMenu>
+                  <ul>
+                    <li class="optionItem" (click)="toggleSave(recipe._id)">
+                      <div class="optionItemContent" *ngIf="!isSaved(recipe._id)">Save to your recipes</div>
+                      <div class="optionItemContent" *ngIf="isSaved(recipe._id)">Remove from your recipes</div>
+                    </li>
+                    <li class="optionItem" (mouseover)="updateParent = true" (mouseleave)="updateParent = false">
+                      <div class="optionItemContent">
+                        Add to cookbook
+                        <mat-icon>chevron_right</mat-icon>
+                        <div class="addToBook" [ngClass]="{ hide: openWindow == undefined }">
+                          <ul>
+                            <li *ngFor="let cookbook of usersCookbooks.author" class="addElementElement">
+                              <div class="addElement" (click)="addToCookbook(cookbook, recipe)" [ngClass]="{ hide: openWindow == undefined }">{{ cookbook.cookbook }}</div>
+                            </li>
+                            <li><div class="addElement addElementBottom" (click)="addToCookbook('new', recipe)" [ngClass]="{ hide: openWindow == undefined }">Create new cookbook</div></li>
+                          </ul>
+                        </div>
+                      </div>
+                    </li>
+                    <li class="optionItem" (click)="copyMessage(recipe)">
+                      <div class="optionItemContent">
+                        <mat-icon class="linkIcon">link_icon</mat-icon>
+                        Copy recipe link
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </td>
+              <td>{{ recipe.views }}</td>
+              <td>{{ recipe.score }}</td>
+              <td>
+                <mat-icon class="newIcon" [ngClass]="{ upvote: recipe.vote == 'up' }" (click)="$event.stopPropagation(); castVote('up', recipe)">arrow_upward</mat-icon>
+                <mat-icon class="newIcon" [ngClass]="{ downvote: recipe.vote == 'down' }" (click)="$event.stopPropagation(); castVote('down', recipe)">arrow_downward</mat-icon>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

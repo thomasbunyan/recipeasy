@@ -1,0 +1,88 @@
+<div class="home">
+  <div class="content" *ngIf="!authService.loggedIn()">
+    <div class="slogan">
+      <h1>Recipes made easy.</h1>
+      <h6>Loads of ideas, 100% free.</h6>
+    </div>
+    <div class="button-container">
+      <button [routerLinkActive]="['active']" [routerLink]="['/register']" class="sign-up">
+        SIGN UP
+      </button>
+    </div>
+  </div>
+
+  <div class="content2" *ngIf="authService.loggedIn()">
+    <div class="search-bar">
+      <input type="text" class="search input-field" [(ngModel)]="searchQuery" (keyup.enter)="enterSearch()" placeholder="Search">
+    </div>
+    <div class="picked">
+      <div class="picked-card">
+        <div class="cookbookTitle">
+          <h2 class="tTitle">Early morning breakfast</h2>
+          <div class="tNav">
+            <i class="fas fa-chevron-left" (click)="scrollCookbooks('left', ref)" [ngClass]="{'unclickable': cookbookPos === 'left'}"></i>
+            <i class="fas fa-chevron-right" (click)="scrollCookbooks('right', ref)" [ngClass]="{'unclickable': cookbookPos === 'right'}"
+              class="fas fa-chevron-right" style="margin-left: 15px; padding-right: 20px"></i>
+          </div>
+        </div>
+        <div class="cookbooks" #ref>
+          <div class="cookbook" *ngFor="let cookbook of cookbooks">
+            <div class="tImage">
+              <img src="../../../assets/imgs/christmas.png" class="tPic">
+              <div class="tImageOverlay" (click)="viewCookbook(cookbook)">
+                <i class="tImageFav far fa-heart" *ngIf="true" (click)="$event.stopPropagation(); saveCookbook(cookbook)"></i>
+                <i class="tImageFav fas fa-heart" *ngIf="false" (click)="$event.stopPropagation(); saveCookbook(cookbook)"></i>
+              </div>
+            </div>
+            <div class="tInfo">
+              <h4 class="tInfo-title" (click)="viewCookbook(cookbook)">{{cookbook}}</h4>
+              <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit.</p>
+              <p class="tFol">15,352 followers.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="dash-area">
+      <div class="info"></div>
+      <div class="trending">
+        <h3 class="trending-title">Trending recipes</h3>
+        <div class="trending-recipe" *ngFor="let recipe of recipes" (click)="viewRecipe(recipe)">
+          {{recipe.name}}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer">
+    <div class="upper-footer">
+      <div class="uf-content">
+        <div class="uf-content-table uf-left">
+          <h2 class="table-header">Links</h2>
+          <div class="table-item"><a href="#"><i class="table-icon fas fa-home"></i>Home</a></div>
+          <div class="table-item"><a href="#"><i class="table-icon fas fa-briefcase"></i>Work</a></div>
+          <div class="table-item"><a href="#"><i class="table-icon fas fa-user"></i>About</a></div>
+          <div class="table-item"><a href="#"><i class="table-icon fas fa-paper-plane"></i>Contact</a></div>
+        </div>
+        <div class="uf-content-table">
+          <h2 class="table-header">Recipeasy</h2>
+          <div class="table-item"><a href="#"><i class="table-icon fas fa-envelope"></i>thomaspaulbunyan@gmail.com</a></div>
+          <div class="table-item">
+            <li><i class="socials fab fa-twitter"></i></li>
+            <li><i class="socials fab fa-linkedin"></i></li>
+            <li><i class="socials fab fa-github"></i></li>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="lower-footer">
+      <div class="lf-content">
+        <div class="lf-content-left">
+          <span class="author">Thomas Bunyan</span>
+        </div>
+        <div class="lf-content-right">
+          Copyright © 2018.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

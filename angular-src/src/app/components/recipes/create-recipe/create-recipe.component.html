@@ -1,0 +1,125 @@
+<div class="page">
+  <div class="container">
+    <h1 class="title">Create a recipe</h1>
+    <div class="public-switch noselect">
+      <div class="switch-button" [ngClass]="{'switch-good': public}" (click)="public=true">Public</div>
+      <div class="switch-button switch-right" [ngClass]="{'switch-bad': !public}" (click)="public=false">Private</div>
+    </div>
+    <div class="title-area">
+      <h3 style="margin-top:30px; margin-bottom:-5px">Details</h3>
+      <label class="input-area">
+        <input type="text" class="input-field" [(ngModel)]="title" [ngClass]="{'error': errors[0].err==true }" name="title"
+          placeholder=" " maxlength="64">
+        <span class="input-placeholder">Title <i class="fas fa-question-circle" title="Give your recipe a name"></i></span>
+      </label>
+    </div>
+    <div class="description-area">
+      <label class="input-area">
+        <textarea class="input-field" rows="4" type="text" maxlength="199" [(ngModel)]="description" [ngClass]="{'error': errors[1].err==true }" name="description"
+          placeholder=" "></textarea>
+        <span class="input-placeholder">Description <i class="fas fa-question-circle" title="Add a short description of the recipe"></i></span>
+      </label>
+    </div>
+    <div class="meta-area">
+      <h3 style="margin-bottom:20px">Information</h3>
+      <div class="recipe-type">
+        <div class="custom-select">
+          <select class="type-box" [(ngModel)]="mealType">
+            <option disabled selected value style="display:none" value="-1">Select</option>
+            <option class="type-option" *ngFor="let type of recipeTypes" value="{{type}}">{{type}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="recipe-time">
+        <div class="cook-time">
+          <span style="display: table; padding-left: 15px; padding-bottom: 5px"><i class="far fa-clock" style="padding-right: 5px;"></i>
+            Prep</span>
+          <input class="time-input" type="text" [(ngModel)]="prepTime" [ngClass]="{'error': errors[2].err==true }" (keydown)="timeInput($event, 'prep')"
+            placeholder="00:00" maxlength="5" onpaste="return false" (focusout)="clickOut('prep', prepTime)" (focusin)="prepTime=''">
+        </div>
+        <div class="cook-time">
+          <span style="display: table; padding-left: 15px; padding-bottom: 5px"><i class="far fa-clock" style="padding-right: 5px;"></i>
+            Cook</span>
+          <input class="time-input" type="text" [(ngModel)]="cookTime" [ngClass]="{'error': errors[3].err==true }" (keydown)="timeInput($event, 'cook')"
+            placeholder="00:00" maxlength="5" onpaste="return false" (focusout)="clickOut('cook', cookTime)" (focusin)="cookTime=''">
+        </div>
+      </div>
+      <div class="recipe-skill">
+        <h4>Difficulty</h4>
+        <div class="skill-switch noselect">
+          <div class="switch-button" style="width:25%" [ngClass]="{'switch-med': difficulty==0}" (click)="difficulty=0">Easy</div>
+          <div class="switch-button switch-middle" style="width:50%" [ngClass]="{'switch-good': difficulty==1}" (click)="difficulty=1">Intermediate</div>
+          <div class="switch-button switch-right" style="width:25%" [ngClass]="{'switch-bad': difficulty==2}" (click)="difficulty=2">Hard</div>
+        </div>
+      </div>
+      <div class="recipe-servings">
+        <label class="input-area" style="margin-top:15px">
+          <input type="text" class="input-field" [(ngModel)]="servings" [ngClass]="{'error': errors[6].err==true }" name="servings" placeholder=" " (keydown)="enterInt($event)">
+          <span class="input-placeholder">Servings <i class="fas fa-question-circle" title="Number of serving this recipe makes"></i></span>
+        </label>
+      </div>
+    </div>
+    <div class="ingredients-area">
+      <h3 style="margin-bottom:15px">Ingredients</h3>
+      <div class="added-ingredients">
+        <div class="added-ingredient" *ngFor="let ingredient of ingredients; let i = index">
+          <div class="add-ingredients" *ngIf="ingredient.editItem!=true">
+            <div class="entered-field spacing wide">{{ingredient.food}}</div>
+            <div class="entered-field spacing">{{ingredient.amount}}</div>
+            <div class="entered-field spacing">{{ingredient.unit}}</div>
+            <div class="button" (click)="ingredient.editItem=true; ingredientDetail = ingredient.detail;"><i class="far fa-edit"></i></div>
+            <div class="button" style="background-color:#cc0033;" (click)="removeIngredient(i)"><i class="fas fa-trash-alt"></i></div>
+          </div>
+          <div class="add-ingredients" *ngIf="ingredient.editItem==true" (keyup.enter)="updateIngredient(ingredient, i, addedFood, addedAmount, addedUnit); addedFood.value='';
+          addedAmount.value=''; addedUnit.value=''; ingredient.editItem=false">
+            <input type="text" class="input-field spacing wide" placeholder="{{ingredient.food}}" value="{{ingredient.food}}"
+              #addedFood>
+            <input type="text" class="input-field spacing" placeholder="{{ingredient.amount}}" value="{{ingredient.amount}}"
+              #addedAmount>
+            <input type="text" class="input-field spacing" placeholder="{{ingredient.unit}}" value="{{ingredient.unit}}"
+              #addedUnit>
+            <div class="button" (click)="addIngredientDetail(ingredient)"><i class="fas fa-cog"></i></div>
+            <div class="button" (click)="updateIngredient(ingredient, i, addedFood, addedAmount, addedUnit); addedFood.value='';
+            addedAmount.value=''; addedUnit.value=''; ingredient.editItem=false"><i
+                class="far fa-save"></i></div>
+          </div>
+        </div>
+      </div>
+      <div class="add-ingredients" (keyup.enter)="addIngredient(food, amount, unit, ingField); food=''; amount=''; unit=''">
+        <input type="text" class="input-field spacing wide" [(ngModel)]="food" placeholder="Ingredient" #ingField>
+        <input type="text" class="input-field spacing" [(ngModel)]="amount" placeholder="Amount">
+        <input type="text" class="input-field spacing" [(ngModel)]="unit" placeholder="Unit">
+        <div class="button" (click)="addIngredientDetail()"><i class="fas fa-cog"></i></div>
+        <div class="button" (click)="addIngredient(food, amount, unit, ingField); food=''; amount=''; unit=''"><i class="fas fa-plus"></i></div>
+      </div>
+      <div class="ingredient-error">{{ingredientError}}</div>
+    </div>
+    <div class="method-area">
+      <h3 style="margin-bottom:15px">Method</h3>
+      <div class="added-steps">
+        <div class="added-step" *ngFor="let step of method; let i = index">
+          <div class="view-step" *ngIf="step.editItem!=true">
+            <p class="step-info"><span style="font-weight: 800">Step {{i+1}}:</span> {{step.step}}</p>
+            <div class="method-buttons">
+              <div class="button" (click)="step.editItem=true"><i class="far fa-edit"></i></div>
+              <div class="button" style="background-color:#cc0033;" (click)="removeStep(i)"><i class="fas fa-trash-alt"></i></div>
+            </div>
+          </div>
+          <div class="view-step" *ngIf="step.editItem==true" (keyup.enter)="updateStep(stepField.value, i)">
+            <textarea class="input-field spacing wide" (keydown)="disableEnter($event)" rows="3" type="text" maxlength="184"
+              value="{{step.step}}" placeholder="{{step.step}}" #stepField></textarea>
+            <div class="method-buttons">
+              <div class="button" (click)="updateStep(stepField.value, i); stepField.value=''; step.editItem=false"><i
+                  class="far fa-save"></i></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="add-ingredients" (keyup.enter)="addStep(step); step=''">
+        <textarea class="input-field spacing wide" (keydown)="disableEnter($event)" rows="3" type="text" maxlength="184"
+          [(ngModel)]="step" [ngClass]="{'error': errors[8].err==true }" placeholder="Add a step"></textarea>
+      </div>
+    </div>
+    <input class="submit-button" (click)="onRecipeSubmit()" type="button" value="SAVE">
+  </div>
+</div>

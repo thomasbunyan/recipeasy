@@ -1,0 +1,21 @@
+<div class="verify">
+  <div class="splash" *ngIf="splash">
+    <div class="infoBox">
+      <div class="message">
+        Success! Your account has been verified. You will now be redirected to the next page where you can login.
+      </div>
+      <div class="load">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+      </div>
+    </div>
+  </div>
+  <div class="verify" *ngIf="expired">
+    <div class="infoBox">
+      <div class="message">
+        Uh oh! Looks like that token has expired. Click the button to receive a new link to activate your account.
+      </div>
+    </div>
+  </div>
+</div>

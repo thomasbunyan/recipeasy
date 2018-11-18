@@ -1,0 +1,33 @@
+<div class="cookbook-page">
+  <div class="info-wrapper">
+    <div class="cookbook-info">
+      <div class="cookbook-image" (click)="editCookbook()"></div>
+      <div>
+        <h5>Public: {{!cookbook.private}}</h5>
+        <h1 class="clickable" (click)="editCookbook()">{{cookbook.name}} <span class="edit-button"><i class="far fa-edit"></i></span></h1>
+        <small>Created by: {{author}}</small>
+        <div class="cookbook-description" (click)="editCookbook()">{{cookbook.description}} Lorem ipsum dolor sit amet
+          consectetur adipisicing
+          elit. Tempore, maiores atque, ea delectus facere repellendus incidunt mollitia provident necessitatibus
+          aspernatur magni dignissimos quibusdam odio!</div>
+      </div>
+    </div>
+    <div class="cookbook-recipes">
+      <h2>Recipes:</h2>
+      <table class="cb-table">
+        <tr>
+          <th></th>
+          <th>Recipe</th>
+          <th><i class="far fa-calendar-alt"></i></th>
+          <th></th>
+        </tr>
+        <tr class="cb-table-row" *ngFor="let recipe of cookbookRecipes; let i = index">
+          <td><i class="far fa-heart"></i></td>
+          <td>{{recipe.name}}</td>
+          <td>DATE ADDED IN HERE</td>
+          <td><i class="fas fa-times" (click)="removeRecipe(i)"></i></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>

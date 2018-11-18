@@ -1,0 +1,15 @@
+.nav {
+  height: 60px;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  position: fixed;
+  z-index: 100 !important;
+}
+.container {
+  height: calc(100% - 60px);
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  margin-top: 60px;
+}
