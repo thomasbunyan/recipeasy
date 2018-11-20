@@ -17,17 +17,20 @@ export class HomeComponent implements OnInit {
 
   recipes = [2, 2, 2, 2, 2, 2, 2, 2, 2, 2];
 
-
-  constructor(private authService: AuthService,
+  constructor(
+    private authService: AuthService,
     private titleService: Title,
     private router: Router,
-    private recipeService: RecipeService) { }
+    private recipeService: RecipeService
+  ) {}
 
   ngOnInit() {
     this.titleService.setTitle("Recipeasy");
-    this.recipeService.getRecipe().subscribe(data => {
-      this.recipes = data.recipes.slice(0, 10)
-    });
+    if (localStorage.getItem("user")) {
+      this.recipeService.getRecipes().subscribe(data => {
+        this.recipes = data.recipes.slice(0, 10);
+      });
+    }
   }
 
   enterSearch() {
@@ -35,21 +38,29 @@ export class HomeComponent implements OnInit {
     } else {
       // Do the search.
       // console.log(this.searchQuery);
-      this.router.navigate(['/recipes'], { queryParams: { search_query: this.searchQuery } });
+      this.router.navigate(["/recipes"], {
+        queryParams: { search_query: this.searchQuery }
+      });
     }
   }
 
   scrollCookbooks(dir, ref) {
     if (dir === "left") {
-      ref.scrollTo({ left: ref.scrollLeft - (ref.offsetWidth * 0.75), behavior: "smooth" });
-      if ((ref.scrollLeft - (ref.offsetWidth * 0.75)) <= 0) {
+      ref.scrollTo({
+        left: ref.scrollLeft - ref.offsetWidth * 0.75,
+        behavior: "smooth"
+      });
+      if (ref.scrollLeft - ref.offsetWidth * 0.75 <= 0) {
         this.cookbookPos = "left";
       } else {
         this.cookbookPos = "none";
       }
     } else {
-      ref.scrollTo({ left: ref.scrollLeft + (ref.offsetWidth * 0.75), behavior: "smooth" });
-      if ((ref.scrollLeft + (ref.offsetWidth * 0.75)) >= ref.offsetWidth) {
+      ref.scrollTo({
+        left: ref.scrollLeft + ref.offsetWidth * 0.75,
+        behavior: "smooth"
+      });
+      if (ref.scrollLeft + ref.offsetWidth * 0.75 >= ref.offsetWidth) {
         this.cookbookPos = "right";
       } else {
         this.cookbookPos = "none";
@@ -59,11 +70,11 @@ export class HomeComponent implements OnInit {
 
   viewRecipe(recipe) {
     const id = "5be354e89712648a88d84126";
-    this.router.navigate(['/recipe', id]);
+    this.router.navigate(["/recipe", id]);
   }
   viewCookbook(cookbook) {
     const id = "5bed5c8a36fda544901eaeff";
-    this.router.navigate(['/cookbook', id]);
+    this.router.navigate(["/cookbook", id]);
   }
   saveCookbook(cookbook) {
     console.log("save" + cookbook);

@@ -1,6 +1,5 @@
 import { Injectable } from "@angular/core";
 import { Http, Headers } from "@angular/http";
-import "rxjs/add/operator/map";
 import { tokenNotExpired } from "angular2-jwt";
 
 @Injectable()
@@ -15,7 +14,7 @@ export class AuthService {
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
     return this.http
-      .post("http://localhost:3000/users/register", user, { headers: headers })
+      .post("http://localhost:3000/users/", user, { headers: headers })
       .map(res => res.json());
   }
 
@@ -53,7 +52,7 @@ export class AuthService {
       id: user.id,
       username: user.username
     };
-    localStorage.setItem("id_token", token);
+    localStorage.setItem("id_token", "bearer " + token);
     localStorage.setItem("user", JSON.stringify(storeUser));
     this.authToken = token;
     this.user = user;

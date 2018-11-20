@@ -3,25 +3,22 @@ import { Http, Headers } from "@angular/http";
 
 @Injectable()
 export class CookbookService {
-  constructor(private http: Http) { }
+  constructor(private http: Http) {}
 
-  addCookbook(initialRecipe, author) {
-    const newCookbook = {
-      name: "Give your cookbook a name",
+  addCookbook(initialRecipe) {
+    const cookbook = {
+      title: "Give your cookbook a name",
       description: "Add a description",
-      recipes: [initialRecipe],
-      author: author,
-      date: new Date().getTime(),
-      private: true,
-      views: 0,
-      followers: 0,
-      tags: []
+      public: false,
+      recipes: [{ recipe: initialRecipe, timestamp: new Date() }],
+      date: new Date()
     };
 
     const headers = new Headers();
+    headers.append("Authorization", localStorage.getItem("id_token"));
     headers.append("Content-Type", "application/json");
     return this.http
-      .post("http://localhost:3000/cookbooks/add", newCookbook, {
+      .post("http://localhost:3000/cookbooks", cookbook, {
         headers: headers
       })
       .map(res => res.json());
@@ -32,21 +29,19 @@ export class CookbookService {
     headers.append("Authorization", localStorage.getItem("id_token"));
     headers.append("Content-Type", "application/json");
     return this.http
-      .get("http://localhost:3000/cookbooks/all", {
+      .get("http://localhost:3000/cookbooks/", {
         headers: headers
       })
       .map(res => res.json());
   }
 
-  getCookBookById(cookbookId, updateViews) {
+  getCookBookById(cookbookId) {
     const headers = new Headers();
+    headers.append("Authorization", localStorage.getItem("id_token"));
     headers.append("Content-Type", "application/json");
     return this.http
-      .get("http://localhost:3000/cookbooks/cookbook/" + cookbookId, {
-        headers: headers,
-        params: {
-          update: updateViews
-        }
+      .get("http://localhost:3000/cookbooks/" + cookbookId, {
+        headers: headers
       })
       .map(res => res.json());
   }
@@ -64,24 +59,36 @@ export class CookbookService {
       .map(res => res.json());
   }
 
-  updateCookbook(id, update) {
-    const headers = new Headers();
-    headers.append("Authorization", localStorage.getItem("id_token"));
-    headers.append("Content-Type", "application/json");
-    return this.http
-      .put("http://localhost:3000/cookbooks/cookbook/" + id + "/update", update, {
-        headers: headers
-      })
-      .map(res => res.json());
-  }
+  updateCookbook(cookbook, data) {
+    let cookbookID = "";
+    const update = [];
+    if (data.type === "recipes") {
+      cookbookID = cookbook.cookbook._id;
+      const cookbookRecipes = cookbook.cookbook.recipes.slice(0);
+      const index = cookbookRecipes.findIndex(
+        x => x.recipe === data.recipe._id || x.recipe._id === data.recipe._id
+      );
+      if (index === -1) {
+        cookbookRecipes.push({
+          recipe: data.recipe._id,
+          timestamp: new Date()
+        });
+      }
+      update.push({ name: "recipes", value: cookbookRecipes });
+    } else if (data.type === "info") {
+      cookbookID = cookbook;
+      data.data.forEach(e => {
+        update.push(e);
+      });
+    }
 
-  updateCookbookRecipes(id, newRecipes) {
-    const update = { recipes: newRecipes };
+    console.log(update);
+
     const headers = new Headers();
     headers.append("Authorization", localStorage.getItem("id_token"));
     headers.append("Content-Type", "application/json");
     return this.http
-      .put("http://localhost:3000/cookbooks/cookbook/" + id + "/update", update, {
+      .patch("http://localhost:3000/cookbooks/" + cookbookID, update, {
         headers: headers
       })
       .map(res => res.json());

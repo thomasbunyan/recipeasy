@@ -7,7 +7,7 @@ export class RecipeValidateService {
   constructor(
     private userService: UserService,
     private recipeService: RecipeService
-  ) { }
+  ) {}
 
   validateIngredient(ingredient) {
     if (ingredient.length > 15) {
@@ -77,11 +77,7 @@ export class RecipeValidateService {
       servings: recipeData.servings,
       ingredients: recipeData.ingredients,
       method: recipeData.method,
-      author: user,
-      timeStamp: date.getTime(),
-      date: date,
-      score: 0,
-      views: 0
+      author: user
     };
 
     // TODO: Nutritional info
@@ -90,6 +86,7 @@ export class RecipeValidateService {
   }
 
   castVote(vote, currentVote, recipe, user, callback) {
+    console.log(recipe);
     let amount = 0;
     if (currentVote === undefined) {
       currentVote = "none";
@@ -117,7 +114,11 @@ export class RecipeValidateService {
     this.recipeService.voteRecipe(recipe._id, amount).subscribe(data => {
       if (data.success) {
         this.userService
-          .addRecipeData(user, { type: "vote", vote: currentVote }, recipe._id)
+          .addUserData(
+            user,
+            { data: "recipes", type: "vote", vote: currentVote },
+            recipe._id
+          )
           .subscribe(data => {
             if (!data.success) {
               console.log("Failed to cast vote");
@@ -133,7 +134,7 @@ export class RecipeValidateService {
 
   toggleSave(userData, recipeId) {
     this.userService
-      .addRecipeData(userData, { type: "save" }, recipeId)
+      .addUserData(userData, { data: "recipes", type: "save" }, recipeId)
       .subscribe(data => {
         if (!data.success) {
           console.log("Failed to toggle save");

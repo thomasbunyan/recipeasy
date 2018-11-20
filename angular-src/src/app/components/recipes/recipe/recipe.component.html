@@ -4,35 +4,34 @@
     <div class="rImage"></div>
     <div class="rDesc">
       <div class="rInfo">
-        <h3>{{recipe.name}}</h3>
+        <h3>{{ recipe.name }}</h3>
         <div class="mealType">
-          <p class="tes">Type: {{recipe.mealType}}</p>
-          <p class="tes">Cooking time: {{recipe.cookTime}}</p>
-          <p class="tes">Prep time: {{recipe.prepTime}}</p>
-          <p class="tes">Difficulty: {{recipe.difficulty}}</p>
-          <p class="tes">Servings: {{recipe.servings}}</p>
+          <p class="tes">Type: {{ recipe.mealType }}</p>
+          <p class="tes">Cooking time: {{ recipe.cookTime }}</p>
+          <p class="tes">Prep time: {{ recipe.prepTime }}</p>
+          <p class="tes">Difficulty: {{ recipe.difficulty }}</p>
+          <p class="tes">Servings: {{ recipe.servings }}</p>
         </div>
       </div>
       <div class="rData">
-        <mat-icon class="upVote" [ngClass]="{up: vote === 'up'}" (click)="castVote('up')">arrow_upward</mat-icon>
-        <mat-icon class="downVote" [ngClass]="{down: vote === 'down'}" (click)="castVote('down')">arrow_downward</mat-icon>
-        <mat-icon class="newIcon" *ngIf="!saved" (click)="toggleSave()">favorite_border</mat-icon>
-        <mat-icon class="newIcon" *ngIf="saved" (click)="toggleSave()">favorite</mat-icon>
-        <p class="tes">Score: {{recipe.score}}</p>
-        <p class="tes">Views: {{recipe.views}}</p>
-        <p class="tes">Author: {{recipe.author}}</p>
+        <mat-icon class="upVote" [ngClass]="{ up: recipe.vote == 'up' }" (click)="castVote('up')">arrow_upward</mat-icon>
+        <mat-icon class="downVote" [ngClass]="{ down: recipe.vote == 'down' }" (click)="castVote('down')">arrow_downward</mat-icon>
+        <mat-icon class="newIcon" *ngIf="recipe.saved != true" (click)="toggleSave()">favorite_border</mat-icon>
+        <mat-icon class="newIcon" *ngIf="recipe.saved == true" (click)="toggleSave()">favorite</mat-icon>
+        <p class="tes">Score: {{ recipe.score }}</p>
+        <p class="tes">Views: {{ recipe.views }}</p>
+        <p class="tes">Author: {{ recipe.author }}</p>
       </div>
     </div>
     <div class="rLower">
       <div class="ingredients">
         <ul>
-          <li *ngFor="let ingredient of recipe.ingredients">{{ingredient.amount}} {{ingredient.unit}}
-            {{ingredient.food}} </li>
+          <li *ngFor="let ingredient of recipe.ingredients">{{ ingredient.amount }} {{ ingredient.unit }} {{ ingredient.food }}</li>
         </ul>
       </div>
       <div class="method">
         <ul>
-          <li *ngFor="let step of recipe.method; index as i">{{i + 1}}. {{step.step}}</li>
+          <li *ngFor="let step of recipe.method; index as i">{{ i + 1 }}. {{ step.step }}</li>
         </ul>
       </div>
     </div>

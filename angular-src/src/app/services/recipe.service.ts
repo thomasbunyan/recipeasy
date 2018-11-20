@@ -8,27 +8,30 @@ export class RecipeService {
 
   addRecipe(recipe) {
     const headers = new Headers();
+    headers.append("Authorization", localStorage.getItem("id_token"));
     headers.append("Content-Type", "application/json");
     return this.http
-      .post("http://localhost:3000/recipes/addRecipe", recipe, {
+      .post("http://localhost:3000/recipes/", recipe, {
         headers: headers
       })
       .map(res => res.json());
   }
 
-  getRecipe() {
+  getRecipes() {
     const headers = new Headers();
+    headers.append("Authorization", localStorage.getItem("id_token"));
     headers.append("Content-Type", "application/json");
     return this.http
-      .get("http://localhost:3000/recipes/getRecipes", { headers: headers })
+      .get("http://localhost:3000/recipes", { headers: headers })
       .map(res => res.json());
   }
 
   getRecipesBySelection(selection) {
     const headers = new Headers();
+    headers.append("Authorization", localStorage.getItem("id_token"));
     headers.append("Content-Type", "application/json");
     return this.http
-      .get("http://localhost:3000/recipes/getRecipesFromSelection", {
+      .get("http://localhost:3000/recipes/selection", {
         headers: headers,
         params: {
           selection: selection
@@ -37,26 +40,29 @@ export class RecipeService {
       .map(res => res.json());
   }
 
-  getRecipeById(id, updateViews) {
+  getRecipe(id) {
     const headers = new Headers();
+    headers.append("Authorization", localStorage.getItem("id_token"));
     headers.append("Content-Type", "application/json");
-    headers.append("id", id);
     return this.http
-      .get("http://localhost:3000/recipes/getRecipeById", {
-        headers: headers,
-        params: { id: id, update: updateViews }
+      .get("http://localhost:3000/recipes/" + id, {
+        headers: headers
       })
       .map(res => res.json());
   }
 
   voteRecipe(id, vote) {
-    const update = { id: id, voteType: vote };
     const headers = new Headers();
+    headers.append("Authorization", localStorage.getItem("id_token"));
     headers.append("Content-Type", "application/json");
     return this.http
-      .post("http://localhost:3000/recipes/castVote", update, {
-        headers: headers
-      })
+      .patch(
+        "http://localhost:3000/recipes/" + id + "/" + vote,
+        {},
+        {
+          headers: headers
+        }
+      )
       .map(res => res.json());
   }
 }

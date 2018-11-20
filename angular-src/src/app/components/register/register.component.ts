@@ -14,15 +14,17 @@ export class RegisterComponent implements OnInit {
   email: String;
   emailConf: String;
   password: String;
-  specificError = [, , , ,];
-  specificMessage = [, , , ,];
+  specificError = [, , , , ];
+  specificMessage = [, , , , ];
 
-  constructor(private validateService: UserValidateService,
+  constructor(
+    private validateService: UserValidateService,
     private authService: AuthService,
     private userService: UserService,
-    private router: Router) { }
+    private router: Router
+  ) {}
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   onRegisterSubmit() {
     const user = {
@@ -53,7 +55,9 @@ export class RegisterComponent implements OnInit {
         }
 
         // Validate password.
-        const passwordRes = this.validateService.validatePassword(user.password);
+        const passwordRes = this.validateService.validatePassword(
+          user.password
+        );
         if (!passwordRes.res) {
           this.specificError[3] = true;
           this.specificMessage[3] = passwordRes.error;
@@ -65,7 +69,6 @@ export class RegisterComponent implements OnInit {
             return false;
           }
         }
-        console.log("Register");
         this.authService.registerUser(user).subscribe(data => {
           if (data.success) {
             this.router.navigate(["/login"]);
@@ -100,7 +103,10 @@ export class RegisterComponent implements OnInit {
         }
       });
     } else if (type === "emailConf" && this.emailConf !== undefined) {
-      const emailConfRes = this.validateService.validateEmailConf(this.email, this.emailConf);
+      const emailConfRes = this.validateService.validateEmailConf(
+        this.email,
+        this.emailConf
+      );
       if (!emailConfRes.res) {
         this.specificError[2] = true;
         this.specificMessage[2] = emailConfRes.error;

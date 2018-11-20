@@ -24,7 +24,6 @@ export class RecipesComponent implements OnInit {
   timeType: String = "day";
   sortType: String = "hot";
 
-  timeStamp: any;
   cookbookPos = "left";
   scrolledPast = false;
 
@@ -44,12 +43,12 @@ export class RecipesComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private titleService: Title
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.userId = JSON.parse(localStorage.getItem("user")).id;
     this.activatedRoute.queryParams.subscribe(params => {
-      this.searchQuery = params['search_query'];
+      this.searchQuery = params["search_query"];
     });
     if (this.searchQuery) {
       this.titleService.setTitle("" + this.searchQuery);
@@ -58,11 +57,33 @@ export class RecipesComponent implements OnInit {
     }
 
     // TODO: If search query exists, apply it to the GET.
-
-    this.recipeService.getRecipe().subscribe(data => {
+    this.recipeService.getRecipes().subscribe(data => {
       if (data.success) {
         this.recipes = data.recipes;
         this.searchList = this.recipes;
+
+        this.userService.getUserData().subscribe(data => {
+          if (data.success) {
+            this.usersRecipes = data.recipes;
+            this.usersCookbooks = data.cookbooks;
+            this.recipes.forEach(x => {
+              const indexVote = this.usersRecipes.voted.findIndex(
+                y => y.recipe._id === x._id
+              );
+              const indexSave = this.usersRecipes.saved.findIndex(
+                y => y.recipe._id === x._id
+              );
+              if (indexVote !== -1) {
+                x.vote = this.usersRecipes.voted[indexVote].vote;
+              }
+              if (indexSave !== -1) {
+                x.saved = true;
+              }
+            });
+          } else {
+            console.log("User data could not be acquired");
+          }
+        });
       } else {
         console.log("Recipes could not be acquired");
       }
@@ -74,32 +95,6 @@ export class RecipesComponent implements OnInit {
         console.log("Cookbooks could not be acquired");
       }
     });
-    this.userService.getUserRecipes().subscribe(data => {
-      if (data.success) {
-        this.usersRecipes = data.item;
-        this.recipes.forEach(x => {
-          const index = this.usersRecipes.voted.findIndex(y => y.recipe === x._id);
-          if (index !== -1) {
-            x.vote = this.usersRecipes.voted[index].vote;
-          }
-        });
-
-      } else {
-        console.log("User recipes could not be acquired");
-      }
-    });
-    this.userService.getUserCookbooks().subscribe(data => {
-      if (data.success) {
-        if (this.usersCookbooks !== undefined) {
-          this.usersCookbooks = data.item;
-        } else {
-          this.usersCookbooks = [];
-        }
-      } else {
-        console.log("User cookbooks could not be acquired");
-      }
-    });
-    this.timeStamp = new Date().getTime();
   }
 
   @HostListener("window:scroll", ["$event"])
@@ -129,38 +124,17 @@ export class RecipesComponent implements OnInit {
     this.searchList = newFoods;
   }
 
-  isSaved(recipeId) {
-    if (this.usersRecipes === undefined) {
-      return false;
-    }
-    const saved = this.usersRecipes.saved;
-    const index = saved.findIndex(x => x.recipe === recipeId);
-    if (index !== -1) {
-      return true;
-    }
-    return false;
-  }
-
-  // isVoted(recipeId, voteType) {
-  //   if (this.usersRecipes === undefined) {
-  //     return false;
-  //   }
-  //   const index = this.usersRecipes.findIndex(x => x.id === recipeId);
-  //   if (index !== -1 && this.usersRecipes[index].vote === voteType) {
-  //     return true;
-  //   }
-  //   return false;
-  // }
-
-  toggleSave(id) {
+  toggleSave(recipe) {
     if (!this.saveLock) {
       this.saveLock = true;
-      const userData = { id: this.userId, recipes: this.usersRecipes };
+      const userData = { id: this.userId, data: this.usersRecipes };
       this.userService
-        .addRecipeData(userData, { type: "save" }, id)
+        .addUserData(userData, { data: "recipes", type: "save" }, recipe._id)
         .subscribe(data => {
           if (!data.success) {
             console.log("Failed to toggle save");
+          } else {
+            recipe.saved = !recipe.saved;
           }
           this.saveLock = false;
         });
@@ -174,8 +148,7 @@ export class RecipesComponent implements OnInit {
   castVote(vote, recipe) {
     if (!this.voteLock) {
       this.voteLock = true;
-
-      const user = { id: this.userId, recipes: this.usersRecipes };
+      const user = { id: this.userId, data: this.usersRecipes };
       const result = this.recipeValidateService.castVote(
         vote,
         recipe.vote,
@@ -187,23 +160,67 @@ export class RecipesComponent implements OnInit {
       );
       recipe.score = result.newScore;
       recipe.vote = result.newVote;
-
       this.voteLock = false;
     }
   }
 
-  getVote(recipe) {
-    if (this.usersRecipes === undefined) {
-      return;
+  addToCookbook(cookbook, recipe) {
+    if (cookbook === "new") {
+      this.cookbookService.addCookbook(recipe._id).subscribe(data => {
+        if (!data.success) {
+          console.log("Could not create cookbook");
+        } else {
+          const user = { id: this.userId, data: this.usersCookbooks };
+          const update = { data: "cookbooks", type: "author" };
+          this.userService
+            .addUserData(user, update, data.cookbook._id)
+            .subscribe(data => {
+              if (!data.success) {
+                console.log("Could not update user data");
+              } else {
+                this.usersCookbooks = data.cookbooks;
+              }
+            });
+        }
+      });
+    } else {
+      this.cookbookService
+        .updateCookbook(cookbook, { type: "recipes", data: recipe })
+        .subscribe(data => {
+          if (!data.success) {
+            console.log("Unable to add recipe");
+          } else {
+            console.log(data.cookbook.recipes);
+          }
+        });
+
+      // this.cookbookService
+      //   .getCookBookById(book.cookbook, false)
+      //   .subscribe(data => {
+      //     if (data.success) {
+      //       const recipes = data.cookbook.recipes.slice(0);
+      //       const index = recipes.findIndex(x => x === recipe._id);
+      //       if (index !== -1) {
+      //         console.log("Duplicate");
+      //         return;
+      //       }
+      //       recipes.push(recipe._id);
+      //       this.cookbookService
+      //         .updateCookbookRecipes(data.cookbook._id, recipes)
+      //         .subscribe(data => {
+      //           if (!data.success) {
+      //             console.log("Could not add to cookbook");
+      //           }
+      //         });
+      //     }
+      //   });
     }
-    const index = this.usersRecipes.findIndex(x => x.id === recipe._id);
-    if (index !== -1) {
-      recipe.vote = this.usersRecipes[index].vote;
-    }
+    this.openWindow.showOptions = false;
+    this.openWindow = undefined;
   }
 
   getTimeAgo(timeStamp) {
-    let diff = (this.timeStamp - new Date(timeStamp).getTime()) / 60000;
+    let diff = (new Date().getTime() - new Date(timeStamp).getTime()) / 60000;
     if (isNaN(diff)) {
       return "not a valid time";
     } else if (diff < 1) {
@@ -302,46 +319,6 @@ export class RecipesComponent implements OnInit {
       recipe.showOptions = true;
       this.openWindow = recipe;
     }
-  }
-
-  addToCookbook(book, recipe) {
-    if (book === "new") {
-      this.cookbookService
-        .addCookbook(recipe._id, this.userId)
-        .subscribe(data => {
-          if (!data.success) {
-            console.log("Could not create cookbook");
-          } else {
-            const user = { id: this.userId, cookbooks: this.usersCookbooks };
-            this.userService
-              .addCookbookData(user, { type: "author" }, data.cookbook)
-              .subscribe(data => {
-                if (!data.success) {
-                  console.log("Could not add cookbook");
-                }
-              });
-          }
-        });
-    } else {
-      this.cookbookService.getCookBookById(book.cookbook, false).subscribe(data => {
-        if (data.success) {
-          const recipes = data.cookbook.recipes.slice(0);
-          const index = recipes.findIndex(x => x === recipe._id);
-          if (index !== -1) {
-            console.log("Duplicate");
-            return;
-          }
-          recipes.push(recipe._id);
-          this.cookbookService.updateCookbookRecipes(data.cookbook._id, recipes).subscribe(data => {
-            if (!data.success) {
-              console.log("Could not add to cookbook");
-            }
-          });
-        }
-      });
-    }
-    this.openWindow.showOptions = false;
-    this.openWindow = undefined;
   }
 
   copyMessage(recipe) {

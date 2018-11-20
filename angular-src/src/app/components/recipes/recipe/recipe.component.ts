@@ -17,9 +17,8 @@ export class RecipeComponent implements OnInit {
   recipe: any = {};
   usersRecipes: any;
 
-  vote = "none";
-  saved = false;
   voteLock = false;
+  saveLock = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -33,36 +32,31 @@ export class RecipeComponent implements OnInit {
   ngOnInit() {
     this.recipeId = this.route.snapshot.paramMap.get("id");
     this.user = JSON.parse(localStorage.getItem("user"));
-    this.recipeService.getRecipeById(this.recipeId, true).subscribe(data => {
-      if (data.success) {
-        this.recipe = data.recipe;
-        this.titleService.setTitle(this.recipe.name);
-      } else {
-        console.log("Could not acquire recipe");
+    this.recipeService.getRecipe(this.recipeId).subscribe(data => {
+      if (!data.success) {
         this.router.navigate(["/recipes"]);
+      } else {
+        this.recipe = data.recipe;
+        this.titleService.setTitle(this.recipe.title);
+        this.userService.getUserData().subscribe(data => {
+          if (data.success) {
+            this.usersRecipes = data.recipes;
+            const indexVote = this.usersRecipes.voted.findIndex(
+              y => y.recipe === this.recipe._id
+            );
+            const indexSave = this.usersRecipes.saved.findIndex(
+              y => y.recipe._id === this.recipe._id
+            );
+            if (indexVote !== -1) {
+              this.recipe.vote = this.usersRecipes.voted[indexVote].vote;
+            }
+            if (indexSave !== -1) {
+              this.recipe.saved = true;
+            }
+          }
+        });
       }
     });
-    this.userService.getUserRecipes().subscribe(data => {
-      if (data.success) {
-        this.usersRecipes = data.item;
-        this.setUserData();
-      }
-    });
-  }
-
-  setUserData() {
-    let found = false;
-    let i = 0;
-    for (; i < this.usersRecipes.length; i++) {
-      if (this.usersRecipes[i].id === this.recipeId) {
-        found = true;
-        break;
-      }
-    }
-    if (found) {
-      this.vote = this.usersRecipes[i].vote;
-      this.saved = this.usersRecipes[i].saved;
-    }
   }
 
   castVote(vote) {
@@ -71,7 +65,7 @@ export class RecipeComponent implements OnInit {
       const userData = { id: this.user.id, recipes: this.usersRecipes };
       const newVote = this.recipeValidateService.castVote(
         vote,
-        this.vote,
+        this.recipe.vote,
         this.recipe,
         userData,
         () => {
@@ -79,13 +73,24 @@ export class RecipeComponent implements OnInit {
         }
       );
       this.recipe.score = newVote.newScore;
-      this.vote = newVote.newVote;
+      this.recipe.vote = newVote.newVote;
     }
   }
 
   toggleSave() {
-    this.saved = !this.saved;
-    const userData = { id: this.user.id, recipes: this.usersRecipes };
-    this.recipeValidateService.toggleSave(userData, this.recipe._id);
+    if (!this.saveLock) {
+      this.saveLock = true;
+      const userData = { id: this.user.id, data: this.usersRecipes };
+      this.userService
+        .addUserData(userData, { data: "recipes", type: "save" }, this.recipeId)
+        .subscribe(data => {
+          if (!data.success) {
+            console.log("Failed to toggle save");
+          } else {
+            this.recipe.saved = !this.recipe.saved;
+          }
+          this.saveLock = false;
+        });
+    }
   }
 }

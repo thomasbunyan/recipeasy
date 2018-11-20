@@ -59,10 +59,10 @@
           <tbody>
             <tr class="recipeItem" *ngFor="let recipe of searchList; let i = index" (click)="viewRecipe(recipe._id)" (contextmenu)="onRightClick($event, recipe, optionsMenu)">
               <td>
-                <mat-icon class="newIcon" *ngIf="!isSaved(recipe._id)" (click)="$event.stopPropagation(); toggleSave(recipe._id)">favorite_border</mat-icon>
-                <mat-icon class="newIcon icoFilled" *ngIf="isSaved(recipe._id)" (click)="$event.stopPropagation(); toggleSave(recipe._id)">favorite</mat-icon>
+                <mat-icon class="newIcon" *ngIf="recipe.saved != true" (click)="$event.stopPropagation(); toggleSave(recipe)">favorite_border</mat-icon>
+                <mat-icon class="newIcon icoFilled" *ngIf="recipe.saved == true" (click)="$event.stopPropagation(); toggleSave(recipe)">favorite</mat-icon>
               </td>
-              <td>{{ recipe.name }}</td>
+              <td>{{ recipe.title }}</td>
               <td>{{ recipe.mealType }}</td>
               <td>{{ getTotalTime(recipe) }}</td>
               <td title="{{recipe.date}}">{{ getTimeAgo(recipe.date) }}</td>
@@ -70,9 +70,9 @@
                 <mat-icon class="newIcon moreOptions" (click)="$event.stopPropagation(); moreOptions($event, recipe, optionsMenu)">more_horiz</mat-icon>
                 <div class="moreOptionsPanel" [ngClass]="{ hide: !recipe.showOptions, cookBookSelector: updateParent }" (click)="$event.stopPropagation()" #optionsMenu>
                   <ul>
-                    <li class="optionItem" (click)="toggleSave(recipe._id)">
-                      <div class="optionItemContent" *ngIf="!isSaved(recipe._id)">Save to your recipes</div>
-                      <div class="optionItemContent" *ngIf="isSaved(recipe._id)">Remove from your recipes</div>
+                    <li class="optionItem" (click)="toggleSave(recipe)">
+                      <div class="optionItemContent" *ngIf="recipe.saved != true">Save to your recipes</div>
+                      <div class="optionItemContent" *ngIf="recipe.saved == true">Remove from your recipes</div>
                     </li>
                     <li class="optionItem" (mouseover)="updateParent = true" (mouseleave)="updateParent = false">
                       <div class="optionItemContent">
@@ -81,7 +81,7 @@
                         <div class="addToBook" [ngClass]="{ hide: openWindow == undefined }">
                           <ul>
                             <li *ngFor="let cookbook of usersCookbooks.author" class="addElementElement">
-                              <div class="addElement" (click)="addToCookbook(cookbook, recipe)" [ngClass]="{ hide: openWindow == undefined }">{{ cookbook.cookbook }}</div>
+                              <div class="addElement" (click)="addToCookbook(cookbook, recipe)" [ngClass]="{ hide: openWindow == undefined }">{{ cookbook.cookbook.title }}</div>
                             </li>
                             <li><div class="addElement addElementBottom" (click)="addToCookbook('new', recipe)" [ngClass]="{ hide: openWindow == undefined }">Create new cookbook</div></li>
                           </ul>

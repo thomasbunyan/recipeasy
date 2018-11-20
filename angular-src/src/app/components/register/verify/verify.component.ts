@@ -22,32 +22,6 @@ export class VerifyComponent implements OnInit {
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
-      this.hash = params["token"];
-      if (this.hash == undefined) {
-        this.router.navigate(["/"]);
-      } else {
-        this.userService.validateHash(this.hash).subscribe(data => {
-          if (data.success) {
-            this.msg = data.msg;
-            if (!data.found) {
-              // Hash was invalid.
-              console.log("Invalid link");
-              this.router.navigate(["/"]);
-            } else if (!data.valid) {
-              // Hash has expired.
-              this.expired = true;
-              console.log("Link expired");
-            } else {
-              // Account is now active.
-              // Redirect to login.
-              this.splashScreen();
-              console.log("Account activated");
-            }
-          } else {
-            console.log("Failed to verify");
-          }
-        });
-      }
     });
   }
 

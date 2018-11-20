@@ -18,27 +18,18 @@ export class CookbooksComponent implements OnInit {
     private cookbookService: CookbookService,
     private titleService: Title,
     private router: Router
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.userId = JSON.parse(localStorage.getItem("user")).id;
-    this.userService.getUserCookbooks().subscribe(data => {
-      if (data.err) {
+    this.titleService.setTitle("Your cookbooks");
+    this.userService.getUserData().subscribe(data => {
+      if (!data.success) {
         console.log("Could not get cookbooks");
       } else {
-        const usersCookbooks = data.item.author.map(x => x.cookbook);
-        this.cookbookService
-          .getCookbooksFromSelection(usersCookbooks)
-          .subscribe(data => {
-            if (!data.success) {
-              console.log("ERROR2: Could not get cookbooks");
-            } else {
-              this.cookbooks = data.cookbooks;
-            }
-          });
+        const usersCookbooks = data.cookbooks.author;
       }
     });
-    this.titleService.setTitle("Your cookbooks");
   }
 
   viewCookbook(cookbook) {

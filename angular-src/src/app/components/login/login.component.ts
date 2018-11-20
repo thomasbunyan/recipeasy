@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
 
     this.authService.authenticateUser(user).subscribe(data => {
       if (data.success) {
-        this.authService.storeUserData(data.token, data.user);
+        this.authService.storeUserData(data.jwt, data.user);
         this.error = false;
         this.router.navigate(["/"]);
       } else {
@@ -54,10 +54,10 @@ export class LoginComponent implements OnInit {
 
   onRecoverSubmit() {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    let removeIllegal = this.recovery;
+    const removeIllegal = this.recovery;
     if (re.test(String(this.recovery).toLowerCase())) {
       // Recover using the email.
-    } else if (removeIllegal.replace(/\W/g, "") == this.recovery) {
+    } else if (removeIllegal.replace(/\W/g, "") === this.recovery) {
       // Recover using the username.
     } else {
       // Don't recover.
