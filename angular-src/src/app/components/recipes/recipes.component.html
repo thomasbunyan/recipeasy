@@ -29,13 +29,13 @@
       </div>
       <div class="cookbooks" #ref>
         <div class="cookbook" *ngFor="let cookbook of cookbooks">
-          <div class="tImage">
+          <div class="tImage" (click)="viewCookbook(cookbook)">
             <img src="../../../assets/imgs/christmas.png" class="tPic" />
             <div class="tImageOverlay"><mat-icon class="tImageFav">favorite_border</mat-icon></div>
           </div>
           <div class="tInfo">
-            <h4>{{ cookbook.name }}</h4>
-            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit.</p>
+            <h4>{{ cookbook.title }}</h4>
+            <p>{{ cookbook.description }}</p>
             <p class="tFol">15,352 followers.</p>
           </div>
         </div>

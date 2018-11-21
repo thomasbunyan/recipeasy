@@ -17,7 +17,7 @@ export class CookbookComponent implements OnInit {
   cookbook: any = "";
   cookbookRecipes: any = "";
   userId: any;
-  author: String;
+  owner: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -29,7 +29,6 @@ export class CookbookComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.author = "admin";
     this.userId = JSON.parse(localStorage.getItem("user")).id;
     this.cookbookId = this.route.snapshot.paramMap.get("id");
     this.cookbookService.getCookBookById(this.cookbookId).subscribe(data => {
@@ -38,11 +37,24 @@ export class CookbookComponent implements OnInit {
       } else {
         this.cookbook = data.cookbook;
         this.titleService.setTitle(this.cookbook.title);
+        if (
+          JSON.parse(localStorage.getItem("user")).username ===
+          this.cookbook.author
+        ) {
+          console.log("Author");
+          this.owner = true;
+        } else {
+          console.log("Not author");
+          this.owner = false;
+        }
       }
     });
   }
 
   editCookbook() {
+    if (!this.owner) {
+      return;
+    }
     const editDialog = this.dialog.open(EditCookbookDialogComponent, {
       data: {
         title: this.cookbook.title,
@@ -59,9 +71,9 @@ export class CookbookComponent implements OnInit {
           .updateCookbook(this.cookbookId, { type: "info", data: result })
           .subscribe(data => {
             if (!data.success) {
-              console.log("err");
+              console.log("Could not update cookbook");
             } else {
-              console.log(data);
+              this.cookbook = data.cookbook;
             }
           });
       }

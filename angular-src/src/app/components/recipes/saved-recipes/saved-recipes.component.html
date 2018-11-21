@@ -1,10 +1,29 @@
-<div class="viewRecipe">
-  <div *ngIf="!recipesEmpty" class="recipes">
-    <h3>All recipes</h3>
-    <div class="re" *ngFor="let recipe of recipes; let i = index">
-      <p (click)="viewRecipe(recipe._id)">{{ recipe.name }}</p>
-      <mat-icon (click)="removeRecipe(recipe._id, i)">delete</mat-icon>
-    </div>
+<div class="saved-recipes">
+  <div *ngIf="recipes.saved.length" class="recipe-card">
+    <h3>Saved recipes</h3>
+    <table mat-table [dataSource]="recipes.saved" class="recipe-table">
+      <ng-container matColumnDef="save">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let recipe">
+          <div class="remove"><i class="fas fa-heart" (click)="$event.stopPropagation(); removeSaved(recipe)"></i><i class="fas fa-times" (click)="$event.stopPropagation(); removeSaved(recipe)"></i></div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="recipe">
+        <th mat-header-cell *matHeaderCellDef>Recipe</th>
+        <td mat-cell *matCellDef="let recipe">{{ recipe.recipe.title }}</td>
+      </ng-container>
+      <ng-container matColumnDef="type">
+        <th mat-header-cell *matHeaderCellDef>Type</th>
+        <td mat-cell *matCellDef="let recipe">{{ recipe.recipe.mealType }}</td>
+      </ng-container>
+      <ng-container matColumnDef="added">
+        <th mat-header-cell *matHeaderCellDef class="end-column" title="Added"><i class="far fa-calendar-alt"></i></th>
+        <td mat-cell *matCellDef="let recipe" class="end-column">{{ getTimeAgo(recipe.timestamp) }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="['save', 'recipe', 'type', 'added']"></tr>
+      <tr mat-row *matRowDef="let myRowData; columns: ['save', 'recipe', 'type', 'added']" (click)="viewRecipe(myRowData)" class="element-row"></tr>
+    </table>
   </div>
-  <div *ngIf="recipesEmpty" class="recipes"><h3>No recipes added. Go add some.</h3></div>
+  <div *ngIf="!recipes.saved.length" class="recipe-card"><h3>No recipes added. Go add some.</h3></div>
 </div>

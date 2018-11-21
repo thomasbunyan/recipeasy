@@ -11,7 +11,7 @@ import { Router } from "@angular/router";
 })
 export class CookbooksComponent implements OnInit {
   userId: any;
-  cookbooks: any;
+  cookbooks = { saved: [] };
 
   constructor(
     private userService: UserService,
@@ -27,7 +27,8 @@ export class CookbooksComponent implements OnInit {
       if (!data.success) {
         console.log("Could not get cookbooks");
       } else {
-        const usersCookbooks = data.cookbooks.author;
+        this.cookbooks = data.cookbooks;
+        console.log(this.cookbooks);
       }
     });
   }

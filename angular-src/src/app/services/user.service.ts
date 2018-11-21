@@ -56,7 +56,10 @@ export class UserService {
           x => x.recipe === dataID || x.recipe._id === dataID
         );
         if (index === -1) {
-          userData.saved.push({ recipe: dataID, time: new Date() });
+          userData.saved.push({
+            recipe: dataID,
+            timestamp: new Date().getTime()
+          });
         } else {
           userData.saved.splice(index, 1);
         }
@@ -68,16 +71,19 @@ export class UserService {
           userData.voted.push({
             recipe: dataID,
             vote: update.vote,
-            time: new Date()
+            timestamp: new Date().getTime()
           });
         } else if (update.vote === "none") {
           userData.voted.splice(index, 1);
         } else {
           userData.voted[index].vote = update.vote;
-          userData.voted[index].time = new Date();
+          userData.voted[index].timestamp = new Date().getTime();
         }
       } else if (update.type === "author") {
-        userData.author.push({ recipe: dataID, time: new Date() });
+        userData.author.push({
+          recipe: dataID,
+          timestamp: new Date().getTime()
+        });
       }
       data.push({ name: "recipes", value: userData });
     } else if (update.data === "cookbooks") {
@@ -86,12 +92,18 @@ export class UserService {
           x => x.cookbook === dataID || x.cookbook._id === dataID
         );
         if (index === -1) {
-          userData.saved.push({ cookbook: dataID, time: new Date() });
+          userData.saved.push({
+            cookbook: dataID,
+            timestamp: new Date().getTime()
+          });
         } else {
           userData.saved.splice(index, 1);
         }
       } else if (update.type === "author") {
-        userData.author.push({ cookbook: dataID, time: new Date() });
+        userData.author.push({
+          cookbook: dataID,
+          timestamp: new Date().getTime()
+        });
       }
       data.push({ name: "cookbooks", value: userData });
     }

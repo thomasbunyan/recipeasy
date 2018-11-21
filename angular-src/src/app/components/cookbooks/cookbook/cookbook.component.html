@@ -1,14 +1,14 @@
 <div class="cookbook-page">
   <div class="info-wrapper">
     <div class="cookbook-info">
-      <div class="cookbook-image" (click)="editCookbook()"></div>
+      <div class="cookbook-image" [ngClass]="{ clickable: owner }" (click)="editCookbook()"></div>
       <div>
         <h5>Public: {{ cookbook.public }}</h5>
-        <h1 class="clickable" (click)="editCookbook()">
+        <h1 class="clickable" [ngClass]="{ clickable: owner }" (click)="editCookbook()">
           {{ cookbook.title }} <span class="edit-button"><i class="far fa-edit"></i></span>
         </h1>
-        <small>Created by: {{ author }}</small>
-        <div class="cookbook-description" (click)="editCookbook()">{{ cookbook.description }}</div>
+        <small>Created by: {{ cookbook.author }}</small>
+        <div class="cookbook-description" [ngClass]="{ clickable: owner }" (click)="editCookbook()">{{ cookbook.description }}</div>
       </div>
     </div>
     <div class="cookbook-recipes">

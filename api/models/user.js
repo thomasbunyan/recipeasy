@@ -23,9 +23,9 @@ const UserSchema = mongoose.Schema({
     required: true
   },
   date: {
-    type: Date,
+    type: Number,
     required: true,
-    default: new Date()
+    default: new Date().getTime()
   },
   preferences: {
     type: Array,
@@ -41,7 +41,7 @@ const UserSchema = mongoose.Schema({
           required: true
         },
         timestamp: {
-          type: Date,
+          type: Number,
           required: true
         }
       }
@@ -58,7 +58,7 @@ const UserSchema = mongoose.Schema({
           required: true
         },
         timestamp: {
-          type: Date,
+          type: Number,
           required: true
         }
       }
@@ -71,7 +71,7 @@ const UserSchema = mongoose.Schema({
           required: true
         },
         timestamp: {
-          type: Date,
+          type: Number,
           required: true
         }
       }
@@ -86,7 +86,7 @@ const UserSchema = mongoose.Schema({
           required: true
         },
         timestamp: {
-          type: Date,
+          type: Number,
           required: true
         }
       }
@@ -99,7 +99,7 @@ const UserSchema = mongoose.Schema({
           required: true
         },
         timestamp: {
-          type: Date,
+          type: Number,
           required: true
         }
       }

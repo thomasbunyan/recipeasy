@@ -113,6 +113,10 @@ export class RecipesComponent implements OnInit {
     }
   }
 
+  viewCookbook(cookbook) {
+    this.router.navigate(["cookbook", cookbook._id]);
+  }
+
   updateSearch() {
     const query = this.filterQuery;
     const newFoods = [];
