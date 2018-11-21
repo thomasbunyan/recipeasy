@@ -23,13 +23,13 @@
             <div class="tImage">
               <img src="../../../assets/imgs/christmas.png" class="tPic" />
               <div class="tImageOverlay" (click)="viewCookbook(cookbook)">
-                <i class="tImageFav far fa-heart" *ngIf="true" (click)="$event.stopPropagation(); saveCookbook(cookbook)"></i>
-                <i class="tImageFav fas fa-heart" *ngIf="false" (click)="$event.stopPropagation(); saveCookbook(cookbook)"></i>
+                <i class="tImageFav far fa-heart" *ngIf="cookbook.saved != true" (click)="$event.stopPropagation(); saveCookbook(cookbook)"></i>
+                <i class="tImageFav fas fa-heart" *ngIf="cookbook.saved == true" (click)="$event.stopPropagation(); saveCookbook(cookbook)"></i>
               </div>
             </div>
             <div class="tInfo">
-              <h4 class="tInfo-title" (click)="viewCookbook(cookbook)">{{ cookbook }}</h4>
-              <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit.</p>
+              <h4 class="tInfo-title" (click)="viewCookbook(cookbook)">{{ cookbook.title }}</h4>
+              <p>{{ cookbook.description }}</p>
               <p class="tFol">15,352 followers.</p>
             </div>
           </div>

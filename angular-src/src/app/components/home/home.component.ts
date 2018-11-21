@@ -1,6 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { AuthService } from "../../services/auth.service";
+import { UserService } from "../../services/user.service";
 import { RecipeService } from "../../services/recipe.service";
+import { CookbookService } from "../../services/cookbook.service";
 import { Title } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 
@@ -10,25 +12,49 @@ import { Router } from "@angular/router";
   styleUrls: ["./home.component.css"]
 })
 export class HomeComponent implements OnInit {
+  userId: any;
+
   searchQuery: String;
 
-  cookbooks = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+  recipes = [];
+  cookbooks = [];
   cookbookPos = "left";
 
-  recipes = [2, 2, 2, 2, 2, 2, 2, 2, 2, 2];
+  userCookbooks: any;
 
   constructor(
     private authService: AuthService,
+    private userService: UserService,
     private titleService: Title,
     private router: Router,
-    private recipeService: RecipeService
+    private recipeService: RecipeService,
+    private cookbookService: CookbookService
   ) {}
 
   ngOnInit() {
     this.titleService.setTitle("Recipeasy");
     if (localStorage.getItem("user")) {
+      this.userId = JSON.parse(localStorage.getItem("user")).id;
       this.recipeService.getRecipes().subscribe(data => {
         this.recipes = data.recipes.slice(0, 10);
+      });
+      this.cookbookService.getCookbooks().subscribe(data => {
+        if (data.success) {
+          this.cookbooks = data.cookbooks.slice(0, 10);
+          this.userService.getUserData().subscribe(data => {
+            if (data.success) {
+              this.userCookbooks = data.cookbooks;
+              this.cookbooks.forEach(x => {
+                const indexSave = this.userCookbooks.saved.findIndex(
+                  y => y.cookbook._id === x._id
+                );
+                if (indexSave !== -1) {
+                  x.saved = true;
+                }
+              });
+            }
+          });
+        }
       });
     }
   }
@@ -36,8 +62,6 @@ export class HomeComponent implements OnInit {
   enterSearch() {
     if (this.searchQuery === undefined || this.searchQuery === "") {
     } else {
-      // Do the search.
-      // console.log(this.searchQuery);
       this.router.navigate(["/recipes"], {
         queryParams: { search_query: this.searchQuery }
       });
@@ -69,14 +93,25 @@ export class HomeComponent implements OnInit {
   }
 
   viewRecipe(recipe) {
-    const id = "5be354e89712648a88d84126";
-    this.router.navigate(["/recipe", id]);
+    this.router.navigate(["/recipe", recipe._id]);
   }
   viewCookbook(cookbook) {
-    const id = "5bed5c8a36fda544901eaeff";
-    this.router.navigate(["/cookbook", id]);
+    this.router.navigate(["/cookbook", cookbook._id]);
   }
   saveCookbook(cookbook) {
-    console.log("save" + cookbook);
+    this.userService
+      .addUserData(
+        { id: this.userId, data: this.userCookbooks },
+        { data: "cookbooks", type: "save" },
+        cookbook._id
+      )
+      .subscribe(data => {
+        if (!data.success) {
+          console.log("Couldn't add cookbook");
+        } else {
+          this.userCookbooks = data.cookbooks;
+          cookbook.saved = !cookbook.saved;
+        }
+      });
   }
 }

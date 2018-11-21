@@ -25,8 +25,8 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    if (localStorage.getItem("user")) {
-      this.router.navigate(["/"]);
+    if (this.authService.loggedIn()) {
+      return this.router.navigate(["/"]);
     }
     this.titleService.setTitle("Login");
   }

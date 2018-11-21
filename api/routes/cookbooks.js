@@ -65,7 +65,7 @@ router.get("/:id", checkAuth, (req, res, next) => {
     .exec()
     .then((cookbook) => {
       if (!cookbook) {
-        res.status(200).json({
+        return res.status(200).json({
           success: false
         });
       } else if (!cookbook.public) {

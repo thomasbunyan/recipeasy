@@ -47,7 +47,6 @@ export class UserService {
   // ? update = {data(recipes/cookbooks), type(saved,...), ?vote}
   // ? dataID = 252dfs
   addUserData(user, update, dataID) {
-    console.log(update);
     const userData = Object.assign({}, user.data);
     const data = [];
     if (update.data === "recipes") {

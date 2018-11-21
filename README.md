@@ -14,6 +14,8 @@
 
 ### Discover<img src="https://imgur.com/cZTyVmd.jpg">
 
+### Cookbook/Edit cookbook<img src="https://imgur.com/YuZz9xg.jpg">
+
 ## Nex to add
 
 - Web scraper window
