@@ -33,7 +33,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.titleService.setTitle("Recipeasy");
-    if (localStorage.getItem("user")) {
+    if (this.authService.loggedIn()) {
       this.userId = JSON.parse(localStorage.getItem("user")).id;
       this.recipeService.getRecipes().subscribe(data => {
         this.recipes = data.recipes.slice(0, 10);

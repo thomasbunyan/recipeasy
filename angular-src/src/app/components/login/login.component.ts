@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { AuthService } from "../../services/auth.service";
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import { Title } from "@angular/platform-browser";
 
 @Component({
@@ -18,10 +18,13 @@ export class LoginComponent implements OnInit {
   error: boolean;
   errorMessage: String;
 
+  returnUrl: String = "/";
+
   constructor(
     private authService: AuthService,
     private router: Router,
-    private titleService: Title
+    private titleService: Title,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
@@ -29,6 +32,7 @@ export class LoginComponent implements OnInit {
       return this.router.navigate(["/"]);
     }
     this.titleService.setTitle("Login");
+    this.returnUrl = this.route.snapshot.queryParams["returnUrl"] || "/";
   }
 
   onLoginSubmit() {
@@ -41,7 +45,7 @@ export class LoginComponent implements OnInit {
       if (data.success) {
         this.authService.storeUserData(data.jwt, data.user);
         this.error = false;
-        this.router.navigate(["/"]);
+        this.router.navigate([this.returnUrl]);
       } else {
         if (data.notActive) {
           this.error = true;
