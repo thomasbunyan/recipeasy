@@ -48,6 +48,7 @@ export class CookbookService {
 
   getCookbooksFromSelection(selection) {
     const headers = new Headers();
+    headers.append("Authorization", localStorage.getItem("id_token"));
     headers.append("Content-Type", "application/json");
     return this.http
       .get("http://localhost:3000/cookbooks/selection", {

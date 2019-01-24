@@ -1,0 +1,52 @@
+<div class="recipePage">
+  <div class="recipePageArea">
+    <div class="breakLine"></div>
+    <div class="recipeHeader">
+      <div class="recipeDetails">
+        <div class="recipeTitle">
+          <h1>{{ recipe.title }}</h1>
+          <p>{{ recipe.description }}</p>
+        </div>
+        <div class="recipeButtons">
+          <i class="fas fa-arrow-up" (click)="castVote('up')" [ngClass]="{ upvote: recipe.vote == 'up' }"></i> <i class="fas fa-arrow-down" (click)="castVote('down')" [ngClass]="{ downvote: recipe.vote == 'down' }"></i>
+          <i class="fas fa-star" (click)="toggleSave()" [ngClass]="{ saved: recipe.saved }"></i> <i class="fas fa-ellipsis-v"></i>
+        </div>
+      </div>
+      <div class="recipeImage"></div>
+    </div>
+    <div class="breakLine"></div>
+    <div class="recipeInformation">
+      <div class="recipeIngredients half">
+        <div class="ingredientsList">
+          <h2>Ingredients</h2>
+          <p *ngFor="let ingredient of recipe.ingredients">{{ ingredient.food }}</p>
+        </div>
+      </div>
+      <div class="recipeMethod half">
+        <div class="methodList">
+          <h2>Method</h2>
+          <p *ngFor="let step of recipe.method; let i = index">{{ i + 1 }}. {{ step.step }}</p>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="recipeCard">
+      <div class="recipeHeader">
+        <div class="recipeImage"></div>
+        <div class="heading">
+          <h1>{{ recipe.title }}</h1>
+          <small class="recipeAuthor">{{ recipe.author }}</small>
+          <p class="recipeDescription">{{ recipe.description }}</p>
+        </div>
+      </div>
+      <div class="recipeInfo">
+        <mat-tab-group md-stretch-tabs>
+          <mat-tab label="Ingredients"> Content 1 </mat-tab>
+          <mat-tab label="Method"> Content 2 </mat-tab>
+        </mat-tab-group>
+      </div>
+      <div class="recipeFooter">
+        <small>Posted: {{ recipe.date | date }}</small>
+      </div>
+    </div> -->
+  </div>
+</div>

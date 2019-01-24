@@ -10,7 +10,8 @@ router.post("/", checkAuth, (req, res, next) => {
   let cookbook = new Cookbook({
     title: req.body.title,
     description: req.body.description,
-    public: req.body.public,
+    // public: req.body.public,
+    public: true,
     recipes: req.body.recipes,
     author: req.userData.user.username,
     date: req.body.date
@@ -46,6 +47,28 @@ router.get("/", checkAuth, (req, res, next) => {
       res.status(500).json({
         success: false,
         error: err
+      });
+    });
+});
+
+// Get cookbooks from a selection.
+router.get("/selection", checkAuth, (req, res, next) => {
+  const user = "admin";
+  const selectedCookbooks = req.query.selection;
+  Cookbook.find({ _id: { $in: selectedCookbooks }, $or: [{ public: true }, { author: user }] }, { new: true })
+    .populate("recipes.recipe")
+    .exec()
+    .then((cookbooks) => {
+      console.log(cookbooks);
+      res.status(200).json({
+        success: true,
+        cookbooks: cookbooks
+      });
+    })
+    .catch((error) => {
+      res.status(500).json({
+        success: false,
+        error: error
       });
     });
 });
@@ -101,26 +124,6 @@ router.get("/:id", checkAuth, (req, res, next) => {
     });
 });
 
-// Get cookbooks from a selection.
-router.get("/selection", checkAuth, (req, res, next) => {
-  const selectedCookbooks = req.query.selection;
-  Cookbook.find({ _id: { $in: selectedCookbooks }, public: true }, { new: true })
-    .populate("recipes.recipe")
-    .exec()
-    .then((cookbooks) => {
-      res.status(200).json({
-        success: true,
-        cookbooks: cookbooks
-      });
-    })
-    .catch((error) => {
-      res.status(500).json({
-        success: false,
-        error: err
-      });
-    });
-});
-
 // Update cookbook.
 router.patch("/:id", checkAuth, (req, res, next) => {
   const query = { _id: req.params.id, author: req.userData.user.username };
@@ -136,6 +139,7 @@ router.patch("/:id", checkAuth, (req, res, next) => {
     }
   }
   Cookbook.findOneAndUpdate(query, update, { new: true })
+    .populate("recipes.recipe")
     .exec()
     .then((cookbook) => {
       if (!cookbook) {

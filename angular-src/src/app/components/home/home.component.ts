@@ -1,8 +1,9 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, HostListener } from "@angular/core";
 import { AuthService } from "../../services/auth.service";
 import { UserService } from "../../services/user.service";
 import { RecipeService } from "../../services/recipe.service";
 import { CookbookService } from "../../services/cookbook.service";
+import { SidenavService } from "../sidenav/sidenav.service";
 import { Title } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 
@@ -21,6 +22,7 @@ export class HomeComponent implements OnInit {
   cookbookPos = "left";
 
   userCookbooks: any;
+  toggle = false;
 
   constructor(
     private authService: AuthService,
@@ -28,11 +30,16 @@ export class HomeComponent implements OnInit {
     private titleService: Title,
     private router: Router,
     private recipeService: RecipeService,
-    private cookbookService: CookbookService
+    private cookbookService: CookbookService,
+    private sidenavService: SidenavService
   ) {}
 
   ngOnInit() {
+    if (this.authService.loggedIn()) {
+      this.router.navigate(["/dashboard"]);
+    }
     this.titleService.setTitle("Recipeasy");
+    this.sidenavService.close();
     if (this.authService.loggedIn()) {
       this.userId = JSON.parse(localStorage.getItem("user")).id;
       this.recipeService.getRecipes().subscribe(data => {

@@ -5,26 +5,37 @@ import { Http, Headers } from "@angular/http";
 export class UserService {
   constructor(private http: Http) {}
 
-  // Check if username is unique.
-  checkUsername(username) {
-    const headers = new Headers();
-    headers.append("Content-Type", "application/json");
-    return this.http
-      .get("http://localhost:3000/users/unique/username", {
-        headers: headers,
-        params: { value: username }
-      })
-      .map(res => res.json());
-  }
+  // // Check if username is unique.
+  // checkUsername(username) {
+  //   const headers = new Headers();
+  //   headers.append("Content-Type", "application/json");
+  //   return this.http
+  //     .get("http://localhost:3000/users/unique/username", {
+  //       headers: headers,
+  //       params: { value: username }
+  //     })
+  //     .map(res => res.json());
+  // }
 
-  // Check if email is unique.
-  checkEmail(email) {
+  // // Check if email is unique.
+  // checkEmail(email) {
+  //   const headers = new Headers();
+  //   headers.append("Content-Type", "application/json");
+  //   return this.http
+  //     .get("http://localhost:3000/users/unique/email", {
+  //       headers: headers,
+  //       params: { value: email }
+  //     })
+  //     .map(res => res.json());
+  // }
+
+  // Check if username or email is unique.
+  checkUnique(query) {
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
     return this.http
-      .get("http://localhost:3000/users/unique/email", {
-        headers: headers,
-        params: { value: email }
+      .get("http://localhost:3000/users/unique/" + query, {
+        headers: headers
       })
       .map(res => res.json());
   }
@@ -63,6 +74,7 @@ export class UserService {
           userData.saved.splice(index, 1);
         }
       } else if (update.type === "vote") {
+        console.log("User data", userData);
         const index = userData.voted.findIndex(
           x => x.recipe === dataID || x.recipe._id === dataID
         );

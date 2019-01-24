@@ -1,0 +1,50 @@
+.sidenav {
+  /*** Vars ***/
+  --secondary-color: #5292ee;
+
+  width: 225px;
+  min-height: calc(100vh - 60px);
+  overflow: hidden;
+  /* background-color: #f8f9fa; */
+}
+
+.wrapper {
+  position: fixed;
+  background-color: #ffffff;
+  height: calc(100vh - 60px);
+  width: 225px;
+  overflow: hidden;
+}
+
+.navSection {
+  /* background-color: blueviolet; */
+  margin: 30px 0px;
+}
+.navSectionTitle {
+  margin-left: 15px;
+  font-size: 17px;
+  color: rgb(161, 161, 161);
+}
+
+.navItem {
+  width: 100%;
+  /* background-color: aquamarine; */
+  font-size: 15px;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+.navItem:hover {
+  background-color: #fff;
+  color: var(--secondary-color);
+}
+.navItem:hover i {
+  color: var(--secondary-color);
+}
+.navItem i {
+  padding-right: 10px;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}

@@ -1,20 +1,19 @@
 <div class="login">
-  <div class="content-area">
-    <div *ngIf="!forgot" class="login-form">
-      <h1 class="login-title">Login</h1>
-      <input class="input-field" id="usernameField" type="text" [(ngModel)]="username" name="username" placeholder="username" />
-      <input class="input-field" id="passwordField" type="password" [(ngModel)]="password" name="password" placeholder="password" />
-      <div *ngIf="error" class="errorMessage">
-        <p>{{ errorMessage }}</p>
-      </div>
-      <input class="login-button" (click)="onLoginSubmit()" type="button" value="Login" /> <a class="forgot-button" (click)="forgotPw()">Forgot your username or password?</a>
-      <a class="forgot-button" [routerLinkActive]="['active']" [routerLink]="['/register']">Don't have an account? Register!</a>
+  <div *ngIf="!forgot" class="login-form">
+    <h1 class="login-title">Log in</h1>
+    <input class="input-field" id="usernameField" type="text" [(ngModel)]="username" name="username" placeholder="username" />
+    <input class="input-field" id="passwordField" type="password" [(ngModel)]="password" name="password" placeholder="password" />
+    <div *ngIf="error" class="errorMessage">
+      <p>{{ errorMessage }}</p>
     </div>
+    <button mat-stroked-button class="login-button" (click)="onLoginSubmit()">Log in</button>
+    <!-- <input class="login-button" (click)="onLoginSubmit()" type="button" value="Login" /> -->
+    <a class="forgot-button" (click)="forgotPw()">Forgot your username or password?</a> <a class="forgot-button" [routerLinkActive]="['active']" [routerLink]="['/register']">Don't have an account? Register!</a>
+  </div>
 
-    <div *ngIf="forgot" class="login-form">
-      <h1 class="login-title">Recover</h1>
-      <input class="input-field" type="text" [(ngModel)]="recovery" name="recovery" placeholder="email or username" /> <input class="login-button" (click)="onRecoverSubmit()" type="button" value="Send recovery" />
-      <a class="forgot-button" (click)="forgotPw()">Go back.</a>
-    </div>
+  <div *ngIf="forgot" class="login-form">
+    <h1 class="login-title">Recover</h1>
+    <input class="input-field" type="text" [(ngModel)]="recovery" name="recovery" placeholder="email or username" /> <button mat-stroked-button class="login-button" (click)="onRecoverSubmit()">Send recovery</button>
+    <a class="forgot-button" (click)="forgotPw()">Go back.</a>
   </div>
 </div>

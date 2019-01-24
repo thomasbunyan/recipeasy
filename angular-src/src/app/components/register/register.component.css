@@ -1,103 +1,150 @@
 .register {
-  height: 100%;
+  min-height: 100vh;
   width: 100%;
+  overflow: hidden;
+  background-color: #fff;
   font-family: "ProductSansRegular";
+  color: #443c77;
 }
+
+/******* Nav *******/
+nav {
+  width: 86%;
+  margin: auto;
+  text-align: right;
+  margin-top: 50px;
+  padding: 1vh 20px;
+  overflow: hidden;
+  z-index: 100 !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+a {
+  text-decoration: none;
+  color: var(--main-dark-text);
+  font-size: 20px;
+  font-weight: 300;
+  margin: 0 10px;
+}
+.navLeft {
+  /* background-color: #0066ff; */
+  /* width: 450px; */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.navRight {
+  display: flex;
+  align-items: flex-end;
+}
+.logo {
+  padding: 0;
+  font-size: 32px;
+  font-weight: 900;
+  margin-right: 30px;
+}
+.subPoint {
+  padding: 0;
+  font-size: 18px;
+}
+.btnSmall {
+  background-color: #4286f5;
+  color: #fff;
+  border-radius: 5px;
+  font-size: 18px;
+  padding: 0.75em 1.1em;
+  text-align: center;
+}
+
+/*** Form ***/
 
 .content-area {
   height: 100%;
   width: 100%;
-  background: #2193b0; /* fallback for old browsers */
-  background: -webkit-linear-gradient(
-    to right,
-    #6dd5ed,
-    #2193b0
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    to right,
-    #6dd5ed,
-    #2193b0
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
-.register-title {
+.registerForm h1 {
   font-family: "ProductSansRegular", sans-serif;
-  font-weight: 800;
-  margin-bottom: 30px;
+  font-weight: normal;
+  font-size: 30px;
 }
-.register-form {
+.registerForm h3 {
+  font-family: "ProductSansRegular", sans-serif;
+  font-weight: normal;
+  font-size: 14px;
+  margin-top: 5px;
+  margin-bottom: 40px;
+}
+.registerForm {
   background-color: #fff;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 300px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.25);
+  margin: 4vh auto;
+  width: 400px;
   text-align: center;
-  padding: 20px;
-  border-radius: 5px;
+  padding: 60px;
+  border-radius: 25px;
 }
-.input-col{
+.input-col {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   justify-content: center;
-  padding-bottom: 8px;
 }
 .input-field {
   font-family: "ProductSansRegular", sans-serif;
-  text-align: center;
-  background-color: #ecf0f1;
+  text-align: left;
+  background-color: #f0f0f0;
   border: 2px solid transparent;
-  border-radius: 3px;
+  border-radius: 5px;
   font-size: 16px;
-  font-weight: 200;
-  padding: 10px 0;
+  font-weight: normal;
+  padding: 10px 0px 10px 10px;
   width: 95%;
-  margin:auto;
   transition: border 0.5s;
+}
+.input-field::placeholder {
+  color: #c4c4c4;
 }
 .input-field:focus {
   border: 2px solid #71c6f7;
   box-shadow: none;
 }
 .errorMessage {
-  width: 90%;
-  margin:auto;
+  width: 100%;
+  height: 30px;
+  margin: auto;
+  margin-bottom: 10px;
   font-size: 10pt;
-  padding-top: 2px;
+  padding-top: 4px;
   color: #cc0033;
 }
-.register-button {
-  margin-top: 20px;
-  margin-bottom: 20px;
-  font-family: "Roboto", sans-serif;
-  outline: none;
-  height: 40px;
-  text-align: center;
-  width: 130px;
-  border-radius: 40px;
-  background: #fff;
-  border: 2px solid #1ecd97;
-  color: #1ecd97;
-  letter-spacing: 1px;
-  text-shadow: 0;
-  font-size: 12px;
-  font-weight: bold;
+
+/*** Bottom buttons ***/
+.registerButton {
+  font-family: "ProductSansRegular", sans-serif;
+  margin-top: 30px;
+  font-size: 17px;
+  padding: 10px 20px;
+  color: #fff;
+  border-radius: 5px;
+  background-color: #4286f5;
+  transition: 0.15s all ease-in-out;
   cursor: pointer;
-  transition: all 0.25s ease;
 }
-.register-button:hover {
-  color: white;
-  background: #1ecd97;
+.registerButton:hover {
+  background-color: #7aadff;
+  transition: 0.15s all ease-in-out;
 }
 .forgot-button {
-  padding-top: 10px;
-  font-size: 12px;
-  color: #444;
+  padding-top: 20px;
+  font-size: 14px;
+  color: #c4c4c4;
   display: block;
   cursor: pointer;
   text-decoration-line: underline;
 }
+
+/*** Form validation ***/
 .flag {
   position: absolute;
   color: #cc0033;

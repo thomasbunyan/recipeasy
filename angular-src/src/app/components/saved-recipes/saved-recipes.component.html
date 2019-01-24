@@ -1,0 +1,53 @@
+<div class="savedRecipes" (click)="windowClick($event, contextMenu)">
+  <div class="wrapper">
+    <h1>Saved recipes</h1>
+    <div class="breakLine"></div>
+    <div *ngIf="recipes.saved.length" class="recipeCard">
+      <table mat-table [dataSource]="recipes.saved" class="recipe-table">
+        <ng-container matColumnDef="save">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let recipe">
+            <div class="remove"><i class="fas fa-heart" (click)="$event.stopPropagation(); removeSaved(recipe)"></i><i class="fas fa-times" (click)="$event.stopPropagation(); removeSaved(recipe)"></i></div>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="recipe">
+          <th mat-header-cell *matHeaderCellDef>Recipe</th>
+          <td mat-cell *matCellDef="let recipe" class="recipeColumn">{{ recipe.recipe.title }}</td>
+        </ng-container>
+        <ng-container matColumnDef="type">
+          <th mat-header-cell *matHeaderCellDef>Type</th>
+          <td mat-cell *matCellDef="let recipe">{{ recipe.recipe.mealType }}</td>
+        </ng-container>
+        <ng-container matColumnDef="ellipsis">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let recipe" class="ellipColumn"><i class="fas fa-ellipsis-h" (click)="$event.stopPropagation(); openMenu($event, contextMenu, recipe)"></i></td>
+        </ng-container>
+        <ng-container matColumnDef="added">
+          <th mat-header-cell *matHeaderCellDef class="endColumn" title="Added">Added<i class="far fa-calendar-alt"></i></th>
+          <td mat-cell *matCellDef="let recipe" class="endColumn">{{ getTimeAgo(recipe.timestamp) }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="['save', 'recipe', 'type', 'ellipsis', 'added']"></tr>
+        <tr mat-row *matRowDef="let myRowData; columns: ['save', 'recipe', 'type', 'ellipsis', 'added']" (click)="viewRecipe(myRowData)" class="elementRow"></tr>
+      </table>
+    </div>
+    <div *ngIf="!recipes.saved.length" class="noRecipe"><h1>No recipes saved. Go and add some.</h1></div>
+  </div>
+  <div class="contextMenu" #contextMenu>
+    <div class="cmWrapper">
+      <p class="cmItem" (click)="removeSaved(contextMenuRecipe)"><i class="fas fa-times"></i>Remove</p>
+      <p class="cmItem" (click)="viewAuthor(contextMenuRecipe)"><i class="fas fa-user"></i>View author</p>
+      <p class="cmItem cmMore" (click)="$event.stopPropagation()"><i class="fas fa-book"></i>Add to cookbook<i class="fas fa-chevron-right" style="padding-left: 20px; padding-right: 0px;"></i></p>
+      <div class="cmCookbooks">
+        <p class="cmItem" (click)="addToCookbook(contextMenuRecipe, 'new')"><i class="fas fa-plus"></i>Add to new cookbook</p>
+        <div class="cmBreak"></div>
+        <div class="cmCookbooksExisting">
+          <p class="cmItem" (click)="addToCookbook(contextMenuRecipe, cookbook)" *ngFor="let cookbook of usersCookbooks.author">{{ cookbook.timestamp }}</p>
+        </div>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="cmBreak"></div>
+      <p class="cmItem"><i class="fas fa-link"></i>Copy link</p>
+    </div>
+  </div>
+</div>

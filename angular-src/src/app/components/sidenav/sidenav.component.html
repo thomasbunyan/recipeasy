@@ -1,0 +1,17 @@
+<div class="sidenav">
+  <div class="wrapper">
+    <div class="navSection">
+      <div class="navItem" [routerLinkActive]="['active']" [routerLink]="['/dashboard']"><i class="fas fa-home"></i>Home</div>
+      <div class="navItem" [routerLinkActive]="['active']" [routerLink]="['/history']"><i class="fas fa-history"></i>Recently viewed</div>
+    </div>
+    <div class="navSection">
+      <div class="navSectionTitle">Saved</div>
+      <div class="navItem" [routerLinkActive]="['active']" [routerLink]="['/recipes']"><i class="fas fa-save"></i>Recipes</div>
+      <div class="navItem" [routerLinkActive]="['active']" [routerLink]="['/cookbooks']"><i class="fas fa-book"></i>Cookbooks</div>
+    </div>
+    <div class="navSection">
+      <div class="navSectionTitle">Created</div>
+      <div class="navItem" [routerLinkActive]="['active']" [routerLink]="['/create']"><i class="fas fa-plus-square"></i>Create new</div>
+    </div>
+  </div>
+</div>

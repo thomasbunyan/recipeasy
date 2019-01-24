@@ -1,85 +1,154 @@
 <div class="home">
-  <div class="content" *ngIf="!authService.loggedIn()">
-    <div class="slogan">
-      <h1>Recipes made easy.</h1>
-      <h6>Loads of ideas, 100% free.</h6>
+  <div class="wrapper">
+    <nav id="nav">
+      <div class="navLeft"><a href="#" class="logo">Recipeasy</a> <a href="#" class="subPoint">About</a> <a href="#" class="subPoint">How it works</a> <a href="#" class="subPoint">Contact</a></div>
+      <div class="navRight"><a class="subPoint" [routerLinkActive]="['active']" [routerLink]="['/login']">Login</a> <a [routerLinkActive]="['active']" [routerLink]="['/register']" class="btnSmall">Register</a></div>
+    </nav>
+    <div class="landing">
+      <div class="slogan">
+        <h1>Recipes made easy.</h1>
+        <p>Loads of ideas, 100% free.</p>
+        <div class="mainButton"><a [routerLinkActive]="['active']" [routerLink]="['/register']" class="btnMed">Get Inspired</a> <a class="moreLink" href="#">Learn More</a></div>
+      </div>
+      <div class="focus"><!-- <div class="gifLoc"></div> --></div>
     </div>
-    <div class="button-container"><button [routerLinkActive]="['active']" [routerLink]="['/register']" class="sign-up">SIGN UP</button></div>
   </div>
+  <div class="screenShot"></div>
+  <div class="moreInfo">
+    <div class="column">
+      <div class="infoBox">
+        <i class="fas fa-book" style="color: #FF9700"></i>
+        <h2>An archive of recipes</h2>
+        <p>mply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+        <p>mply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+      </div>
+      <div class="infoBox">
+        <i class="fas fa-desktop" style="color: #EA1E63"></i>
+        <h2>Multi-Browser support</h2>
+        <p>mply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+        <p>mply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+      </div>
+    </div>
+    <div class="column">
+      <div class="infoBox">
+        <i class="fas fa-save" style="color: #8BC24A"></i>
+        <h2>Save them for later</h2>
+        <p>mply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+        <p>mply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+      </div>
+      <div class="infoBox">
+        <i class="fas fa-edit" style="color: #673BB7"></i>
+        <h2>Edit your own</h2>
+        <p>mply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+        <p>mply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+      </div>
+    </div>
+  </div>
+  <div class="mobileArea">
+    <h2>Go Mobile</h2>
+    <p>Explore recipes anywhere</p>
+    <div class="phone"></div>
+  </div>
+  <div class="spacedArea">
+    <div class="breakerBar"></div>
+    <div class="infoPanel">
+      <div class="infoPanelR">
+        <h2>Create your own</h2>
+        <p>mply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+      </div>
+      <div class="infoPanelL"><div class="infoPanelS"></div></div>
+    </div>
+    <div class="breakerBar"></div>
+    <div class="infoPanel">
+      <div class="infoPanelL"><div class="infoPanelS" style="float: right;"></div></div>
+      <div class="infoPanelR" style="text-align: right;">
+        <h2>Share with others</h2>
+        <p>mply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+      </div>
+    </div>
+    <div class="breakerBar"></div>
+  </div>
+  <div class="more">
+    <div class="feature" id="feature-1">
+      <i class="fas fa-money-bill-wave"></i>
+      <h2>Headline</h2>
+      <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error corrupti quaerat aspernatur.</p>
+    </div>
+    <div class="feature" id="feature-2">
+      <i class="fas fa-cookie-bite"></i>
+      <h2>Headline</h2>
+      <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error corrupti quaerat aspernatur.</p>
+    </div>
+    <div class="feature" id="feature-3">
+      <i class="fas fa-search"></i>
+      <h2>Headline</h2>
+      <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error corrupti quaerat aspernatur.</p>
+    </div>
+  </div>
+  <!-- <div class="image-bar">
+    <div class="about">
+      <div class="profile-text">
+        <h2>Professionals love it</h2>
+        <p>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione aliquid, molestias velit iusto dolor neque. Commodi, consectetur. Tenetur facilis in, omnis animi maxime vero quod possimus dolore nihil
+          distinctio. Veritatis.
+        </p>
+      </div>
+      <div class="profile-image"><img src="https://picsum.photos/300/300/?random" height="100%" width="100%" /></div>
+    </div>
+  </div> -->
+  <div class="bottomArea">
+    <h1>What are you waiting for?</h1>
+    <a [routerLinkActive]="['active']" [routerLink]="['/register']" href="#" class="startedButton">Get started</a>
+  </div>
+  <footer>
+    <div class="navLeft"><a href="#" class="logoB">Recipeasy</a> <a href="#" class="subPoint">Privacy and Terms</a> <a href="#" class="subPoint">About Recipeasy</a></div>
+    <div class="navRight">
+      <a href="#" class="subPoint"><i class="far fa-question-circle" style="padding-right: 5px;"></i>Help</a>
+    </div>
+  </footer>
+</div>
 
-  <div class="content2" *ngIf="authService.loggedIn()">
-    <div class="search-bar"><input type="text" class="search input-field" [(ngModel)]="searchQuery" (keyup.enter)="enterSearch()" placeholder="Search" /></div>
-    <div class="picked">
-      <div class="picked-card">
-        <div class="cookbookTitle">
-          <h2 class="tTitle">Early morning breakfast</h2>
-          <div class="tNav">
-            <i class="fas fa-chevron-left" (click)="scrollCookbooks('left', ref)" [ngClass]="{ unclickable: cookbookPos === 'left' }"></i>
-            <i class="fas fa-chevron-right" (click)="scrollCookbooks('right', ref)" [ngClass]="{ unclickable: cookbookPos === 'right' }" class="fas fa-chevron-right" style="margin-left: 15px; padding-right: 20px"></i>
+<!--
+  <div class="dash">
+    <div class="content2" *ngIf="authService.loggedIn()">
+      <div class="search-bar"><input type="text" class="search input-field" [(ngModel)]="searchQuery" (keyup.enter)="enterSearch()"
+          placeholder="Search" /></div>
+      <div class="picked">
+        <div class="picked-card card">
+          <div class="cookbookTitle">
+            <h2 class="tTitle">Early morning breakfast</h2>
+            <div class="tNav">
+              <i class="fas fa-chevron-left" (click)="scrollCookbooks('left', ref)" [ngClass]="{ unclickable: cookbookPos === 'left' }"></i>
+              <i class="fas fa-chevron-right" (click)="scrollCookbooks('right', ref)" [ngClass]="{ unclickable: cookbookPos === 'right' }"
+                class="fas fa-chevron-right" style="margin-left: 15px; padding-right: 20px"></i>
+            </div>
           </div>
-        </div>
-        <div class="cookbooks" #ref>
-          <div class="cookbook" *ngFor="let cookbook of cookbooks">
-            <div class="tImage">
-              <img src="../../../assets/imgs/christmas.png" class="tPic" />
-              <div class="tImageOverlay" (click)="viewCookbook(cookbook)">
-                <i class="tImageFav far fa-heart" *ngIf="cookbook.saved != true" (click)="$event.stopPropagation(); saveCookbook(cookbook)"></i>
-                <i class="tImageFav fas fa-heart" *ngIf="cookbook.saved == true" (click)="$event.stopPropagation(); saveCookbook(cookbook)"></i>
+          <div class="cookbooks" #ref>
+            <div class="cookbook" *ngFor="let cookbook of cookbooks">
+              <div class="tImage">
+                <div class="tPic"></div>
+                <div class="tImageOverlay" (click)="viewCookbook(cookbook)">
+                  <i class="tImageFav far fa-heart" *ngIf="cookbook.saved != true" (click)="$event.stopPropagation(); saveCookbook(cookbook)"></i>
+                  <i class="tImageFav fas fa-heart" *ngIf="cookbook.saved == true" (click)="$event.stopPropagation(); saveCookbook(cookbook)"></i>
+                </div>
+              </div>
+              <div class="tInfo">
+                <h4 class="tInfo-title" (click)="viewCookbook(cookbook)">{{ cookbook.title }}</h4>
+                <p>{{ cookbook.description }}</p>
+                <p class="tFol">15,352 followers.</p>
               </div>
             </div>
-            <div class="tInfo">
-              <h4 class="tInfo-title" (click)="viewCookbook(cookbook)">{{ cookbook.title }}</h4>
-              <p>{{ cookbook.description }}</p>
-              <p class="tFol">15,352 followers.</p>
-            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="dash-area">
-      <div class="info"></div>
-      <div class="trending">
-        <h3 class="trending-title">Trending recipes</h3>
-        <div class="trending-recipe" *ngFor="let recipe of recipes" (click)="viewRecipe(recipe)">{{ recipe.title }}</div>
+      <div class="dash-area">
+        <div class="info card"></div>
+        <div class="trending card">
+          <h3 class="trending-title">Trending recipes</h3>
+          <div class="trending-recipe" *ngFor="let recipe of recipes" (click)="viewRecipe(recipe)">{{ recipe.title }}</div>
+        </div>
       </div>
     </div>
   </div>
-  <div class="footer">
-    <div class="upper-footer">
-      <div class="uf-content">
-        <div class="uf-content-table uf-left">
-          <h2 class="table-header">Links</h2>
-          <div class="table-item">
-            <a href="#"><i class="table-icon fas fa-home"></i>Home</a>
-          </div>
-          <div class="table-item">
-            <a href="#"><i class="table-icon fas fa-briefcase"></i>Work</a>
-          </div>
-          <div class="table-item">
-            <a href="#"><i class="table-icon fas fa-user"></i>About</a>
-          </div>
-          <div class="table-item">
-            <a href="#"><i class="table-icon fas fa-paper-plane"></i>Contact</a>
-          </div>
-        </div>
-        <div class="uf-content-table">
-          <h2 class="table-header">Recipeasy</h2>
-          <div class="table-item">
-            <a href="#"><i class="table-icon fas fa-envelope"></i>thomaspaulbunyan@gmail.com</a>
-          </div>
-          <div class="table-item">
-            <li><i class="socials fab fa-twitter"></i></li>
-            <li><i class="socials fab fa-linkedin"></i></li>
-            <li><i class="socials fab fa-github"></i></li>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="lower-footer">
-      <div class="lf-content">
-        <div class="lf-content-left"><span class="author">Thomas Bunyan</span></div>
-        <div class="lf-content-right">Copyright © 2018.</div>
-      </div>
-    </div>
-  </div>
-</div>
+-->

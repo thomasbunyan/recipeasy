@@ -1,0 +1,20 @@
+<div class="cookbooksPage">
+  <div class="wrapper">
+    <h1>Saved cookbooks</h1>
+    <div class="breakLine"></div>
+    <div class="cookbookArea" *ngIf="cookbooks.saved.length">
+      <div class="cookbookTile" *ngFor="let cookbook of cookbooks.saved">
+        <div class="cookbookImage" (click)="viewCookbook(cookbook.cookbook)">
+          <div class="cookbookOverlay">
+            <div class="remove" (click)="$event.stopPropagation(); toggleSave(cookbook)"><i class="cookbookFavorite fas fa-heart"></i> <i class="cookbookFavorite fas fa-times"></i></div>
+          </div>
+        </div>
+        <div class="cookbookInfo">
+          <h3 (click)="viewCookbook(cookbook.cookbook)">{{ cookbook.cookbook.title }}</h3>
+          <p>{{ cookbook.cookbook.description }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="noCookbooks" *ngIf="!cookbooks.saved.length"><h1>No cookbooks saved. Go and add some.</h1></div>
+  </div>
+</div>

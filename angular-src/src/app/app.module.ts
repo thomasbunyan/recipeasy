@@ -10,27 +10,32 @@ import { MaterialModule } from "./material.module";
 
 import { AppComponent } from "./app.component";
 import { NavbarComponent } from "./components/navbar/navbar.component";
+import { SidenavComponent } from "./components/sidenav/sidenav.component";
+import { HomeComponent } from "./components/home/home.component";
 import { LoginComponent } from "./components/login/login.component";
 import { RegisterComponent } from "./components/register/register.component";
-import { HomeComponent } from "./components/home/home.component";
-import { RecipesComponent } from "./components/recipes/recipes.component";
-import { ProfileComponent } from "./components/profile/profile.component";
 import { VerifyComponent } from "./components/register/verify/verify.component";
-import { CookbooksComponent } from "./components/cookbooks/cookbooks.component";
-import { CookbookComponent } from "./components/cookbooks/cookbook/cookbook.component";
+import { DashboardComponent } from "./components/dashboard/dashboard.component";
+import { ProfileComponent } from "./components/profile/profile.component";
+import { ResultsComponent } from "./components/results/results.component";
+import { HistoryComponent } from "./components/history/history.component";
+import { CreateComponent } from "./components/create/create.component";
+import { RecipeComponent } from "./components/recipe/recipe.component";
+import { CookbooksComponent } from "./components/saved-cookbooks/cookbooks.component";
+import { SavedRecipesComponent } from "./components/saved-recipes/saved-recipes.component";
+import { CookbookComponent } from "./components/cookbook/cookbook.component";
 
-import { EditCookbookDialogComponent } from "./components/cookbooks/cookbook/edit-cookbook-dialog/edit-cookbook-dialog.component";
+import { EditCookbookDialogComponent } from "./components/cookbook/edit-cookbook-dialog/edit-cookbook-dialog.component";
 
-import { UserValidateService } from "./services/user-validate.service";
+import { AuthGuard } from "./guards/auth.guard";
 import { AuthService } from "./services/auth.service";
+import { UserValidateService } from "./services/user-validate.service";
 import { UserService } from "./services/user.service";
+import { RecipeValidateService } from "./services/recipe-validate.service";
 import { RecipeService } from "./services/recipe.service";
 import { CookbookService } from "./services/cookbook.service";
-import { RecipeValidateService } from "./services/recipe-validate.service";
-import { AuthGuard } from "./guards/auth.guard";
-import { CreateRecipeComponent } from "./components/recipes/create-recipe/create-recipe.component";
-import { SavedRecipesComponent } from "./components/recipes/saved-recipes/saved-recipes.component";
-import { RecipeComponent } from "./components/recipes/recipe/recipe.component";
+import { SidenavService } from "./components/sidenav/sidenav.service";
+import { GeneralService } from "./services/general.service";
 
 const appRoutes: Routes = [
   { path: "", component: HomeComponent, pathMatch: "full" },
@@ -38,8 +43,13 @@ const appRoutes: Routes = [
   { path: "verify", component: VerifyComponent },
   { path: "login", component: LoginComponent },
   {
-    path: "recipes",
-    component: RecipesComponent,
+    path: "dashboard",
+    component: DashboardComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "results",
+    component: ResultsComponent,
     canActivate: [AuthGuard]
   },
   {
@@ -52,14 +62,15 @@ const appRoutes: Routes = [
     component: CookbookComponent,
     canActivate: [AuthGuard]
   },
+  { path: "history", component: HistoryComponent, canActivate: [AuthGuard] },
   { path: "profile", component: ProfileComponent, canActivate: [AuthGuard] },
   {
-    path: "recipes/create",
-    component: CreateRecipeComponent,
+    path: "create",
+    component: CreateComponent,
     canActivate: [AuthGuard]
   },
   {
-    path: "recipes/saved",
+    path: "recipes",
     component: SavedRecipesComponent,
     canActivate: [AuthGuard]
   },
@@ -75,18 +86,21 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     NavbarComponent,
+    SidenavComponent,
     LoginComponent,
     RegisterComponent,
     HomeComponent,
-    RecipesComponent,
+    DashboardComponent,
+    ResultsComponent,
     ProfileComponent,
-    CreateRecipeComponent,
+    CreateComponent,
     EditCookbookDialogComponent,
     SavedRecipesComponent,
     RecipeComponent,
     VerifyComponent,
     CookbooksComponent,
-    CookbookComponent
+    CookbookComponent,
+    HistoryComponent
   ],
   imports: [
     HttpModule,
@@ -101,16 +115,16 @@ const appRoutes: Routes = [
   providers: [
     UserValidateService,
     RecipeValidateService,
+    SidenavService,
     AuthService,
     UserService,
     RecipeService,
     CookbookService,
+    GeneralService,
     AuthGuard,
     Title
   ],
   bootstrap: [AppComponent],
-  entryComponents: [
-    EditCookbookDialogComponent
-  ]
+  entryComponents: [EditCookbookDialogComponent]
 })
-export class AppModule { }
+export class AppModule {}

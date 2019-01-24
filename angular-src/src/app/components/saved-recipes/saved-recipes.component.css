@@ -1,0 +1,172 @@
+/*** Saved recipe page ***/
+.savedRecipes {
+  min-height: calc(100vh - 60px);
+  width: 100%;
+  overflow: hidden;
+}
+.wrapper {
+  /* background-color: red; */
+  padding-top: 40px;
+  width: 1350px;
+  margin: auto;
+}
+
+.wrapper h1 {
+  font-size: 50px;
+  margin-bottom: 20px;
+}
+
+/*** Card for the table ***/
+.recipeCard {
+  /* background-color: #fff; */
+  /* box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1); */
+  border-radius: 25px;
+  padding: 20px;
+  width: 70%;
+  margin: 20px auto;
+}
+
+/*** Recipe table ***/
+.recipe-table {
+  width: 100%;
+  font-family: inherit;
+  margin: auto;
+  background-color: rgba(255, 255, 255, 0);
+}
+th,
+td {
+  vertical-align: middle;
+  transition: all 0.2s ease-in-out;
+}
+th {
+  font-size: 13px;
+}
+td {
+  font-size: 15px;
+}
+.elementRow:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.recipeColumn {
+  width: 50%;
+}
+.ellipColumn {
+  text-align: right;
+  color: rgba(255, 255, 255, 0);
+}
+.elementRow:hover .ellipColumn {
+  color: #000;
+}
+.endColumn {
+  text-align: right;
+  width: 22%;
+}
+.endColumn i {
+  padding-left: 5px;
+}
+
+/*** Table interaction ***/
+.remove {
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  width: 30px;
+  color: #e42063;
+}
+.remove:hover .fa-heart,
+.remove .fa-times {
+  display: none;
+}
+.remove:hover .fa-times {
+  display: inline;
+}
+
+/*** General elements ***/
+.breakLine {
+  width: 100%;
+  height: 2px;
+  background-color: #eaeaea;
+  border-radius: 25px;
+}
+
+/*** Context menu ***/
+.contextMenu {
+  visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #fff;
+  border: #dcdcdc 1px solid;
+  color: #000;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  z-index: 10;
+  padding: 5px 0;
+  border-radius: 15px;
+}
+.cmWrapper {
+  overflow: hidden;
+}
+.cmItem {
+  padding: 10px;
+  margin: 2px 0;
+  width: 100%;
+  font-size: 16px;
+  cursor: context-menu;
+}
+.cmItem i {
+  padding-right: 5px;
+}
+.cmItem:hover {
+  background-color: #eaeaea;
+}
+.cmBreak {
+  margin: auto;
+  width: 95%;
+  height: 1px;
+  background-color: #000;
+}
+
+.cmCookbooks {
+  visibility: hidden;
+  width: 200px;
+  background-color: #fff;
+  border: #dcdcdc 1px solid;
+  position: absolute;
+  top: 81px;
+  left: 188px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  z-index: 11;
+  padding: 5px 0;
+  border-radius: 15px;
+  overflow: hidden;
+}
+.cmCookbooks:hover {
+  visibility: visible;
+}
+.cmCookbooks i {
+  align-self: center;
+}
+.cmCookbooksExisting {
+  overflow: scroll;
+  overflow-x: hidden;
+  max-height: 85px;
+}
+.cmCookbooksExisting p {
+}
+.cmMore:hover + .cmCookbooks {
+  visibility: visible;
+}
+
+/*** No recipe added ***/
+.noRecipe {
+  text-align: center;
+  padding-top: 80px;
+  font-size: 30px;
+}

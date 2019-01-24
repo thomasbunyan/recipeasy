@@ -12,7 +12,7 @@ import { Router } from "@angular/router";
 export class RegisterComponent implements OnInit {
   username: String;
   email: String;
-  emailConf: String;
+  passConf: String;
   password: String;
   specificError = [, , , , ];
   specificMessage = [, , , , ];
@@ -29,7 +29,7 @@ export class RegisterComponent implements OnInit {
   onRegisterSubmit() {
     const user = {
       email: this.email,
-      emailConf: this.emailConf,
+      passConf: this.passConf,
       username: this.username,
       password: this.password
     };
@@ -49,9 +49,9 @@ export class RegisterComponent implements OnInit {
         }
 
         // Validate email conf.
-        if (user.emailConf === undefined || user.emailConf === "") {
+        if (user.passConf === undefined || user.passConf === "") {
           this.specificError[2] = true;
-          this.specificMessage[2] = "Email confirmation required";
+          this.specificMessage[2] = "Password confirmation required.";
         }
 
         // Validate password.
@@ -102,14 +102,17 @@ export class RegisterComponent implements OnInit {
           this.specificMessage[1] = undefined;
         }
       });
-    } else if (type === "emailConf" && this.emailConf !== undefined) {
-      const emailConfRes = this.validateService.validateEmailConf(
-        this.email,
-        this.emailConf
+    } else if (type === "passConf" && this.passConf !== undefined) {
+      const passwordConfRes = this.validateService.validatePasswordConf(
+        this.password,
+        this.passConf
       );
-      if (!emailConfRes.res) {
+      if (!passwordConfRes.res) {
         this.specificError[2] = true;
-        this.specificMessage[2] = emailConfRes.error;
+        this.specificMessage[2] = passwordConfRes.error;
+      } else if (this.specificError[3]) {
+        this.specificError[2] = true;
+        this.specificMessage[2] = "";
       } else {
         this.specificError[2] = false;
         this.specificMessage[2] = undefined;

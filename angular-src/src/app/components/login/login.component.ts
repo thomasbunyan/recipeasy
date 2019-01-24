@@ -32,7 +32,8 @@ export class LoginComponent implements OnInit {
       return this.router.navigate(["/"]);
     }
     this.titleService.setTitle("Login");
-    this.returnUrl = this.route.snapshot.queryParams["returnUrl"] || "/";
+    this.returnUrl =
+      this.route.snapshot.queryParams["returnUrl"] || "/dashboard";
   }
 
   onLoginSubmit() {
@@ -41,13 +42,15 @@ export class LoginComponent implements OnInit {
       password: this.password
     };
 
+    console.log("here");
     this.authService.authenticateUser(user).subscribe(data => {
+      console.log(data);
       if (data.success) {
         this.authService.storeUserData(data.jwt, data.user);
         this.error = false;
         this.router.navigate([this.returnUrl]);
       } else {
-        if (data.notActive) {
+        if (data.inactive) {
           this.error = true;
           this.errorMessage =
             "The account has not yet been authenticated. Please check your email to activate your account.";

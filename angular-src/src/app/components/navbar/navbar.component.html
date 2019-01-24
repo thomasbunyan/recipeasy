@@ -1,10 +1,20 @@
 <div class="navbar">
-  <div class="navbar-content">
-    <div class="logo-area">
-      <div class="logo-container" [routerLinkActive]="['active']" [routerLink]="['/']"><a class="logo" [routerLink]="['/']">Recipeasy</a></div>
+  <!-- <div class="sideGraphic" [ngClass]="{ wideGraphic: toggle == true }"></div> -->
+  <div class="leftNav">
+    <div class="sidebarToggle"><i *ngIf="authService.loggedIn()" class="fas fa-bars sideToggle" (click)="sideToggle()"></i></div>
+    <div class="logoArea">
+      <div class="logoContainer" [routerLinkActive]="['active']" [routerLink]="['/']"><a class="logo" [routerLink]="['/']">Recipeasy</a></div>
     </div>
-
-    <div class="navbar-area">
+  </div>
+  <div class="navbarContent">
+    <div class="searchBar"><i class="fas fa-search"></i> <input type="text" [(ngModel)]="searchQuery" (keyup.enter)="enterSearch()" /></div>
+    <div class="profileInformation">
+      <div class="username">
+        <a (click)="onLogoutClick()" href="#">{{ user }}</a>
+      </div>
+      <div class="profileIcon" [routerLinkActive]="['active']" [routerLink]="['/profile']"></div>
+    </div>
+    <!-- <div class="navbar-area">
       <div *ngIf="authService.loggedIn()" class="nav-item dropdown">
         <div class="nav-link-area" [routerLinkActive]="['active']" [routerLink]="['/recipes/saved']"><a class="nav-link drp-btn" [routerLinkActive]="['active']" [routerLink]="['/recipes']">Saved</a></div>
         <ul class="drp-nav">
@@ -19,7 +29,6 @@
         <div class="nav-link-area"><a class="nav-link" [routerLinkActive]="['active']" [routerLink]="['recipes/create']">Create</a></div>
       </div>
     </div>
-
     <div class="account-area">
       <div class="account-container">
         <div *ngIf="!authService.loggedIn()" class="nav-item" [routerLinkActive]="['active']" [routerLink]="['/login']">
@@ -35,6 +44,7 @@
           <div class="nav-link-area"><a class="nav-link" (click)="onLogoutClick()" href="#">Log out</a></div>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
+  <!-- <div class="navbar-end"></div> -->
 </div>

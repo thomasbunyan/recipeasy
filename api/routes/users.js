@@ -125,6 +125,7 @@ router.post("/authenticate", (req, res, next) => {
       } else if (!user.active) {
         res.status(401).json({
           success: false,
+          inactive: true,
           message: "Auth failed, account inactive"
         });
       } else {
@@ -140,7 +141,7 @@ router.post("/authenticate", (req, res, next) => {
               { user },
               process.env.JWT_KEY,
               {
-                expiresIn: "1h"
+                expiresIn: "1w"
               },
               (err, token) => {
                 if (err) {
@@ -308,6 +309,37 @@ router.delete("/:id", checkAuth, (req, res, next) => {
         res.status(404).json({
           success: false,
           message: "User not found for provided ID"
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        error: err
+      });
+    });
+});
+
+router.get("/unique/:value", (req, res, next) => {
+  const value = req.params.value;
+  let query = {};
+  if (value.indexOf("@") > -1) {
+    query = { email: value };
+  } else {
+    query = { username: value };
+  }
+  User.findOne(query)
+    .exec()
+    .then((usr) => {
+      if (usr) {
+        res.status(200).json({
+          success: true,
+          unique: false
+        });
+      } else {
+        res.status(200).json({
+          success: true,
+          unique: true
         });
       }
     })

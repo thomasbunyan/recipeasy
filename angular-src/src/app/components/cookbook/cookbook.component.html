@@ -1,0 +1,74 @@
+<div class="cookbookPage">
+  <div class="wrapper">
+    <div class="topArea">
+      <div class="cookbookImage"></div>
+      <h1 class="cookbookTitle">{{ cookbook.title }}</h1>
+      <p class="cookbookDescription">{{ cookbook.description }}</p>
+      <p class="cookbookInfo">Created by {{ cookbook.author }} {{ getTimeAgo(cookbook.date) }}.</p>
+      <div class="cookbookButtons">
+        <i class="fas fa-edit" (click)="editCookbook()" style="padding-right: 20px" *ngIf="owner"></i><i class="fas fa-heart" (click)="toggleCookbookSave()" [ngClass]="{ saved: saved == true }"></i
+        ><i class="fas fa-ellipsis-v"></i>
+      </div>
+    </div>
+    <div class="breakLine"></div>
+    <div class="bottomArea">
+      <table mat-table [dataSource]="cookbook.recipes" class="recipe-table">
+        <ng-container matColumnDef="save">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let recipe">
+            <div class="remove"><i class="fas fa-heart" [ngClass]="{ saved: recipe.recipe.saved }" (click)="$event.stopPropagation(); toggleSave(recipe.recipe)"></i></div>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="recipe">
+          <th mat-header-cell *matHeaderCellDef>Recipe</th>
+          <td mat-cell *matCellDef="let recipe" class="recipeColumn">{{ recipe.recipe.title }}</td>
+        </ng-container>
+        <ng-container matColumnDef="type">
+          <th mat-header-cell *matHeaderCellDef>Type</th>
+          <td mat-cell *matCellDef="let recipe">{{ recipe.recipe.mealType }}</td>
+        </ng-container>
+        <ng-container matColumnDef="ellipsis">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let recipe" class="ellipColumn"><i class="fas fa-ellipsis-h" (click)="$event.stopPropagation(); openMenu($event, contextMenu, recipe)"></i></td>
+        </ng-container>
+        <ng-container matColumnDef="added">
+          <th mat-header-cell *matHeaderCellDef class="endColumn" title="Added">Added<i class="far fa-calendar-alt"></i></th>
+          <td mat-cell *matCellDef="let recipe" class="endColumn">{{ getTimeAgo(recipe.timestamp) }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="['save', 'recipe', 'type', 'ellipsis', 'added']"></tr>
+        <tr mat-row *matRowDef="let myRowData; columns: ['save', 'recipe', 'type', 'ellipsis', 'added']" (click)="viewRecipe(myRowData)" class="elementRow"></tr>
+      </table>
+    </div>
+    <!-- <div class="infoWrapper">
+      <div class="cookbookInfo">
+        <div class="cookbookImage" [ngClass]="{ clickable: owner }" (click)="editCookbook()"></div>
+        <div>
+          <h5>Public: {{ cookbook.public }}</h5>
+          <h1 class="clickable" [ngClass]="{ clickable: owner }" (click)="editCookbook()">
+            {{ cookbook.title }} <span class="editButton"><i class="far fa-edit"></i></span>
+          </h1>
+          <small>Created by: {{ cookbook.author }}</small>
+          <div class="cookbookDescription" [ngClass]="{ clickable: owner }" (click)="editCookbook()">{{ cookbook.description }}</div>
+        </div>
+      </div>
+      <div class="cookbookRecipes">
+        <h2>Recipes:</h2>
+        <table class="cb-table">
+          <tr>
+            <th></th>
+            <th>Recipe</th>
+            <th><i class="far fa-calendar-alt"></i></th>
+            <th></th>
+          </tr>
+          <tr class="cb-table-row" *ngFor="let recipe of cookbook.recipes; let i = index">
+            <td><i class="far fa-heart"></i></td>
+            <td>{{ recipe.recipe.title }}</td>
+            <td>{{ recipe.timestamp }}</td>
+            <td><i class="fas fa-times" (click)="removeRecipe(i)"></i></td>
+          </tr>
+        </table>
+      </div>
+    </div> -->
+  </div>
+</div>

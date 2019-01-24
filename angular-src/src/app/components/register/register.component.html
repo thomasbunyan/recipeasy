@@ -1,39 +1,73 @@
 <div class="register">
+  <nav id="nav">
+    <div class="navLeft"><a href="#" class="logo">Recipeasy</a> <a href="#" class="subPoint">About</a> <a href="#" class="subPoint">How it works</a> <a href="#" class="subPoint">Contact</a></div>
+    <div class="navRight"><a class="subPoint" [routerLinkActive]="['active']" [routerLink]="['/login']">Login</a></div>
+  </nav>
   <div class="content-area">
-    <div class="register-form">
-      <h1 class="register-title">Register</h1>
+    <div class="registerForm">
+      <h1>Create your account</h1>
+      <h3>Sign up with your email address</h3>
       <form autocomplete="off">
         <div class="input-col">
-          <input type="text" [(ngModel)]="username" name="username" class="input-field" [ngClass]="{ error: specificError[0], success: specificError[0] == false }"
-          placeholder="username" (focusout)="checkField('username')" />
-          <label class="errorMessage" *ngIf="specificError[0]">
-            {{specificMessage[0]}}
+          <input
+            type="text"
+            [(ngModel)]="username"
+            name="username"
+            class="input-field"
+            [ngClass]="{ error: specificError[0], success: specificError[0] == false }"
+            placeholder="Username"
+            (keyup)="checkField('username')"
+          />
+          <label class="errorMessage">
+            <p *ngIf="specificError[0]">{{ specificMessage[0] }}</p>
           </label>
         </div>
         <div class="input-col">
-          <input type="text" [(ngModel)]="email" name="email" class="input-field" [ngClass]="{ error: specificError[1], success: specificError[1] == false }"
-          placeholder="email" autocomplete="email" (focusout)="checkField('email')" />
-          <label class="errorMessage" *ngIf="specificError[1]">
-            {{specificMessage[1]}}
+          <input
+            type="text"
+            [(ngModel)]="email"
+            name="email"
+            class="input-field"
+            [ngClass]="{ error: specificError[1], success: specificError[1] == false }"
+            placeholder="Email"
+            autocomplete="email"
+            (keyup)="checkField('email')"
+          />
+          <label class="errorMessage">
+            <p *ngIf="specificError[1]">{{ specificMessage[1] }}</p>
           </label>
         </div>
         <div class="input-col">
-          <input type="text" [(ngModel)]="emailConf" name="emailConf" class="input-field" [ngClass]="{ error: specificError[2], success: specificError[2] == false }"
-          placeholder="confirm email" autocomplete="no" (focusout)="checkField('emailConf')" />
-          <label class="errorMessage" *ngIf="specificError[2]">
-            {{specificMessage[2]}}
+          <input
+            type="password"
+            [(ngModel)]="password"
+            name="password"
+            class="input-field"
+            [ngClass]="{ error: specificError[3], success: specificError[3] == false }"
+            placeholder="Password"
+            autocomplete="new-password"
+            (keyup)="checkField('password'); checkField('passConf')"
+          />
+          <label class="errorMessage">
+            <p *ngIf="specificError[3]">{{ specificMessage[3] }}</p>
           </label>
         </div>
         <div class="input-col">
-          <input type="password" [(ngModel)]="password" name="password" class="input-field" [ngClass]="{ error: specificError[3], success: specificError[3] == false }"
-          placeholder="password" autocomplete="new-password" (focusout)="checkField('password')" />
-          <label class="errorMessage" *ngIf="specificError[3]">
-            {{specificMessage[3]}}
+          <input
+            type="password"
+            [(ngModel)]="passConf"
+            name="passConf"
+            class="input-field"
+            [ngClass]="{ error: specificError[2], success: specificError[2] == false }"
+            placeholder="Confirm password"
+            autocomplete="no"
+            (keyup)="checkField('passConf')"
+          />
+          <label class="errorMessage">
+            <p *ngIf="specificError[2]">{{ specificMessage[2] }}</p>
           </label>
         </div>
-        <input class="register-button" (click)="onRegisterSubmit()" type="button" value="Register" />
-        <a class="forgot-button" [routerLinkActive]="['active']" [routerLink]="['/login']">Already have an account? Log
-          In!</a>
+        <input class="registerButton" (click)="onRegisterSubmit()" type="button" value="Register" /> <a class="forgot-button" [routerLinkActive]="['active']" [routerLink]="['/login']">Already have an account? Log In!</a>
       </form>
     </div>
   </div>
