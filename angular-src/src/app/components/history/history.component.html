@@ -1,3 +1,15 @@
-<p>
-  history works!
-</p>
+<div class="history">
+  <div class="wrapper">
+    <h1>Recently viewed.</h1>
+    <div class="breakLine"></div>
+    <div class="historyArea">
+      <div class="historyTile" *ngFor="let history of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]">
+        <div class="historyImage" (click)="viewItem(history)"><div class="historyOverlay"></div></div>
+        <div class="historyInfo">
+          <h3 (click)="viewItem(history)">{{ history }} Title</h3>
+          <p>{{ history }} Description</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

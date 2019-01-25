@@ -19,7 +19,7 @@ const UserSchema = mongoose.Schema({
   },
   active: {
     type: Boolean,
-    default: true,
+    default: false,
     required: true
   },
   date: {

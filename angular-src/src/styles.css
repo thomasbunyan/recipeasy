@@ -21,24 +21,17 @@ body {
   margin: 0;
   padding: 0;
   font-family: "ProductSansRegular", sans-serif;
-  /* overflow: scroll;
-  overflow-x: hidden; */
 }
 
-body {
-  /* background: #2193b0;
-  background: -webkit-linear-gradient(to right, #6dd5ed, #2193b0);
-  background: linear-gradient(to right, #6dd5ed, #2193b0); */
+/* body {
   height: 100%;
   width: 100vw;
   position: absolute;
-}
+} */
 ::-webkit-scrollbar {
   width: 0px;
-  /* remove scrollbar space */
-  background: transparent; /* optional: just make scrollbar invisible */
+  background: transparent;
 }
-/* optional: show position indicator in red */
-::-webkit-scrollbar-thumb {
-  /* background: #ff0000; */
-}
+/* ::-webkit-scrollbar-thumb {
+  background: #ff0000;
+} */

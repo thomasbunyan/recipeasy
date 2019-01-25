@@ -1,0 +1,75 @@
+/*** History ***/
+.history {
+  min-height: calc(100vh - 60px);
+  width: 100%;
+  overflow: hidden;
+}
+.wrapper {
+  width: 1350px;
+  min-height: 100%;
+  margin: auto;
+}
+.wrapper h1 {
+  font-size: 50px;
+  margin-top: 40px;
+  margin-bottom: 10px;
+}
+
+/*** History area ***/
+.historyArea {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.historyTile {
+  padding: 10px;
+  margin: 10px;
+  width: 175px;
+}
+.historyImage {
+  width: 175px;
+  height: 175px;
+  border-radius: 25px;
+  background-color: #f1eff4;
+  position: relative;
+  cursor: pointer;
+}
+.historyOverlay {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(39, 39, 39, 0.2);
+  opacity: 0;
+  transition: all 0.3s ease-in-out 0s;
+  position: absolute;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  border-radius: 25px;
+}
+
+.historyImage:hover .historyOverlay {
+  transition: all 0.3s ease-in-out 0s;
+  opacity: 1;
+}
+.historyInfo {
+  padding-top: 5px;
+  font-size: 10pt;
+  text-align: left;
+  font-family: "ProductSansRegular", sans-serif;
+  width: 90%;
+  margin: auto;
+}
+.historyInfo h3:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/*** General elements ***/
+.breakLine {
+  width: 100%;
+  height: 2px;
+  background-color: #eaeaea;
+  border-radius: 25px;
+}
