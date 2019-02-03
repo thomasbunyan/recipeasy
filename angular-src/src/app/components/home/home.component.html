@@ -1,16 +1,34 @@
 <div class="home">
+  <!-- <div class="initialScreen"></div> -->
   <div class="wrapper">
     <nav id="nav">
       <div class="navLeft"><a href="#" class="logo">Recipeasy</a> <a href="#" class="subPoint">About</a> <a href="#" class="subPoint">How it works</a> <a href="#" class="subPoint">Contact</a></div>
       <div class="navRight"><a class="subPoint" [routerLinkActive]="['active']" [routerLink]="['/login']">Login</a> <a [routerLinkActive]="['active']" [routerLink]="['/register']" class="btnSmall">Register</a></div>
     </nav>
-    <div class="landing">
+    <!-- <div class="landing">
       <div class="slogan">
         <h1>Recipes made easy.</h1>
         <p>Loads of ideas, 100% free.</p>
         <div class="mainButton"><a [routerLinkActive]="['active']" [routerLink]="['/register']" class="btnMed">Get Inspired</a> <a class="moreLink" href="#">Learn More</a></div>
       </div>
-      <div class="focus"><!-- <div class="gifLoc"></div> --></div>
+      <div class="focus"></div>
+    </div> -->
+    <div class="landingArea">
+      <div class="slogan">
+        <h1>Recipes made easy.</h1>
+      </div>
+      <div class="gifArea">
+        <div class="imageBoxContainer">
+          <div class="imageBox"></div>
+          <div class="imageBox"></div>
+          <div class="imageBox"></div>
+          <div class="imageBox"></div>
+        </div>
+      </div>
+      <div class="continue">
+        <a [routerLinkActive]="['active']" [routerLink]="['/register']" class="btnMed">Get Inspired</a>
+        <a class="moreLink" href="#">Learn More</a>
+      </div>
     </div>
   </div>
   <div class="screenShot"></div>

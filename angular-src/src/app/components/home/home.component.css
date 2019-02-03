@@ -1,11 +1,11 @@
 /******* Global *******/
 .home {
   /******* Vars *******/
-  --main-text: #443c77;
-  --main-dark-text: #252a4b;
+  --main-text: #3a3a3a;
+  --main-dark-text: #363636;
   --main-light-text: #696c80;
   --light-background: #e7e7e7;
-  --button-color: #c2004e;
+  --button-color: #7d7bff;
   --circle: #e7e7e7;
   --circle-top: #6d6d6d;
   --circle-bottom: #c5c5c5;
@@ -15,11 +15,26 @@
   background-color: #fff;
   color: var(--main-text);
   overflow: hidden;
+  z-index: -2;
 }
 .wrapper {
   width: 100%;
   position: relative;
   margin: auto;
+  top: -10px;
+  margin-bottom: 100px;
+  z-index: 2;
+  height: 1000px;
+  overflow: hidden;
+  background-color: #bfd9d2;
+}
+
+/*** ***/
+.initialScreen {
+  z-index: 1;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
 }
 
 /******* Nav *******/
@@ -66,11 +81,11 @@ a {
   /* font-weight: 900; */
 }
 .btnSmall {
-  background-color: #6000f1;
+  background-color: var(--button-color);
   color: #fff;
-  border-radius: 5px;
+  border-radius: 30px;
   font-size: 18px;
-  padding: 0.75em 1.1em;
+  padding: 0.65em 1.1em;
   text-align: center;
 }
 
@@ -86,13 +101,70 @@ a {
   align-items: center;
 }
 .slogan {
+  /* text-align: center; */
+  margin-top: 30px;
+  padding: 40px 0;
+  display: flex;
+  justify-content: center;
 }
 .slogan h1 {
+  margin: 0 auto;
   font-size: 60px;
+  overflow: hidden;
+  white-space: nowrap;
 }
+
 .slogan p {
-  color: var(--main-light-text);
   font-size: 28px;
+}
+
+.gifArea {
+  margin: auto;
+  height: 450px;
+  width: 450px;
+  overflow-x: hidden;
+}
+.imageBox {
+  margin: 0;
+  height: 450px;
+  min-width: 450px;
+  background-color: rgba(0, 0, 0, 0.274);
+}
+.imageBoxContainer {
+  margin: auto;
+  height: 450px;
+  width: 450px;
+  display: flex;
+  flex-direction: row;
+  animation: slideShow 8.5s ease-in-out 0s infinite;
+}
+@keyframes slideShow {
+  10% {
+    transform: translateX(0);
+  }
+  15%,
+  45% {
+    transform: translateX(-450px);
+  }
+  50%,
+  80% {
+    transform: translateX(-900px);
+  }
+  85%,
+  100% {
+    transform: translateX(-1350px);
+  }
+  /* 75%,
+  100% {
+    transform: translateX(0);
+  } */
+}
+
+.continue {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 40px;
 }
 .mainButton {
   margin-top: 2.5rem;
@@ -102,17 +174,17 @@ a {
 }
 .btnMed {
   color: #fff;
-  margin-left: 0;
-  background-color: #6000f1;
-  border-radius: 5px;
-  padding: 1.1em 2.1em;
+  background-color: var(--button-color);
+  border-radius: 30px;
+  padding: 1em 2em;
   text-align: center;
-  font-size: 17px;
+  font-size: 16px;
   transition: 0.15s all ease-in-out;
 }
 .moreLink {
-  width: 50%;
-  font-size: 17px;
+  margin-top: 10px;
+  text-align: center;
+  font-size: 16px;
 }
 .btnMed:hover {
   background-color: rgb(63, 0, 158);

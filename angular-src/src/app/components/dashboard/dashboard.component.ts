@@ -32,6 +32,7 @@ export class DashboardComponent implements OnInit {
       this.cookbooks = data.cookbooks;
       this.userService.getUserData().subscribe(data => {
         this.userCookbooks = data.cookbooks;
+        // console.log("data", data);
         this.cookbooks.forEach(x => {
           const indexSave = this.userCookbooks.saved.findIndex(
             y => y.cookbook._id === x._id
@@ -40,7 +41,6 @@ export class DashboardComponent implements OnInit {
             x.saved = true;
           }
         });
-        console.log(this.cookbooks);
       });
     });
   }

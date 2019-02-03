@@ -34,7 +34,13 @@ router.post("/", checkAuth, (req, res, next) => {
 
 // Get all public cookbooks.
 router.get("/", checkAuth, (req, res, next) => {
-  Cookbook.find({ public: true })
+  const search_query = req.query.search_query;
+  let query = { public: true };
+  if (search_query != undefined) {
+    const regex = new RegExp(formatQuery(search_query), "gi");
+    query = { $and: [{ public: true }, { title: regex }] };
+  }
+  Cookbook.find(query)
     .populate("recipes.recipe")
     .exec()
     .then((cookbooks) => {
@@ -50,6 +56,9 @@ router.get("/", checkAuth, (req, res, next) => {
       });
     });
 });
+function formatQuery(text) {
+  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+}
 
 // Get cookbooks from a selection.
 router.get("/selection", checkAuth, (req, res, next) => {
@@ -127,10 +136,12 @@ router.get("/:id", checkAuth, (req, res, next) => {
 // Update cookbook.
 router.patch("/:id", checkAuth, (req, res, next) => {
   const query = { _id: req.params.id, author: req.userData.user.username };
-  const update = {};
+  let update = {};
   for (const ops of req.body) {
     if (["title", "description", "public", "recipes"].indexOf(ops.name) >= 0) {
       update[ops.name] = ops.value;
+    } else if (req.body[0].name == "followers") {
+      update = { $inc: { followers: req.body[0].value } };
     } else {
       return res.status(400).json({
         success: false,

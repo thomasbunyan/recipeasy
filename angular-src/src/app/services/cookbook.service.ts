@@ -1,9 +1,12 @@
 import { Injectable } from "@angular/core";
 import { Http, Headers } from "@angular/http";
+import { UserService } from "./user.service";
+import { EmptyObservable } from "rxjs/observable/EmptyObservable";
 
 @Injectable()
 export class CookbookService {
-  constructor(private http: Http) {}
+  cookbookLock = false;
+  constructor(private http: Http, private userService: UserService) {}
 
   addCookbook(initialRecipe) {
     const cookbook = {
@@ -31,6 +34,20 @@ export class CookbookService {
     return this.http
       .get("http://localhost:3000/cookbooks/", {
         headers: headers
+      })
+      .map(res => res.json());
+  }
+
+  getCookbookSearch(query) {
+    const headers = new Headers();
+    headers.append("Authorization", localStorage.getItem("id_token"));
+    headers.append("Content-Type", "application/json");
+    return this.http
+      .get("http://localhost:3000/cookbooks", {
+        headers: headers,
+        params: {
+          search_query: query
+        }
       })
       .map(res => res.json());
   }
@@ -81,8 +98,15 @@ export class CookbookService {
       data.data.forEach(e => {
         update.push(e);
       });
+    } else if (data.type === "followers") {
+      cookbookID = cookbook._id;
+      update.push({
+        name: "followers",
+        value: data.amount
+      });
     }
 
+    console.log(cookbookID);
     console.log(update);
 
     const headers = new Headers();
@@ -93,5 +117,30 @@ export class CookbookService {
         headers: headers
       })
       .map(res => res.json());
+  }
+
+  saveCookbook(cookbook) {
+    if (this.cookbookLock) {
+      return new EmptyObservable();
+    }
+    this.cookbookLock = true;
+    this.userService.getUserData().subscribe(data => {
+      const savedCookbooks = data.cookbooks.saved.map(e => {
+        return e.cookbook._id;
+      });
+      // console.log(savedCookbooks);
+      // console.log(cookbook);
+      let followerChange = 1;
+      if (savedCookbooks.indexOf(cookbook._id) > -1) {
+        followerChange = -1;
+      }
+      this.updateCookbook(cookbook, {
+        type: "followers",
+        amount: followerChange
+      }).subscribe(data => {
+        this.userService.toggleCookbookSave(cookbook);
+        this.cookbookLock = false;
+      });
+    });
   }
 }

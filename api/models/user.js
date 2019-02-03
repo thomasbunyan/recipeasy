@@ -32,6 +32,11 @@ const UserSchema = mongoose.Schema({
     required: true,
     default: []
   },
+  history: {
+    type: Array,
+    required: true,
+    default: []
+  },
   recipes: {
     saved: [
       {
@@ -75,6 +80,19 @@ const UserSchema = mongoose.Schema({
           required: true
         }
       }
+    ],
+    history: [
+      {
+        recipe: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Recipe",
+          required: true
+        },
+        timestamp: {
+          type: Number,
+          required: true
+        }
+      }
     ]
   },
   cookbooks: {
@@ -92,6 +110,19 @@ const UserSchema = mongoose.Schema({
       }
     ],
     author: [
+      {
+        cookbook: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Cookbook",
+          required: true
+        },
+        timestamp: {
+          type: Number,
+          required: true
+        }
+      }
+    ],
+    history: [
       {
         cookbook: {
           type: mongoose.Schema.Types.ObjectId,

@@ -215,7 +215,7 @@ router.get("/confirmation/:token", (req, res, next) => {
   }
 });
 
-// Get a user's (recipes, cookbooks) by their id.
+// Get a user's (recipes, cookbooks, history) by their id.
 router.get("/:id", checkAuth, (req, res, next) => {
   const userID = req.params.id;
   if (req.userData.user._id !== userID) {
@@ -225,14 +225,15 @@ router.get("/:id", checkAuth, (req, res, next) => {
     });
   }
   User.findById(userID)
-    .populate("recipes.saved.recipe recipes.voted.recipe recipes.author.recipe cookbooks.saved.cookbook cookbooks.author.cookbook")
+    .populate("recipes.saved.recipe recipes.voted.recipe recipes.author.recipe recipes.history.recipe cookbooks.saved.cookbook cookbooks.author.cookbook cookbooks.history.cookbook")
     .exec()
     .then((doc) => {
       if (doc) {
         res.status(200).json({
           success: true,
           recipes: doc.recipes,
-          cookbooks: doc.cookbooks
+          cookbooks: doc.cookbooks,
+          history: doc.history
         });
       } else {
         res.status(404).json({
@@ -252,7 +253,7 @@ router.get("/:id", checkAuth, (req, res, next) => {
 // Update a user value.
 router.patch("/:id", checkAuth, (req, res, next) => {
   const userID = req.params.id;
-  if (req.userData.user._id !== userID) {
+  if (req.userData.user._id !== userID || !userID.match(/^[0-9a-fA-F]{24}$/)) {
     return res.status(403).json({
       success: false,
       message: "No access"
@@ -261,7 +262,7 @@ router.patch("/:id", checkAuth, (req, res, next) => {
   const query = { _id: userID };
   const update = {};
   for (const ops of req.body) {
-    if (["recipes", "cookbooks", "preferences", "email"].indexOf(ops.name) >= 0) {
+    if (["history", "recipes", "cookbooks", "preferences", "email"].indexOf(ops.name) >= 0) {
       update[ops.name] = ops.value;
     } else {
       return res.status(400).json({
@@ -271,16 +272,19 @@ router.patch("/:id", checkAuth, (req, res, next) => {
     }
   }
   User.findOneAndUpdate(query, update, { new: true })
-    .populate("recipes.saved.recipe recipes.voted.recipe recipes.author.recipe cookbooks.saved.cookbook cookbooks.author.cookbook")
+    .populate("recipes.saved.recipe recipes.voted.recipe recipes.author.recipe recipes.history.recipe cookbooks.saved.cookbook cookbooks.author.cookbook cookbooks.history.cookbook")
     .exec()
     .then((result) => {
       res.status(200).json({
         success: true,
+        history: result.history,
         recipes: result.recipes,
         cookbooks: result.cookbooks
       });
     })
     .catch((err) => {
+      // console.log("YESSS", query);
+      // console.log("YESSS", update);
       res.status(500).json({
         success: false,
         error: err

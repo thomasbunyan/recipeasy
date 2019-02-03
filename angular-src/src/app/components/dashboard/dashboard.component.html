@@ -3,7 +3,10 @@
   <div class="wrapper">
     <div class="front wide">
       <div class="topArea">
-        <h3>Early morning breakfast.</h3>
+        <div class="cookbookTitle">
+          <h3>Early morning breakfast.</h3>
+          <p>Start your day off right.</p>
+        </div>
         <div class="frontNav">
           <i class="fas fa-chevron-left" (click)="scrollCookbooks('left', ref)" [ngClass]="{ unclickable: cookbookPos === 'left' }"></i>
           <i class="fas fa-chevron-right" (click)="scrollCookbooks('right', ref)" [ngClass]="{ unclickable: cookbookPos === 'right' }" class="fas fa-chevron-right" style="margin-left: 15px; padding-right: 20px"></i>
@@ -15,8 +18,33 @@
             <div class="tPic"></div>
             <div class="tImageOverlay" (click)="viewCookbook(cookbook)">
               <i class="tImageFav fas fa-heart" [ngClass]="{ saved: cookbook.saved == true }" (click)="$event.stopPropagation(); toggleSave(cookbook)"></i>
-              <!-- <i class="tImageFav far fa-heart" *ngIf="cookbook.saved != true" (click)="$event.stopPropagation(); saveCookbook(cookbook)"></i>
-              <i class="tImageFav fas fa-heart" *ngIf="cookbook.saved == true" (click)="$event.stopPropagation(); saveCookbook(cookbook)"></i> -->
+            </div>
+          </div>
+          <div class="tInfo">
+            <h4 class="tInfo-title" (click)="viewCookbook(cookbook)">{{ cookbook.title }}</h4>
+            <p>{{ cookbook.description }}</p>
+            <p class="tFol">{{ cookbook.followers | number: ".2" }} followers.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="front wide">
+      <div class="topArea">
+        <div class="cookbookTitle">
+          <h3>Chinese new year.</h3>
+          <p>Celebrate the new year with these great oriental dishes!</p>
+        </div>
+        <div class="frontNav">
+          <i class="fas fa-chevron-left" (click)="scrollCookbooks('left', ref)" [ngClass]="{ unclickable: cookbookPos === 'left' }"></i>
+          <i class="fas fa-chevron-right" (click)="scrollCookbooks('right', ref)" [ngClass]="{ unclickable: cookbookPos === 'right' }" class="fas fa-chevron-right" style="margin-left: 15px; padding-right: 20px"></i>
+        </div>
+      </div>
+      <div class="boxContainer">
+        <div class="itemBox" *ngFor="let cookbook of cookbooks">
+          <div class="tImage">
+            <div class="tPic"></div>
+            <div class="tImageOverlay" (click)="viewCookbook(cookbook)">
+              <i class="tImageFav fas fa-heart" [ngClass]="{ saved: cookbook.saved == true }" (click)="$event.stopPropagation(); toggleSave(cookbook)"></i>
             </div>
           </div>
           <div class="tInfo">

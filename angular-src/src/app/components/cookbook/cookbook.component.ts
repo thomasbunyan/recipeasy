@@ -36,6 +36,7 @@ export class CookbookComponent implements OnInit {
   ngOnInit() {
     this.userId = JSON.parse(localStorage.getItem("user")).id;
     this.cookbookId = this.route.snapshot.paramMap.get("id");
+    this.userService.addToHistory(this.cookbookId, "cookbooks");
     this.cookbookService.getCookBookById(this.cookbookId).subscribe(data => {
       if (!data.success) {
         this.router.navigate([""]);
@@ -57,7 +58,7 @@ export class CookbookComponent implements OnInit {
               this.saved = true;
             }
           });
-          const savedRecipes = data.recipes.saved.map(e => {
+          const savedRecipes = this.usersData.recipes.saved.map(e => {
             return e.recipe._id;
           });
           this.cookbook.recipes.forEach(recipe => {

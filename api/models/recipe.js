@@ -56,7 +56,8 @@ const RecipeSchema = mongoose.Schema({
   },
   views: {
     type: Number,
-    required: true
+    required: true,
+    default: 0
   }
 });
 

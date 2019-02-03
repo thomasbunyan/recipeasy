@@ -13,26 +13,23 @@ import { SidenavService } from "../sidenav/sidenav.service";
   styleUrls: ["./results.component.css"]
 })
 export class ResultsComponent implements OnInit {
-  recipes: any;
   userId: any;
-  usersRecipes: any;
+  cookbooks = [];
+  recipes = [];
   usersCookbooks: any = "";
+  usersRecipes: any;
   searchQuery: String;
   filterQuery: String;
   searchList = [];
 
+  // Sort through these.
   filterActive = false;
   timeType: String = "day";
   sortType: String = "hot";
-
   cookbookPos = "left";
   scrolledPast = false;
-
-  cookbooks = [];
-
   voteLock = false;
   saveLock = false;
-
   openWindow: any;
   copyText: String;
 
@@ -48,68 +45,74 @@ export class ResultsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    console.log("Start load");
     this.sidenavService.close();
     this.userId = JSON.parse(localStorage.getItem("user")).id;
     this.activatedRoute.queryParams.subscribe(params => {
       this.searchQuery = params["search_query"];
-      if (this.searchQuery) {
+      if (!this.searchQuery) {
+        this.router.navigate(["/"]);
+      } else {
         this.titleService.setTitle("" + this.searchQuery);
-      } else {
-        this.titleService.setTitle("Discover");
-      }
-      // TODO: Search query update here.
-    });
-
-    // TODO: If search query exists, apply it to the GET.
-    this.recipeService.getRecipes().subscribe(data => {
-      if (data.success) {
-        this.recipes = data.recipes;
-        this.searchList = this.recipes;
-        console.log(this.searchList);
-        this.userService.getUserData().subscribe(data => {
-          if (data.success) {
-            this.usersRecipes = data.recipes;
-            this.usersCookbooks = data.cookbooks;
-            this.recipes.forEach(x => {
-              const indexVote = this.usersRecipes.voted.findIndex(
-                y => y.recipe._id === x._id
-              );
-              const indexSave = this.usersRecipes.saved.findIndex(
-                y => y.recipe._id === x._id
-              );
-              if (indexVote !== -1) {
-                x.vote = this.usersRecipes.voted[indexVote].vote;
-              }
-              if (indexSave !== -1) {
-                x.saved = true;
-              }
-            });
-          } else {
-            console.log("User data could not be acquired");
-          }
-        });
-      } else {
-        console.log("Recipes could not be acquired");
-      }
-    });
-    this.cookbookService.getCookbooks().subscribe(data => {
-      if (data.success) {
-        this.cookbooks = data.cookbooks;
-      } else {
-        console.log("Cookbooks could not be acquired");
+        this.getData();
       }
     });
   }
 
-  // @HostListener("window:scroll", ["$event"])
-  // onWindowScroll(e) {
-  //   const element = document.getElementById("bar");
-  //   if (window.pageYOffset > 30) {
-  //     element.classList.add("sticky");
-  //   } else {
-  //     element.classList.remove("sticky");
-  //   }
-  // }
+  private getData() {
+    this.cookbookService
+      .getCookbookSearch(this.searchQuery)
+      .subscribe(cookbookData => {
+        if (!cookbookData.success) {
+          return console.log("Cookbooks could not be acquired");
+        }
+        this.recipeService
+          .getRecipeSearch(this.searchQuery)
+          .subscribe(recipeData => {
+            if (!recipeData.success) {
+              return console.log("Recipes could not be acquired");
+            }
+            this.recipes = recipeData.recipes;
+            this.cookbooks = cookbookData.cookbooks;
+            this.searchList = this.recipes;
+            this.userService.getUserData().subscribe(data => {
+              if (data.success) {
+                this.usersRecipes = data.recipes;
+                this.usersCookbooks = data.cookbooks;
+                this.applyUserData();
+                console.log("Finish load");
+              } else {
+                console.log("User data could not be acquired");
+              }
+            });
+          });
+      });
+  }
+
+  private applyUserData() {
+    this.recipes.forEach(x => {
+      const indexVote = this.usersRecipes.voted.findIndex(
+        y => y.recipe._id === x._id
+      );
+      const indexSave = this.usersRecipes.saved.findIndex(
+        y => y.recipe._id === x._id
+      );
+      if (indexVote !== -1) {
+        x.vote = this.usersRecipes.voted[indexVote].vote;
+      }
+      if (indexSave !== -1) {
+        x.saved = true;
+      }
+    });
+    this.cookbooks.forEach(x => {
+      const indexSave = this.usersCookbooks.saved.findIndex(
+        y => y.cookbook._id === x._id
+      );
+      if (indexSave !== -1) {
+        x.saved = true;
+      }
+    });
+  }
 
   viewRecipe(id) {
     if (this.openWindow === undefined) {
@@ -119,6 +122,16 @@ export class ResultsComponent implements OnInit {
 
   viewCookbook(cookbook) {
     this.router.navigate(["cookbook", cookbook._id]);
+  }
+
+  toggleCookbookSave(cookbook) {
+    this.cookbookService.saveCookbook(cookbook);
+    if (cookbook.saved) {
+      cookbook.followers--;
+    } else {
+      cookbook.followers++;
+    }
+    cookbook.saved = !cookbook.saved;
   }
 
   updateSearch() {

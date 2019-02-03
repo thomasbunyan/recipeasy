@@ -1,11 +1,398 @@
-i {
+/*** Create ***/
+.createPage {
+  min-height: calc(100vh - 60px);
+  width: 100%;
+  overflow: hidden;
+}
+.wrapper {
+  width: 1350px;
+  /* min-height: 100%; */
+  margin: auto;
+}
+.wrapper h1 {
+  font-size: 50px;
+  margin-top: 40px;
+  margin-bottom: 10px;
+}
+
+/*** Form area ***/
+.formArea {
+  width: 90%;
+  margin: auto;
+  padding: 20px 0;
+  /* min-height: 50vh; */
+}
+.stepper {
+  background-color: rgba(255, 255, 255, 0);
+}
+.stepLabel {
+  font-family: "ProductSansRegular", sans-serif;
+}
+.formInputArea {
+  width: 100%;
+  height: 500px;
+}
+
+/*** Input areas ***/
+.inputArea {
+  font-family: "ProductSansRegular", sans-serif;
+}
+.inputArea h2 {
+  font-size: 32px;
+  font-weight: bold;
+  padding-top: 20px;
+  text-align: center;
+}
+.inputArea label {
+  font-size: 18px;
+  color: #696969;
+}
+
+.inputField {
+  font-family: "ProductSansRegular", sans-serif;
+  background-color: #ecf0f1;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  resize: none;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  font-weight: 200;
+  margin-top: 5px;
+  padding: 10px;
+  transition: border 0.5s;
+}
+.inputField:focus {
+  border: 2px solid #03a9f4;
+}
+
+/*** Meal type area ***/
+.mealTypeArea {
+  padding: 40px 0;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.mTypeError {
+  text-align: center;
+  font-size: 14px;
+  color: #cc0033;
+}
+.typeIcon {
+  background-color: #eceff0;
+  text-align: center;
+  height: 175px;
+  width: 175px;
+  border-radius: 25px;
+  margin: 20px 20px;
+  cursor: pointer;
+  border: transparent 2px solid;
+  transition: border ease-in-out 0.15s;
+}
+.selectedMeal {
+  border: 2px solid #03a9f4;
+  transition: border ease-in-out 0.15s;
+}
+
+/*** Information area ***/
+.informationArea {
+  /* background-color: red; */
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+}
+.informationArea .formSection {
+  margin-right: 75px;
+}
+
+.recipeSkill {
+  /* height: 80px; */
+  overflow: hidden;
+}
+.skillSwitch {
+  margin-top: 5px;
+  margin-right: 5px;
+  height: 42px;
+  width: 300px;
+  display: inline-table;
+  border-radius: 8px;
+  border: 2px solid transparent;
+}
+.switch-button {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  background-color: #ecf0f1;
+  color: rgba(0, 0, 0, 0.5);
+  height: 100%;
+  cursor: pointer;
+  transition: all 0.25s ease-in-out;
+}
+.switch-good {
+  background-color: #03a9f4;
+  color: #fff;
+  transition: all 0.25s ease-in-out;
+}
+.switch-med {
+  background-color: #4caf50;
+  color: #fff;
+  transition: all 0.25s ease-in-out;
+}
+.switch-bad {
+  background-color: #cc0033;
+  color: #fff;
+  transition: all 0.25s ease-in-out;
+}
+
+.recipeTime {
+  display: flex;
+  margin-top: 5px;
+}
+.cookTime {
+  width: 90px;
+  margin-right: 20px;
+  /* background-color: #03a9f4; */
+}
+.cookTimeLabel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 15px;
+  margin-top: 10px;
+  margin-bottom: 5px !important;
+}
+.timeInput {
+  width: 100%;
+  padding: 10px;
+  font-size: 17px;
+  text-align: center;
+  background-color: #ecf0f1;
+  box-sizing: border-box;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  font-family: inherit;
+}
+
+.recipeServings {
+  height: 75px;
+  width: 100px;
+  /* padding-left: 45px; */
+  /* float: left; */
+}
+
+.publicCheck {
+  margin-left: 10px;
+}
+
+/*** Ingredients ***/
+.addIngredients {
+  display: flex;
+  flex-wrap: nowrap;
+  /* justify-content: space-around; */
+  align-items: flex-start;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+.addIngredientButton {
+  display: flex;
+  height: 100%;
+}
+
+.ingredientContainer {
+  /* width: 100%; */
+  flex-grow: 1;
+  margin-right: 10px;
+}
+
+.ingredientField {
+  font-family: "ProductSansRegular", sans-serif;
+  background-color: #ecf0f1;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  resize: none;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  font-weight: 200;
+  margin: 0 5px;
+  padding: 10px;
+  transition: border 0.5s;
+}
+.ingredientField:focus {
+  border: 2px solid #03a9f4;
+}
+.smallField {
+  width: 150px;
+}
+
+.button {
+  width: 50px;
+  height: 40px;
+  border-radius: 8px;
+  margin-left: 5px;
+  background-color: #03a9f4;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* font-size: 1.5em; */
+  /* overflow: hidden; */
+  cursor: pointer;
+}
+
+.emptyTable {
+  width: 100%;
+  text-align: center;
+  font-size: 14px;
+  padding-top: 20px;
+}
+.etError {
+  font-weight: bold;
+  color: #cc0033;
+}
+
+/*** Ingredient table ***/
+.ingredientTable {
+  width: 50%;
+  font-family: inherit;
+  margin: auto;
+  background-color: rgba(255, 255, 255, 0);
+}
+th,
+td {
+  vertical-align: middle;
+  transition: all 0.2s ease-in-out;
+}
+th {
+  font-size: 13px;
+}
+td {
+  font-size: 15px;
+}
+.elementRow:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+.recipeColumn {
+  width: 50%;
+}
+.ellipColumn {
+  text-align: right;
+  color: rgba(255, 255, 255, 0);
+}
+
+/*** Method area ***/
+.methodArea {
+  /* background-color: red; */
+}
+
+.viewStep {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  width: 100%;
+  overflow: hidden;
+  padding: 10px 0;
+}
+.stepInfo {
+  padding: 10px 0;
+  margin-right: 20px;
+  text-align: left;
+}
+
+.methodTable {
+  width: 90%;
+  font-family: inherit;
+  margin: auto;
+  background-color: rgba(255, 255, 255, 0);
+}
+.methodTable td {
+  padding: 10px;
+}
+.endColumn {
+  text-align: right;
+}
+.endColumn i {
+  padding-right: 10px;
+  color: #fff;
+}
+.elementRow:hover .endColumn i {
+  color: #000;
+}
+.narrow {
+  width: 50px;
+}
+
+.methodButtons {
+  display: inline-flex;
+}
+
+/*** Lower form area ***/
+.lowerFormArea {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.stepButton {
+  background-color: #eceeef;
+  color: #777977;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.continue {
+  background-color: #03a9f4;
+  color: #fff;
+}
+
+/*** General elements ***/
+.breakLine {
+  width: 100%;
+  height: 2px;
+  background-color: #eaeaea;
+  border-radius: 25px;
+}
+
+.error {
+  color: #cc0033 !important;
+  background-color: #fce4e4 !important;
+  border: 2px solid #cc0033 !important;
+}
+.errorMessage {
+  visibility: hidden;
+  margin-top: 5px;
+  color: #cc0033;
+  font-size: 14px;
+  padding-left: 5px;
+}
+.showErrorMessage {
+  visibility: visible;
+}
+.hidden {
+  visibility: hidden;
+}
+
+.formSection {
+  margin-bottom: 20px;
+}
+
+/*** Stepper configuration ***/
+.mat-horizontal-stepper-header {
+  pointer-events: none !important;
+}
+
+/*** Old stuff ***/
+/* i {
   cursor: pointer;
 }
 textarea,
 select {
   font-family: inherit;
   font-size: inherit;
-}
+} */
 
 .noselect {
   -webkit-touch-callout: none; /* iOS Safari */
@@ -16,7 +403,7 @@ select {
   user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome and Opera */
 }
-
+/* 
 .page {
   width: 100%;
   min-height: 100%;
@@ -48,70 +435,21 @@ select {
   right: 40px;
   border-radius: 3px;
 }
-.switch-button {
-  display: table-cell;
-  vertical-align: middle;
-  background-color: #ecf0f1;
-  color: rgba(0, 0, 0, 0.5);
-  border-top-left-radius: 3px;
-  border-bottom-left-radius: 3px;
-  width: 50%;
-  height: 100%;
-  cursor: pointer;
-  transition: all 0.25s ease-in-out;
-}
-.switch-middle {
-  border-top-left-radius: 0px;
-  border-bottom-left-radius: 0px;
-  border-top-right-radius: 0px;
-  border-bottom-right-radius: 0px;
-}
-.switch-right {
-  border-top-left-radius: 0px;
-  border-bottom-left-radius: 0px;
-  border-top-right-radius: 3px;
-  border-bottom-right-radius: 3px;
-}
-.switch-good {
-  background-color: #03a9f4;
-  color: #fff;
-  transition: all 0.25s ease-in-out;
-}
-.switch-med {
-  background-color: #4caf50;
-  color: #fff;
-  transition: all 0.25s ease-in-out;
-}
-.switch-bad {
-  background-color: #cc0033;
-  color: #fff;
-  transition: all 0.25s ease-in-out;
-}
+
 .title-area {
   height: 70px;
 }
 .description-area {
   margin-top: 15px;
   height: 150px;
-}
-.button {
-  width: 40px;
-  height: 40px;
-  border-radius: 3px;
-  margin-right: 5px;
-  background-color: #03a9f4;
-  color: #fff;
-  display: table;
-  font-size: 1.5em;
-  overflow: hidden;
-  cursor: pointer;
-}
-i {
+} */
+
+/* i {
   display: table-cell;
   text-align: center;
   vertical-align: middle;
-}
-.add-ingredients {
+} */
+/* .add-ingredients {
   display: flex;
   flex-wrap: nowrap;
   justify-content: space-around;
@@ -177,11 +515,7 @@ i {
   padding: 10px 10px;
   transition: border 0.5s;
 }
-.error {
-  color: #cc0033 !important;
-  background-color: #fce4e4 !important;
-  border: 2px solid #cc0033 !important;
-}
+
 .spacing {
   margin-right: 10px;
   width: 60px;
@@ -295,4 +629,4 @@ i {
 }
 .method-buttons {
   display: inline-flex;
-}
+} */

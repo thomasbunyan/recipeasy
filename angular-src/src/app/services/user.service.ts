@@ -1,44 +1,12 @@
 import { Injectable } from "@angular/core";
 import { Http, Headers } from "@angular/http";
+import { Observable } from "rxjs";
+import { EmptyObservable } from "rxjs/observable/EmptyObservable";
 
 @Injectable()
 export class UserService {
+  userData: any;
   constructor(private http: Http) {}
-
-  // // Check if username is unique.
-  // checkUsername(username) {
-  //   const headers = new Headers();
-  //   headers.append("Content-Type", "application/json");
-  //   return this.http
-  //     .get("http://localhost:3000/users/unique/username", {
-  //       headers: headers,
-  //       params: { value: username }
-  //     })
-  //     .map(res => res.json());
-  // }
-
-  // // Check if email is unique.
-  // checkEmail(email) {
-  //   const headers = new Headers();
-  //   headers.append("Content-Type", "application/json");
-  //   return this.http
-  //     .get("http://localhost:3000/users/unique/email", {
-  //       headers: headers,
-  //       params: { value: email }
-  //     })
-  //     .map(res => res.json());
-  // }
-
-  // Check if username or email is unique.
-  checkUnique(query) {
-    const headers = new Headers();
-    headers.append("Content-Type", "application/json");
-    return this.http
-      .get("http://localhost:3000/users/unique/" + query, {
-        headers: headers
-      })
-      .map(res => res.json());
-  }
 
   // Returns the users data.
   getUserData() {
@@ -53,11 +21,96 @@ export class UserService {
       .map(res => res.json());
   }
 
+  // Check if username or email is unique.
+  checkUnique(query) {
+    const headers = new Headers();
+    headers.append("Content-Type", "application/json");
+    return this.http
+      .get("http://localhost:3000/users/unique/" + query, {
+        headers: headers
+      })
+      .map(res => res.json());
+  }
+
+  // data = history array, value = update. If passed a String adds it to the search history, otherwise, removes it.
+  updateSearchHistory(data, value) {
+    const history = data.slice();
+    if (isNaN(value)) {
+      const index = history.findIndex(e => {
+        if (e === value) {
+          return true;
+        }
+      });
+      if (index === -1 && history.length < 31) {
+        history.push(value);
+      } else if (index === -1) {
+        history.pop();
+        history.unshift(value);
+      } else {
+        return new EmptyObservable();
+      }
+    } else {
+      history.splice(value, 1);
+    }
+
+    const update = [{ name: "history", value: history }];
+    const headers = new Headers();
+    const user = JSON.parse(localStorage.getItem("user")).id;
+    headers.append("Authorization", localStorage.getItem("id_token"));
+    headers.append("Content-Type", "application/json");
+    return this.http
+      .patch("http://localhost:3000/users/" + user, update, {
+        headers: headers
+      })
+      .map(res => res.json());
+  }
+
+  addToHistory(id, type) {
+    this.getUserData().subscribe((data: any) => {
+      if (type === "recipes") {
+        data = data.recipes;
+      } else {
+        data = data.cookbooks;
+      }
+      const user = JSON.parse(localStorage.getItem("user")).id;
+      this.addUserData(
+        { id: user, data: data },
+        { data: type, type: "history" },
+        id
+      ).subscribe(data => {
+        // console.log(data);
+      });
+    });
+  }
+
+  toggleCookbookSave(cookbook) {
+    this.getUserData().subscribe(data => {
+      const cookbooks = data.cookbooks.saved.slice();
+      const index = cookbooks.findIndex(e => {
+        return e.cookbook._id === cookbook._id;
+      });
+      if (index > -1) {
+        cookbooks.splice(index, 1);
+      } else {
+        cookbooks.push(cookbook._id);
+      }
+      const user = JSON.parse(localStorage.getItem("user")).id;
+      this.addUserData(
+        { id: user, data: data.cookbooks },
+        { data: "cookbooks", type: "save" },
+        cookbook._id
+      ).subscribe(data => {});
+    });
+  }
+
   // Updates the data for the user.
   // ? user = {id, data(field being updated)}
   // ? update = {data(recipes/cookbooks), type(saved,...), ?vote}
   // ? dataID = 252dfs
   addUserData(user, update, dataID) {
+    // console.log(user);
+    // console.log(update);
+    // console.log(dataID);
     const userData = Object.assign({}, user.data);
     const data = [];
     if (update.data === "recipes") {
@@ -74,7 +127,6 @@ export class UserService {
           userData.saved.splice(index, 1);
         }
       } else if (update.type === "vote") {
-        console.log("User data", userData);
         const index = userData.voted.findIndex(
           x => x.recipe === dataID || x.recipe._id === dataID
         );
@@ -95,6 +147,20 @@ export class UserService {
           recipe: dataID,
           timestamp: new Date().getTime()
         });
+      } else if (update.type === "history") {
+        const index = userData.history.findIndex(e => {
+          if (e.recipe._id === dataID) {
+            return true;
+          }
+        });
+        if (index > -1) {
+          userData.history[index].timestamp = new Date().getTime();
+        } else {
+          userData.history.push({
+            recipe: dataID,
+            timestamp: new Date().getTime()
+          });
+        }
       }
       data.push({ name: "recipes", value: userData });
     } else if (update.data === "cookbooks") {
@@ -115,6 +181,20 @@ export class UserService {
           cookbook: dataID,
           timestamp: new Date().getTime()
         });
+      } else if (update.type === "history") {
+        const index = userData.history.findIndex(e => {
+          if (e.cookbook._id === dataID) {
+            return true;
+          }
+        });
+        if (index > -1) {
+          userData.history[index].timestamp = new Date().getTime();
+        } else {
+          userData.history.push({
+            cookbook: dataID,
+            timestamp: new Date().getTime()
+          });
+        }
       }
       data.push({ name: "cookbooks", value: userData });
     }
@@ -128,4 +208,35 @@ export class UserService {
       })
       .map(res => res.json());
   }
+
+  // ? Private functions
+  // getUserData(): Observable<any> {
+  //   return new Observable(observer => {
+  //     if (this.userData === undefined) {
+  //       console.log("Fetching data...");
+  //       this.getData().subscribe(data => {
+  //         if (data.success) {
+  //           this.updateUserData(data);
+  //           observer.next(this.userData);
+  //           observer.complete();
+  //         } else {
+  //           console.log("Error obtaining data");
+  //           observer.complete();
+  //         }
+  //       });
+  //     } else {
+  //       observer.next(this.userData);
+  //       observer.complete();
+  //     }
+  //   });
+  // }
+  // private updateUserData(data) {
+  //   console.log(data);
+  //   this.userData = {
+  //     cookbooks: data.cookbooks,
+  //     recipes: data.recipes,
+  //     timestamp: new Date().getTime()
+  //   };
+  //   console.log(this.userData);
+  // }
 }

@@ -41,7 +41,13 @@ router.post("/", checkAuth, (req, res, next) => {
 
 // Get all public recipes.
 router.get("/", checkAuth, (req, res, next) => {
-  Recipe.find({ public: true })
+  const search_query = req.query.search_query;
+  let query = { public: true };
+  if (search_query != undefined) {
+    const regex = new RegExp(formatQuery(search_query), "gi");
+    query = { $and: [{ public: true }, { title: regex }] };
+  }
+  Recipe.find(query)
     .exec()
     .then((recipes) => {
       res.status(200).json({
@@ -56,6 +62,9 @@ router.get("/", checkAuth, (req, res, next) => {
       });
     });
 });
+function formatQuery(text) {
+  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+}
 
 // Get all public recipes from a selection.
 router.get("/selection", checkAuth, (req, res, next) => {
@@ -78,24 +87,29 @@ router.get("/selection", checkAuth, (req, res, next) => {
 
 // Get the recipe and update the views.
 router.get("/:id", checkAuth, (req, res, next) => {
+  if (!req.params.id.match(/^[0-9a-fA-F]{24}$/)) {
+    return res.status(200).json({
+      success: false
+    });
+  }
   const user = req.userData.user.username;
-  const query = { _id: req.params.id };
+  const query = { $or: [{ $and: [{ _id: req.params.id }, { public: true }] }, { $and: [{ _id: req.params.id }, { author: user }] }] };
   const update = { $inc: { views: 1 } };
   Recipe.findOneAndUpdate(query, update)
     .exec()
     .then((recipe) => {
-      if (recipe.public === false) {
-        if (recipe.author !== user) {
-          return res.status(403).json({
-            success: false,
-            message: "Private recipe"
-          });
-        }
+      console.log(recipe);
+      if (recipe === null) {
+        return res.status(403).json({
+          success: false,
+          message: "Invalid recipe"
+        });
+      } else {
+        res.status(200).json({
+          success: true,
+          recipe: recipe
+        });
       }
-      res.status(200).json({
-        success: true,
-        recipe: recipe
-      });
     })
     .catch((err) => {
       res.status(500).json({

@@ -2,7 +2,7 @@
   /*** Vars ***/
   --secondary-color: #5292ee;
 
-  width: 225px;
+  width: 300px;
   min-height: calc(100vh - 60px);
   overflow: hidden;
   /* background-color: #f8f9fa; */
@@ -12,7 +12,7 @@
   position: fixed;
   background-color: #ffffff;
   height: calc(100vh - 60px);
-  width: 225px;
+  width: 300px;
   overflow: hidden;
 }
 

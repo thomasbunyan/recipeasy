@@ -10,11 +10,67 @@ export class RecipeValidateService {
   ) {}
 
   validateIngredient(ingredient) {
-    if (ingredient.length > 15) {
-      return false;
-    } else {
-      return true;
+    const errors = new Array(4).fill({ err: false });
+    if (
+      ingredient.food === "" ||
+      ingredient.food === undefined ||
+      ingredient.food.length > 15) {
+      errors[0] = { err: true, msg: "Food not valid." };
     }
+    if(ingredient.detail === undefined){
+    } else if (ingredient.detail === "" ||
+      ingredient.detail.length > 15) {
+      errors[1] = { err: true, msg: "Notes not valid." };
+    }
+    if (
+      ingredient.amount === "" ||
+      ingredient.amount === undefined ||
+      isNaN(ingredient.amount) || 
+      ingredient.amount > 10000) {
+      errors[2] = { err: true, msg: "Amount not valid." };
+    }  
+    if (ingredient.unit === "" ||
+      ingredient.unit === undefined) {
+      errors[3] = { err: true, msg: "Unit not valid." };
+    }
+    return errors; 
+  }
+
+  validateDetails(details) {
+    const errors = new Array(6).fill({ err: false });
+    const testRe = /^[A-Za-z0-9,\.\-/()'# ]+$/;
+    const timeRe = /^[0-9]{2}:[0-5][0-9]$/;
+    if (
+      !testRe.test(details.title) ||
+      details.title === "" ||
+      details.title === undefined ||
+      details.title.length < 6 ||
+      details.title.split(" ").length < 1
+    ) {
+      errors[0] = { err: true, msg: "Title not valid." };
+    }
+    if (
+      !testRe.test(details.description) ||
+      details.description === "" ||
+      details.description === undefined ||
+      details.title.length < 6 ||
+      details.title.split(" ").length < 1
+    ) {
+      errors[1] = { err: true, msg: "Description not valid." };
+    }
+    if (!timeRe.test(details.prepTime)) {
+      errors[2] = { err: true, msg: "Preparation time not valid." };
+    }
+    if (!timeRe.test(details.cookTime)) {
+      errors[3] = { err: true, msg: "Cooking time not valid." };
+    }
+    if (details.difficulty === undefined) {
+      errors[4] = { err: true, msg: "Select a difficulty." };
+    }
+    if (details.servings === undefined || details.servings < 1) {
+      errors[5] = { err: true, msg: "Number of servings not valid." };
+    }
+    return errors;
   }
 
   validateRecipe(recipe) {

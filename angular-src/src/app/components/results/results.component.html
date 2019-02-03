@@ -11,19 +11,19 @@
         L R
       </div>
       <div class="boxContainer">
-        <div class="itemBox" *ngFor="let number of [0, 1, 2, 3, 4, 5, 6, 7, 8]">
+        <div class="itemBox" *ngFor="let cookbook of cookbooks">
           <div class="tImage">
             <div class="tPic"></div>
             <div class="tImageOverlay" (click)="viewCookbook(cookbook)">
-              <i class="tImageFav far fa-heart"></i> <i class="tImageFav fas fa-heart"></i>
+              <i class="tImageFav fas fa-heart" [ngClass]="{ saved: cookbook.saved }" (click)="$event.stopPropagation(); toggleCookbookSave(cookbook)"></i>
               <!-- <i class="tImageFav far fa-heart" *ngIf="cookbook.saved != true" (click)="$event.stopPropagation(); saveCookbook(cookbook)"></i>
                     <i class="tImageFav fas fa-heart" *ngIf="cookbook.saved == true" (click)="$event.stopPropagation(); saveCookbook(cookbook)"></i> -->
             </div>
           </div>
           <div class="tInfo">
-            <h4 class="tInfo-title" (click)="viewCookbook(cookbook)">Cookbook title</h4>
-            <p>A cookbook description</p>
-            <p class="tFol">15,352 followers.</p>
+            <h4 class="tInfo-title" (click)="viewCookbook(cookbook)">{{ cookbook.title }}</h4>
+            <p>{{ cookbook.description }}</p>
+            <p class="tFol">{{ cookbook.followers }} followers.</p>
           </div>
         </div>
       </div>

@@ -41,6 +41,7 @@ export class RecipeComponent implements OnInit {
         this.userService.getUserData().subscribe(data => {
           if (data.success) {
             this.usersRecipes = data.recipes;
+            this.userService.addToHistory(this.recipeId, "recipes");
             const indexVote = this.usersRecipes.voted.findIndex(
               y => y.recipe._id === this.recipe._id
             );

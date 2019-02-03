@@ -1,125 +1,233 @@
-<div class="page">
-  <div class="container">
-    <h1 class="title">Create a recipe</h1>
-    <div class="public-switch noselect">
-      <div class="switch-button" [ngClass]="{'switch-good': public}" (click)="public=true">Public</div>
-      <div class="switch-button switch-right" [ngClass]="{'switch-bad': !public}" (click)="public=false">Private</div>
-    </div>
-    <div class="title-area">
-      <h3 style="margin-top:30px; margin-bottom:-5px">Details</h3>
-      <label class="input-area">
-        <input type="text" class="input-field" [(ngModel)]="title" [ngClass]="{'error': errors[0].err==true }" name="title"
-          placeholder=" " maxlength="64">
-        <span class="input-placeholder">Title <i class="fas fa-question-circle" title="Give your recipe a name"></i></span>
-      </label>
-    </div>
-    <div class="description-area">
-      <label class="input-area">
-        <textarea class="input-field" rows="4" type="text" maxlength="199" [(ngModel)]="description" [ngClass]="{'error': errors[1].err==true }" name="description"
-          placeholder=" "></textarea>
-        <span class="input-placeholder">Description <i class="fas fa-question-circle" title="Add a short description of the recipe"></i></span>
-      </label>
-    </div>
-    <div class="meta-area">
-      <h3 style="margin-bottom:20px">Information</h3>
-      <div class="recipe-type">
-        <div class="custom-select">
-          <select class="type-box" [(ngModel)]="mealType">
-            <option disabled selected value style="display:none" value="-1">Select</option>
-            <option class="type-option" *ngFor="let type of recipeTypes" value="{{type}}">{{type}}</option>
-          </select>
-        </div>
-      </div>
-      <div class="recipe-time">
-        <div class="cook-time">
-          <span style="display: table; padding-left: 15px; padding-bottom: 5px"><i class="far fa-clock" style="padding-right: 5px;"></i>
-            Prep</span>
-          <input class="time-input" type="text" [(ngModel)]="prepTime" [ngClass]="{'error': errors[2].err==true }" (keydown)="timeInput($event, 'prep')"
-            placeholder="00:00" maxlength="5" onpaste="return false" (focusout)="clickOut('prep', prepTime)" (focusin)="prepTime=''">
-        </div>
-        <div class="cook-time">
-          <span style="display: table; padding-left: 15px; padding-bottom: 5px"><i class="far fa-clock" style="padding-right: 5px;"></i>
-            Cook</span>
-          <input class="time-input" type="text" [(ngModel)]="cookTime" [ngClass]="{'error': errors[3].err==true }" (keydown)="timeInput($event, 'cook')"
-            placeholder="00:00" maxlength="5" onpaste="return false" (focusout)="clickOut('cook', cookTime)" (focusin)="cookTime=''">
-        </div>
-      </div>
-      <div class="recipe-skill">
-        <h4>Difficulty</h4>
-        <div class="skill-switch noselect">
-          <div class="switch-button" style="width:25%" [ngClass]="{'switch-med': difficulty==0}" (click)="difficulty=0">Easy</div>
-          <div class="switch-button switch-middle" style="width:50%" [ngClass]="{'switch-good': difficulty==1}" (click)="difficulty=1">Intermediate</div>
-          <div class="switch-button switch-right" style="width:25%" [ngClass]="{'switch-bad': difficulty==2}" (click)="difficulty=2">Hard</div>
-        </div>
-      </div>
-      <div class="recipe-servings">
-        <label class="input-area" style="margin-top:15px">
-          <input type="text" class="input-field" [(ngModel)]="servings" [ngClass]="{'error': errors[6].err==true }" name="servings" placeholder=" " (keydown)="enterInt($event)">
-          <span class="input-placeholder">Servings <i class="fas fa-question-circle" title="Number of serving this recipe makes"></i></span>
-        </label>
-      </div>
-    </div>
-    <div class="ingredients-area">
-      <h3 style="margin-bottom:15px">Ingredients</h3>
-      <div class="added-ingredients">
-        <div class="added-ingredient" *ngFor="let ingredient of ingredients; let i = index">
-          <div class="add-ingredients" *ngIf="ingredient.editItem!=true">
-            <div class="entered-field spacing wide">{{ingredient.food}}</div>
-            <div class="entered-field spacing">{{ingredient.amount}}</div>
-            <div class="entered-field spacing">{{ingredient.unit}}</div>
-            <div class="button" (click)="ingredient.editItem=true; ingredientDetail = ingredient.detail;"><i class="far fa-edit"></i></div>
-            <div class="button" style="background-color:#cc0033;" (click)="removeIngredient(i)"><i class="fas fa-trash-alt"></i></div>
-          </div>
-          <div class="add-ingredients" *ngIf="ingredient.editItem==true" (keyup.enter)="updateIngredient(ingredient, i, addedFood, addedAmount, addedUnit); addedFood.value='';
-          addedAmount.value=''; addedUnit.value=''; ingredient.editItem=false">
-            <input type="text" class="input-field spacing wide" placeholder="{{ingredient.food}}" value="{{ingredient.food}}"
-              #addedFood>
-            <input type="text" class="input-field spacing" placeholder="{{ingredient.amount}}" value="{{ingredient.amount}}"
-              #addedAmount>
-            <input type="text" class="input-field spacing" placeholder="{{ingredient.unit}}" value="{{ingredient.unit}}"
-              #addedUnit>
-            <div class="button" (click)="addIngredientDetail(ingredient)"><i class="fas fa-cog"></i></div>
-            <div class="button" (click)="updateIngredient(ingredient, i, addedFood, addedAmount, addedUnit); addedFood.value='';
-            addedAmount.value=''; addedUnit.value=''; ingredient.editItem=false"><i
-                class="far fa-save"></i></div>
-          </div>
-        </div>
-      </div>
-      <div class="add-ingredients" (keyup.enter)="addIngredient(food, amount, unit, ingField); food=''; amount=''; unit=''">
-        <input type="text" class="input-field spacing wide" [(ngModel)]="food" placeholder="Ingredient" #ingField>
-        <input type="text" class="input-field spacing" [(ngModel)]="amount" placeholder="Amount">
-        <input type="text" class="input-field spacing" [(ngModel)]="unit" placeholder="Unit">
-        <div class="button" (click)="addIngredientDetail()"><i class="fas fa-cog"></i></div>
-        <div class="button" (click)="addIngredient(food, amount, unit, ingField); food=''; amount=''; unit=''"><i class="fas fa-plus"></i></div>
-      </div>
-      <div class="ingredient-error">{{ingredientError}}</div>
-    </div>
-    <div class="method-area">
-      <h3 style="margin-bottom:15px">Method</h3>
-      <div class="added-steps">
-        <div class="added-step" *ngFor="let step of method; let i = index">
-          <div class="view-step" *ngIf="step.editItem!=true">
-            <p class="step-info"><span style="font-weight: 800">Step {{i+1}}:</span> {{step.step}}</p>
-            <div class="method-buttons">
-              <div class="button" (click)="step.editItem=true"><i class="far fa-edit"></i></div>
-              <div class="button" style="background-color:#cc0033;" (click)="removeStep(i)"><i class="fas fa-trash-alt"></i></div>
+<div class="createPage">
+  <div class="wrapper">
+    <h1>Create a recipe</h1>
+    <div class="breakLine"></div>
+    <div class="formArea">
+      <form autocomplete="off">
+        <mat-horizontal-stepper class="stepper" labelPosition="bottom" #stepper>
+          <mat-step>
+            <ng-template matStepLabel><span class="stepLabel">Type</span></ng-template>
+            <div class="inputArea">
+              <!-- ? Meal type -->
+              <h2>Recipe type</h2>
+              <div class="mealTypeArea">
+                <div class="typeIcon" *ngFor="let meal of recipeTypes" (click)="mealType = meal; canContinue = true" [ngClass]="{ selectedMeal: mealType == meal }">{{ meal }}</div>
+              </div>
+              <div class="mTypeError">Please select a general meal type.</div>
             </div>
-          </div>
-          <div class="view-step" *ngIf="step.editItem==true" (keyup.enter)="updateStep(stepField.value, i)">
-            <textarea class="input-field spacing wide" (keydown)="disableEnter($event)" rows="3" type="text" maxlength="184"
-              value="{{step.step}}" placeholder="{{step.step}}" #stepField></textarea>
-            <div class="method-buttons">
-              <div class="button" (click)="updateStep(stepField.value, i); stepField.value=''; step.editItem=false"><i
-                  class="far fa-save"></i></div>
+          </mat-step>
+          <mat-step>
+            <ng-template matStepLabel><span class="stepLabel">Details</span></ng-template>
+            <div class="inputArea">
+              <!-- ? Details -->
+              <h2>Details</h2>
+              <div class="formSection">
+                <label for="title">Title:</label>
+                <input type="text" class="inputField" [(ngModel)]="title" [ngClass]="{ error: errors[0].err == true }" name="title" placeholder=" " maxlength="64" (keyup)="checkErrors(stepper, 0)" />
+                <div class="errorMessage" [ngClass]="{ showErrorMessage: errors[0].err == true }">Error: {{ errors[0].msg }}</div>
+              </div>
+              <div class="formSection">
+                <label for="description">Description:</label>
+                <textarea
+                  class="inputField"
+                  rows="4"
+                  type="text"
+                  maxlength="192"
+                  [(ngModel)]="description"
+                  [ngClass]="{ error: errors[1].err == true }"
+                  name="description"
+                  placeholder=" "
+                  (keyup)="checkErrors(stepper, 1)"
+                ></textarea>
+                <div class="errorMessage" [ngClass]="{ showErrorMessage: errors[1].err == true }">Error: {{ errors[1].msg }}</div>
+              </div>
+              <div class="informationArea">
+                <div class="formSection">
+                  <label for="difficulty">Difficulty:</label>
+                  <div class="recipeSkill">
+                    <div class="skillSwitch noselect" [ngClass]="{ error: errors[4].err == true }" (click)="checkErrors(stepper, 4)">
+                      <div class="switch-button" style="width:25%; border-top-left-radius: 8px; border-bottom-left-radius: 8px;" [ngClass]="{ 'switch-med': difficulty == 0 }" (click)="difficulty = 0">Easy</div>
+                      <div class="switch-button" style="width:50%" [ngClass]="{ 'switch-good': difficulty == 1 }" (click)="difficulty = 1">Intermediate</div>
+                      <div class="switch-button" style="width:25%; border-top-right-radius: 8px; border-bottom-right-radius: 8px;" [ngClass]="{ 'switch-bad': difficulty == 2 }" (click)="difficulty = 2">Hard</div>
+                    </div>
+                  </div>
+                  <div class="errorMessage" [ngClass]="{ showErrorMessage: errors[4].err == true }">Error: {{ errors[4].msg }}</div>
+                </div>
+                <div class="formSection">
+                  <div class="recipeServings">
+                    <label for="servings">Servings:</label>
+                    <input
+                      type="text"
+                      class="inputField"
+                      [(ngModel)]="servings"
+                      [ngClass]="{ error: errors[5].err == true }"
+                      name="servings"
+                      placeholder="eg. 8"
+                      (keydown)="enterInt($event)"
+                      (keyup)="checkErrors(stepper, 5)"
+                    />
+                  </div>
+                  <div class="errorMessage" [ngClass]="{ showErrorMessage: errors[5].err == true }">Error: {{ errors[5].msg }}</div>
+                </div>
+                <div class="formSection">
+                  <label for="recipeTime">Recipe time:</label>
+                  <div class="recipeTime">
+                    <div class="cookTime">
+                      <!-- <div class="cookTimeLabel"><i class="far fa-clock" style="padding-right: 5px;"></i> Prep</div> -->
+                      <input
+                        class="timeInput"
+                        type="text"
+                        [(ngModel)]="prepTime"
+                        name="prepTime"
+                        [ngClass]="{ error: errors[2].err == true }"
+                        (keydown)="timeInput($event, 'prep')"
+                        placeholder="00:00"
+                        maxlength="5"
+                        onpaste="return false"
+                        (focusout)="clickOut('prep', prepTime); checkErrors(stepper, 2)"
+                        (focusin)="prepTime = ''"
+                      />
+                    </div>
+                    <div class="cookTime">
+                      <!-- <div class="cookTimeLabel"><i class="far fa-clock" style="padding-right: 5px;"></i> Cook</div> -->
+                      <input
+                        class="timeInput"
+                        type="text"
+                        [(ngModel)]="cookTime"
+                        name="cookTime"
+                        [ngClass]="{ error: errors[3].err == true }"
+                        (keydown)="timeInput($event, 'cook')"
+                        placeholder="00:00"
+                        maxlength="5"
+                        onpaste="return false"
+                        (focusout)="clickOut('cook', cookTime); checkErrors(stepper, 3)"
+                        (focusin)="cookTime = ''"
+                      />
+                    </div>
+                  </div>
+                  <div class="errorMessage" [ngClass]="{ showErrorMessage: errors[2].err == true || errors[3].err == true }">Error: {{ errors[2].msg }} {{ errors[3].msg }}</div>
+                </div>
+              </div>
+              <div class="formSection"><label for="public">Public:</label> <input class="publicCheck" type="checkbox" name="public" [(ngModel)]="public" /></div>
             </div>
-          </div>
-        </div>
-      </div>
-      <div class="add-ingredients" (keyup.enter)="addStep(step); step=''">
-        <textarea class="input-field spacing wide" (keydown)="disableEnter($event)" rows="3" type="text" maxlength="184"
-          [(ngModel)]="step" [ngClass]="{'error': errors[8].err==true }" placeholder="Add a step"></textarea>
-      </div>
+          </mat-step>
+          <mat-step>
+            <ng-template matStepLabel><span class="stepLabel">Ingredients</span></ng-template>
+            <div class="inputArea">
+              <!-- ? Ingredients -->
+              <h2>Ingredients</h2>
+              <div>
+                <div class="addIngredients" (keyup.enter)="addIngredient(food, amount, unit, ingField); food = ''; amount = ''; unit = ''">
+                  <div class="ingredientContainer">
+                    <input type="text" class="ingredientField" [(ngModel)]="food" [ngClass]="{ error: ingErrors[0].err == true }" name="food" placeholder="Ingredient" (keyup)="checkErrors(stepper, 0)" #ingField />
+                    <div class="errorMessage" [ngClass]="{ showErrorMessage: ingErrors[0].err == true }">Error: {{ ingErrors[0].msg }}</div>
+                  </div>
+                  <div class="ingredientContainer">
+                    <input
+                      type="text"
+                      class="ingredientField"
+                      [(ngModel)]="detail"
+                      [ngClass]="{ error: ingErrors[1].err == true }"
+                      name="detail"
+                      placeholder="Notes (eg. chopped, peeled, ect.)"
+                      (keyup)="checkErrors(stepper, 1)"
+                    />
+                    <div class="errorMessage" [ngClass]="{ showErrorMessage: ingErrors[1].err == true }">Error: {{ ingErrors[1].msg }}</div>
+                  </div>
+                  <div class=" ">
+                    <input type="text" class="ingredientField smallField" [(ngModel)]="amount" [ngClass]="{ error: ingErrors[2].err == true }" name="amount" placeholder="Amount" (keyup)="checkErrors(stepper, 2)" />
+                    <div class="errorMessage" [ngClass]="{ showErrorMessage: ingErrors[2].err == true }">Error: {{ ingErrors[2].msg }}</div>
+                  </div>
+                  <div class=" ">
+                    <input
+                      list="acceptedUnits"
+                      class="ingredientField smallField"
+                      [(ngModel)]="unit"
+                      [ngClass]="{ error: ingErrors[3].err == true }"
+                      name="measureUnit"
+                      placeholder="Unit"
+                      (click)="unit = ''"
+                      (keyup)="checkErrors(stepper, 3)"
+                    />
+                    <div class="errorMessage" [ngClass]="{ showErrorMessage: ingErrors[3].err == true }">Error: {{ ingErrors[3].msg }}</div>
+                  </div>
+                  <div class="">
+                    <datalist id="acceptedUnits"><option *ngFor="let unit of units" data-value="{{ unit }}"></option></datalist>
+                  </div>
+                  <div class="addIngredientButton">
+                    <div class="button" (click)="addIngredient(ingField)"><i class="fas fa-plus"></i></div>
+                  </div>
+                </div>
+                <div class="addedIngredients">
+                  <div class="emptyTable" *ngIf="ingredients.length == 0" [ngClass]="{ etError: ingErrors[4].err }">
+                    Add some ingredients!
+                  </div>
+                  <table *ngIf="ingredients.length > 0" mat-table [dataSource]="dataSource" class="ingredientTable">
+                    <ng-container matColumnDef="ingredient">
+                      <th mat-header-cell *matHeaderCellDef>Ingredient</th>
+                      <td mat-cell *matCellDef="let ingredient">{{ ingredient.food }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="amount">
+                      <th mat-header-cell *matHeaderCellDef>Amount</th>
+                      <td mat-cell *matCellDef="let ingredient">{{ ingredient.amount }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="unit">
+                      <th mat-header-cell *matHeaderCellDef>Unit</th>
+                      <td mat-cell *matCellDef="let ingredient">{{ ingredient.unit }}</td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="['ingredient', 'amount', 'unit']"></tr>
+                    <tr mat-row *matRowDef="let myRowData; columns: ['ingredient', 'amount', 'unit']" class="elementRow"></tr>
+                  </table>
+                </div>
+                <div class="ingredient-error">{{ ingredientError }}</div>
+              </div>
+            </div>
+          </mat-step>
+          <mat-step>
+            <ng-template matStepLabel><span class="stepLabel">Method</span></ng-template>
+            <div class="inputArea">
+              <!-- ? Method -->
+              <h2>Method</h2>
+              <div>
+                <div class="methodArea">
+                  <div class="addIngredients" (keyup.enter)="addStep(step); step = ''">
+                    <textarea class="inputField" (keydown)="disableEnter($event)" rows="3" type="text" maxlength="184" [(ngModel)]="step" name="step" placeholder="Add a step"></textarea>
+                  </div>
+                  <div class="addedSteps">
+                    <div *ngIf="method.length == 0" class="emptyTable" [ngClass]="{ etError: methErrors[0].err }">Add some instructions for your recipe!</div>
+                    <table *ngIf="method.length > 0" mat-table [dataSource]="dataSource2" class="methodTable">
+                      <ng-container matColumnDef="step">
+                        <th mat-header-cell *matHeaderCellDef class="narrow">Step</th>
+                        <td mat-cell *matCellDef="let step; let i = index" class="narrow">{{ i + 1 }}.</td>
+                      </ng-container>
+                      <ng-container matColumnDef="instruction">
+                        <th mat-header-cell *matHeaderCellDef></th>
+                        <td mat-cell *matCellDef="let step">{{ step.step }}</td>
+                      </ng-container>
+                      <ng-container matColumnDef="remove">
+                        <th mat-header-cell *matHeaderCellDef class="narrow endColumn"></th>
+                        <td mat-cell *matCellDef="let step; let i = index" class="narrow endColumn"><i class="fas fa-times" (click)="removeStep(i)"></i></td>
+                      </ng-container>
+                      <tr mat-header-row *matHeaderRowDef="['step', 'instruction', 'remove']"></tr>
+                      <tr mat-row *matRowDef="let myRowData; columns: ['step', 'instruction', 'remove']" class="elementRow"></tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-step>
+          <mat-step>
+            <ng-template matStepLabel><span class="stepLabel">Review</span></ng-template>
+            <div class="inputArea"><h2>Review</h2></div>
+          </mat-step>
+        </mat-horizontal-stepper>
+      </form>
     </div>
-    <input class="submit-button" (click)="onRecipeSubmit()" type="button" value="SAVE">
+    <div class="breakLine"></div>
+    <div class="lowerFormArea">
+      <div class="stepButton" [ngClass]="{ hidden: stepper.selectedIndex == 0 }" (click)="prevPage(stepper)">Prev</div>
+      <div class="stepButton" *ngIf="stepper.selectedIndex != 4" [ngClass]="{ continue: canContinue }" (click)="nextPage(stepper)">Next</div>
+      <div class="stepButton" *ngIf="stepper.selectedIndex == 4" (click)="printRecipe()">Submit</div>
+    </div>
   </div>
 </div>
