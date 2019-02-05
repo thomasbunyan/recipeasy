@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "Recipeasy back-end",
   "main": "app.js",
-  "scripts": {},
+  "scripts": {
+    "start": "node app"
+  },
   "private": true,
   "dependencies": {
     "bcryptjs": "*",
