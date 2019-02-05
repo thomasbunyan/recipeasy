@@ -1,17 +1,17 @@
 /******* Global *******/
 .home {
   /******* Vars *******/
-  --main-text: #3a3a3a;
+  --main-text: #555555;
   --main-dark-text: #363636;
   --main-light-text: #696c80;
   --light-background: #e7e7e7;
-  --button-color: #7d7bff;
+  --button-color: #4286f5;
   --circle: #e7e7e7;
   --circle-top: #6d6d6d;
   --circle-bottom: #c5c5c5;
 
   min-height: 100%;
-  max-width: 100%;
+  max-width: 100vw;
   background-color: #fff;
   color: var(--main-text);
   overflow: hidden;
@@ -21,12 +21,9 @@
   width: 100%;
   position: relative;
   margin: auto;
-  top: -10px;
-  margin-bottom: 100px;
   z-index: 2;
-  height: 1000px;
+  color: var(--main-text);
   overflow: hidden;
-  background-color: #bfd9d2;
 }
 
 /*** ***/
@@ -39,11 +36,9 @@
 
 /******* Nav *******/
 nav {
-  width: 86%;
+  width: 80%;
   margin: auto;
-  text-align: right;
-  margin-top: 50px;
-  padding: 1vh 0px;
+  margin-top: 58px;
   overflow: hidden;
   z-index: 100 !important;
   display: flex;
@@ -52,14 +47,12 @@ nav {
 }
 a {
   text-decoration: none;
-  color: var(--main-dark-text);
-  font-size: 20px;
+  color: var(--main-text);
+  font-size: 18px;
   font-weight: 300;
   margin: 0 10px;
 }
 .navLeft {
-  /* background-color: #0066ff; */
-  /* width: 450px; */
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -77,63 +70,104 @@ a {
 }
 .subPoint {
   padding: 0;
-  font-size: 18px;
+  font-size: 17px;
+  margin-left: 25px;
   /* font-weight: 900; */
 }
 .btnSmall {
-  background-color: var(--button-color);
-  color: #fff;
-  border-radius: 30px;
-  font-size: 18px;
-  padding: 0.65em 1.1em;
+  color: var(--button-color);
+  border: var(--button-color) 2px solid;
+  border-radius: 5px;
+  font-size: 17px;
+  padding: 0.6em 1.4em;
   text-align: center;
+  transition: 0.15s all ease-in-out;
+}
+.btnSmall:hover {
+  color: #fff;
+  background-color: var(--button-color);
+  transition: 0.15s all ease-in-out;
 }
 
 /******* Landing *******/
-.landing {
+.landingArea {
   margin: auto;
-  margin-top: 10vh;
-  margin-bottom: 12vh;
-  width: 1490px;
-  display: flex;
-  justify-content: space-evenly;
   /* background-color: red; */
-  align-items: center;
+  margin-top: 170px;
+  max-width: 1170px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  /* background-color: red; */
+}
+.landingLeft {
+  /* margin: auto; */
+}
+.landingRight {
+  /* margin: auto; */
 }
 .slogan {
-  /* text-align: center; */
-  margin-top: 30px;
-  padding: 40px 0;
-  display: flex;
-  justify-content: center;
+  /* margin: 0 10px; */
 }
 .slogan h1 {
   margin: 0 auto;
   font-size: 60px;
   overflow: hidden;
-  white-space: nowrap;
+  white-space: normal;
+}
+.slogan p {
+  font-size: 17px;
+  max-width: 450px;
+  padding: 20px 0;
+  /* white-space: pre-wrap; */
 }
 
-.slogan p {
-  font-size: 28px;
+.continue {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.btnMed {
+  color: #fff;
+  background-color: var(--button-color);
+  border-radius: 5px;
+  padding: 1.15em 2.3em;
+  text-align: center;
+  font-size: 17px;
+  transition: 0.15s all ease-in-out;
+}
+.moreLink {
+  margin-left: 50px;
+  text-align: center;
+  font-size: 16px;
+}
+.btnMed:hover {
+  background-color: rgb(63, 0, 158);
+  transition: 0.15s all ease-in-out;
 }
 
 .gifArea {
   margin: auto;
-  height: 450px;
-  width: 450px;
-  overflow-x: hidden;
+  height: 500px;
+  width: 500px;
+  overflow: hidden;
 }
 .imageBox {
   margin: 0;
-  height: 450px;
-  min-width: 450px;
-  background-color: rgba(0, 0, 0, 0.274);
+  height: 500px;
+  min-width: 500px;
+  /* background-color: rgba(0, 0, 0, 0.274); */
+}
+.imageBox img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
 }
 .imageBoxContainer {
   margin: auto;
-  height: 450px;
-  width: 450px;
+  height: 500px;
+  width: 500px;
   display: flex;
   flex-direction: row;
   animation: slideShow 8.5s ease-in-out 0s infinite;
@@ -144,93 +178,81 @@ a {
   }
   15%,
   45% {
-    transform: translateX(-450px);
+    transform: translateX(-500px);
   }
   50%,
   80% {
-    transform: translateX(-900px);
+    transform: translateX(-1000px);
   }
   85%,
   100% {
-    transform: translateX(-1350px);
+    transform: translateX(-1500px);
   }
-  /* 75%,
-  100% {
-    transform: translateX(0);
-  } */
-}
-
-.continue {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 40px;
-}
-.mainButton {
-  margin-top: 2.5rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.btnMed {
-  color: #fff;
-  background-color: var(--button-color);
-  border-radius: 30px;
-  padding: 1em 2em;
-  text-align: center;
-  font-size: 16px;
-  transition: 0.15s all ease-in-out;
-}
-.moreLink {
-  margin-top: 10px;
-  text-align: center;
-  font-size: 16px;
-}
-.btnMed:hover {
-  background-color: rgb(63, 0, 158);
-  transition: 0.15s all ease-in-out;
-}
-.focus {
-  height: 400px;
-  flex-grow: 1;
-  max-width: 30vw;
-  border: #000 1px solid;
-}
-.gifLoc {
-  border: #000 1px solid;
-  width: 80%;
-  height: 100%;
-  margin: auto;
 }
 
 /******* Screenshot *******/
+.imageBackground {
+  width: 100vw;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+}
+.imageBackground img {
+  z-index: -1;
+  width: 100%;
+  min-width: 1000px;
+  height: 100%;
+  position: absolute;
+}
 .screenShot {
+  position: relative;
+  margin: 70px auto;
+  overflow: auto;
+  z-index: 100 !important;
+  overflow: hidden;
+}
+.screenShot img {
+  position: relative;
+  max-width: 1150px;
+}
+
+/*** Affiliates ***/
+.affiliates {
+  width: 100%;
+  height: 180px;
+  background-color: #f2f2f2;
+}
+.affRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
   margin: auto;
-  width: 1025px;
-  height: 600px;
-  border-radius: 25px;
-  background-color: #c2004e;
-  box-shadow: 0px 5px 25px 0px rgba(63, 71, 102, 0.5);
+  width: 1170px;
+  height: 100%;
 }
 
 /******* More info *******/
 .moreInfo {
   margin: auto;
-  margin-top: 20vh;
-  margin-bottom: 5vh;
-  /* width: 1025px; */
-  width: 60%;
-  border-radius: 5px;
-  display: flex;
+  margin-top: 150px;
+  margin-bottom: 150px;
+  max-width: 1170px;
 }
 .column {
-  width: 50%;
+  display: flex;
+  flex-direction: column;
+}
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 75px 0;
 }
 .infoBox {
-  /* background-color: #f953c6; */
   width: 470px;
-  margin: auto;
-  margin-bottom: 15vh;
   font-size: 16px;
   font-weight: normal;
 }

@@ -1,64 +1,78 @@
 <div class="home">
-  <!-- <div class="initialScreen"></div> -->
   <div class="wrapper">
     <nav id="nav">
-      <div class="navLeft"><a href="#" class="logo">Recipeasy</a> <a href="#" class="subPoint">About</a> <a href="#" class="subPoint">How it works</a> <a href="#" class="subPoint">Contact</a></div>
-      <div class="navRight"><a class="subPoint" [routerLinkActive]="['active']" [routerLink]="['/login']">Login</a> <a [routerLinkActive]="['active']" [routerLink]="['/register']" class="btnSmall">Register</a></div>
+      <div class="navLeft"><a href="/" class="logo"># Recipeasy</a></div>
+      <div class="navRight">
+        <a href="#" class="subPoint">About</a>
+        <a href="#" class="subPoint">Features</a> <a href="#" class="subPoint">Contact</a>
+        <a class="subPoint btnSmall" [routerLinkActive]="['active']" [routerLink]="['/login']">Login</a>
+      </div>
     </nav>
-    <!-- <div class="landing">
-      <div class="slogan">
-        <h1>Recipes made easy.</h1>
-        <p>Loads of ideas, 100% free.</p>
-        <div class="mainButton"><a [routerLinkActive]="['active']" [routerLink]="['/register']" class="btnMed">Get Inspired</a> <a class="moreLink" href="#">Learn More</a></div>
-      </div>
-      <div class="focus"></div>
-    </div> -->
     <div class="landingArea">
-      <div class="slogan">
-        <h1>Recipes made easy.</h1>
-      </div>
-      <div class="gifArea">
-        <div class="imageBoxContainer">
-          <div class="imageBox"></div>
-          <div class="imageBox"></div>
-          <div class="imageBox"></div>
-          <div class="imageBox"></div>
+      <div class="landingLeft">
+        <div class="slogan">
+          <h1>Recipes made easy.</h1>
+          <p>Some text in gdlkn hrte to fil thr ganm fdkd fpfkdjsedsjekljs sldfjlskd but that osnt mesan hthat I can t. Some text in gdlkn hrte to fil thr ganm fdkd fpfkdjsedsjekljs.</p>
+          <div class="continue">
+            <a [routerLinkActive]="['active']" [routerLink]="['/register']" class="btnMed">Get Inspired</a>
+            <a class="moreLink" href="#">Learn More</a>
+          </div>
         </div>
       </div>
-      <div class="continue">
-        <a [routerLinkActive]="['active']" [routerLink]="['/register']" class="btnMed">Get Inspired</a>
-        <a class="moreLink" href="#">Learn More</a>
+      <div class="landingRight">
+        <div class="gifArea">
+          <div class="imageBoxContainer">
+            <div class="imageBox"><img src="../../../assets//images/icecream@2x.png" /></div>
+            <div class="imageBox"><img src="../../../assets//images/icecream@2x.png" /></div>
+            <div class="imageBox"><img src="../../../assets//images/icecream@2x.png" /></div>
+            <div class="imageBox"><img src="../../../assets//images/icecream@2x.png" /></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="imageBackground">
+      <img src="../../../assets/images/Path 11.svg" />
+      <div class="screenShot">
+        <img src="../../../assets/images/Group 16@2x.png" />
       </div>
     </div>
   </div>
-  <div class="screenShot"></div>
+  <div class="affiliates">
+    <div class="affRow">
+      <div class="affiliate">One</div>
+      <div class="affiliate">Two</div>
+      <div class="affiliate">Three</div>
+    </div>
+  </div>
   <div class="moreInfo">
     <div class="column">
-      <div class="infoBox">
-        <i class="fas fa-book" style="color: #FF9700"></i>
-        <h2>An archive of recipes</h2>
-        <p>mply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
-        <p>mply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+      <div class="row">
+        <div class="infoBox">
+          <i class="fas fa-book" style="color: #FF9700"></i>
+          <h2>An archive of recipes</h2>
+          <p>mply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+          <p>mply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+        </div>
+        <div class="infoBox">
+          <i class="fas fa-desktop" style="color: #EA1E63"></i>
+          <h2>Multi-Browser support</h2>
+          <p>mply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+          <p>mply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+        </div>
       </div>
-      <div class="infoBox">
-        <i class="fas fa-desktop" style="color: #EA1E63"></i>
-        <h2>Multi-Browser support</h2>
-        <p>mply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
-        <p>mply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
-      </div>
-    </div>
-    <div class="column">
-      <div class="infoBox">
-        <i class="fas fa-save" style="color: #8BC24A"></i>
-        <h2>Save them for later</h2>
-        <p>mply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
-        <p>mply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
-      </div>
-      <div class="infoBox">
-        <i class="fas fa-edit" style="color: #673BB7"></i>
-        <h2>Edit your own</h2>
-        <p>mply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
-        <p>mply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+      <div class="row">
+        <div class="infoBox">
+          <i class="fas fa-save" style="color: #8BC24A"></i>
+          <h2>Save them for later</h2>
+          <p>mply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+          <p>mply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+        </div>
+        <div class="infoBox">
+          <i class="fas fa-edit" style="color: #673BB7"></i>
+          <h2>Edit your own</h2>
+          <p>mply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+          <p>mply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+        </div>
       </div>
     </div>
   </div>
@@ -67,7 +81,7 @@
     <p>Explore recipes anywhere</p>
     <div class="phone"></div>
   </div>
-  <div class="spacedArea">
+  <!-- <div class="spacedArea">
     <div class="breakerBar"></div>
     <div class="infoPanel">
       <div class="infoPanelR">
@@ -102,7 +116,7 @@
       <h2>Headline</h2>
       <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error corrupti quaerat aspernatur.</p>
     </div>
-  </div>
+  </div> -->
   <!-- <div class="image-bar">
     <div class="about">
       <div class="profile-text">
@@ -126,47 +140,3 @@
     </div>
   </footer>
 </div>
-
-<!--
-  <div class="dash">
-    <div class="content2" *ngIf="authService.loggedIn()">
-      <div class="search-bar"><input type="text" class="search input-field" [(ngModel)]="searchQuery" (keyup.enter)="enterSearch()"
-          placeholder="Search" /></div>
-      <div class="picked">
-        <div class="picked-card card">
-          <div class="cookbookTitle">
-            <h2 class="tTitle">Early morning breakfast</h2>
-            <div class="tNav">
-              <i class="fas fa-chevron-left" (click)="scrollCookbooks('left', ref)" [ngClass]="{ unclickable: cookbookPos === 'left' }"></i>
-              <i class="fas fa-chevron-right" (click)="scrollCookbooks('right', ref)" [ngClass]="{ unclickable: cookbookPos === 'right' }"
-                class="fas fa-chevron-right" style="margin-left: 15px; padding-right: 20px"></i>
-            </div>
-          </div>
-          <div class="cookbooks" #ref>
-            <div class="cookbook" *ngFor="let cookbook of cookbooks">
-              <div class="tImage">
-                <div class="tPic"></div>
-                <div class="tImageOverlay" (click)="viewCookbook(cookbook)">
-                  <i class="tImageFav far fa-heart" *ngIf="cookbook.saved != true" (click)="$event.stopPropagation(); saveCookbook(cookbook)"></i>
-                  <i class="tImageFav fas fa-heart" *ngIf="cookbook.saved == true" (click)="$event.stopPropagation(); saveCookbook(cookbook)"></i>
-                </div>
-              </div>
-              <div class="tInfo">
-                <h4 class="tInfo-title" (click)="viewCookbook(cookbook)">{{ cookbook.title }}</h4>
-                <p>{{ cookbook.description }}</p>
-                <p class="tFol">15,352 followers.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="dash-area">
-        <div class="info card"></div>
-        <div class="trending card">
-          <h3 class="trending-title">Trending recipes</h3>
-          <div class="trending-recipe" *ngFor="let recipe of recipes" (click)="viewRecipe(recipe)">{{ recipe.title }}</div>
-        </div>
-      </div>
-    </div>
-  </div>
--->
