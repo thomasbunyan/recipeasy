@@ -13,7 +13,7 @@
               <div class="mealTypeArea">
                 <div class="typeIcon" *ngFor="let meal of recipeTypes" (click)="mealType = meal; canContinue = true" [ngClass]="{ selectedMeal: mealType == meal }">{{ meal }}</div>
               </div>
-              <div class="mTypeError">Please select a general meal type.</div>
+              <div class="mType" [ngClass]="{ mTypeError: errors[0] == true }">Please select a general meal type.</div>
             </div>
           </mat-step>
           <mat-step>
@@ -227,7 +227,7 @@
     <div class="lowerFormArea">
       <div class="stepButton" [ngClass]="{ hidden: stepper.selectedIndex == 0 }" (click)="prevPage(stepper)">Prev</div>
       <div class="stepButton" *ngIf="stepper.selectedIndex != 4" [ngClass]="{ continue: canContinue }" (click)="nextPage(stepper)">Next</div>
-      <div class="stepButton" *ngIf="stepper.selectedIndex == 4" (click)="printRecipe()">Submit</div>
+      <div class="stepButton" *ngIf="stepper.selectedIndex == 4" (click)="onRecipeSubmit()">Submit</div>
     </div>
   </div>
 </div>

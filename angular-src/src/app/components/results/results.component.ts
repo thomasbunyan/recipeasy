@@ -6,6 +6,8 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { RecipeValidateService } from "../../services/recipe-validate.service";
 import { Title } from "@angular/platform-browser";
 import { SidenavService } from "../sidenav/sidenav.service";
+import { MatDialog } from "@angular/material";
+import { FilterDialogComponent } from "./filter-dialog/filter-dialog.component";
 
 @Component({
   selector: "app-results",
@@ -22,12 +24,19 @@ export class ResultsComponent implements OnInit {
   filterQuery: String;
   searchList = [];
 
+  // Filter
+  filterOpen = false;
+  ingredients: string;
+  servings: number;
+  difficulty: number;
+  timeMin: string;
+  timeMax: string;
+
   // Sort through these.
-  filterActive = false;
-  timeType: String = "day";
-  sortType: String = "hot";
-  cookbookPos = "left";
-  scrolledPast = false;
+  // step = 0;
+  lastSeen = undefined;
+  endOfPage = false;
+
   voteLock = false;
   saveLock = false;
   openWindow: any;
@@ -41,62 +50,73 @@ export class ResultsComponent implements OnInit {
     private userService: UserService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private titleService: Title
+    private titleService: Title,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit() {
     console.log("Start load");
     this.sidenavService.close();
     this.userId = JSON.parse(localStorage.getItem("user")).id;
-    this.activatedRoute.queryParams.subscribe(params => {
+    this.activatedRoute.queryParams.subscribe((params) => {
       this.searchQuery = params["search_query"];
       if (!this.searchQuery) {
         this.router.navigate(["/"]);
       } else {
         this.titleService.setTitle("" + this.searchQuery);
+        this.lastSeen = undefined;
+        this.endOfPage = false;
         this.getData();
       }
     });
   }
 
   private getData() {
-    this.cookbookService
-      .getCookbookSearch(this.searchQuery)
-      .subscribe(cookbookData => {
-        if (!cookbookData.success) {
-          return console.log("Cookbooks could not be acquired");
+    this.cookbookService.getCookbookSearch(this.searchQuery).subscribe((cookbookData) => {
+      if (!cookbookData.success) {
+        return console.log("Cookbooks could not be acquired");
+      }
+      this.recipeService.getRecipeSearch(this.searchQuery).subscribe((recipeData) => {
+        if (!recipeData.success) {
+          return console.log("Recipes could not be acquired");
         }
-        this.recipeService
-          .getRecipeSearch(this.searchQuery)
-          .subscribe(recipeData => {
-            if (!recipeData.success) {
-              return console.log("Recipes could not be acquired");
-            }
-            this.recipes = recipeData.recipes;
-            this.cookbooks = cookbookData.cookbooks;
-            this.searchList = this.recipes;
-            this.userService.getUserData().subscribe(data => {
-              if (data.success) {
-                this.usersRecipes = data.recipes;
-                this.usersCookbooks = data.cookbooks;
-                this.applyUserData();
-                console.log("Finish load");
-              } else {
-                console.log("User data could not be acquired");
-              }
-            });
-          });
+        this.recipes = recipeData.recipes;
+        this.cookbooks = cookbookData.cookbooks;
+        this.searchList = this.recipes;
+        this.userService.getUserData().subscribe((data) => {
+          if (data.success) {
+            this.usersRecipes = data.recipes;
+            this.usersCookbooks = data.cookbooks;
+            this.recipes = this.applyUserData(recipeData.recipes);
+            console.log("Finish load");
+            this.onScroll();
+          } else {
+            console.log("User data could not be acquired");
+          }
+        });
       });
+    });
   }
 
-  private applyUserData() {
-    this.recipes.forEach(x => {
-      const indexVote = this.usersRecipes.voted.findIndex(
-        y => y.recipe._id === x._id
-      );
-      const indexSave = this.usersRecipes.saved.findIndex(
-        y => y.recipe._id === x._id
-      );
+  onScroll() {
+    if (this.endOfPage) {
+      return;
+    }
+    this.lastSeen = this.searchList[this.searchList.length - 1]._id;
+    this.recipeService.getRecipeSearch(this.searchQuery, this.lastSeen).subscribe((recipeData) => {
+      this.recipes = this.recipes.concat(this.applyUserData(recipeData.recipes));
+      this.searchList = this.recipes;
+      if (this.lastSeen === this.searchList[this.searchList.length - 1]._id) {
+        this.endOfPage = true;
+        return;
+      }
+    });
+  }
+
+  private applyUserData(recipeList) {
+    recipeList.forEach((x) => {
+      const indexVote = this.usersRecipes.voted.findIndex((y) => y.recipe._id === x._id);
+      const indexSave = this.usersRecipes.saved.findIndex((y) => y.recipe._id === x._id);
       if (indexVote !== -1) {
         x.vote = this.usersRecipes.voted[indexVote].vote;
       }
@@ -104,14 +124,13 @@ export class ResultsComponent implements OnInit {
         x.saved = true;
       }
     });
-    this.cookbooks.forEach(x => {
-      const indexSave = this.usersCookbooks.saved.findIndex(
-        y => y.cookbook._id === x._id
-      );
+    this.cookbooks.forEach((x) => {
+      const indexSave = this.usersCookbooks.saved.findIndex((y) => y.cookbook._id === x._id);
       if (indexSave !== -1) {
         x.saved = true;
       }
     });
+    return recipeList;
   }
 
   viewRecipe(id) {
@@ -122,6 +141,29 @@ export class ResultsComponent implements OnInit {
 
   viewCookbook(cookbook) {
     this.router.navigate(["cookbook", cookbook._id]);
+  }
+
+  filterSearch(apply) {
+    if (apply) {
+      const filter = {};
+      if (this.ingredients !== undefined) {
+        filter["ingredients"] = this.ingredients.split(",").map(function(item) {
+          return item.trim();
+        });
+      }
+      if (this.servings !== undefined) {
+      }
+      if (this.difficulty !== undefined) {
+      }
+      if (this.timeMin !== undefined) {
+      }
+      if (this.timeMax !== undefined) {
+      }
+      this.filterOpen = false;
+      console.log(filter);
+    } else {
+      this.ingredients = this.servings = this.difficulty = this.timeMin = this.timeMax = undefined;
+    }
   }
 
   toggleCookbookSave(cookbook) {
@@ -137,7 +179,7 @@ export class ResultsComponent implements OnInit {
   updateSearch() {
     const query = this.filterQuery;
     const newFoods = [];
-    this.recipes.forEach(el => {
+    this.recipes.forEach((el) => {
       if (el.name.toLowerCase().includes(query.toLowerCase())) {
         newFoods.push(el);
       }
@@ -149,16 +191,14 @@ export class ResultsComponent implements OnInit {
     if (!this.saveLock) {
       this.saveLock = true;
       const userData = { id: this.userId, data: this.usersRecipes };
-      this.userService
-        .addUserData(userData, { data: "recipes", type: "save" }, recipe._id)
-        .subscribe(data => {
-          if (!data.success) {
-            console.log("Failed to toggle save");
-          } else {
-            recipe.saved = !recipe.saved;
-          }
-          this.saveLock = false;
-        });
+      this.userService.addUserData(userData, { data: "recipes", type: "save" }, recipe._id).subscribe((data) => {
+        if (!data.success) {
+          console.log("Failed to toggle save");
+        } else {
+          recipe.saved = !recipe.saved;
+        }
+        this.saveLock = false;
+      });
       if (this.openWindow !== undefined) {
         this.openWindow.showOptions = false;
         this.openWindow = undefined;
@@ -170,15 +210,9 @@ export class ResultsComponent implements OnInit {
     if (!this.voteLock) {
       this.voteLock = true;
       const user = { id: this.userId, data: this.usersRecipes };
-      const result = this.recipeValidateService.castVote(
-        vote,
-        recipe.vote,
-        recipe,
-        user,
-        () => {
-          this.voteLock = false;
-        }
-      );
+      const result = this.recipeValidateService.castVote(vote, recipe.vote, recipe, user, () => {
+        this.voteLock = false;
+      });
       recipe.score = result.newScore;
       recipe.vote = result.newVote;
       this.voteLock = false;
@@ -187,33 +221,29 @@ export class ResultsComponent implements OnInit {
 
   addToCookbook(cookbook, recipe) {
     if (cookbook === "new") {
-      this.cookbookService.addCookbook(recipe._id).subscribe(data => {
+      this.cookbookService.addCookbook(recipe._id).subscribe((data) => {
         if (!data.success) {
           console.log("Could not create cookbook");
         } else {
           const user = { id: this.userId, data: this.usersCookbooks };
           const update = { data: "cookbooks", type: "author" };
-          this.userService
-            .addUserData(user, update, data.cookbook._id)
-            .subscribe(data => {
-              if (!data.success) {
-                console.log("Could not update user data");
-              } else {
-                this.usersCookbooks = data.cookbooks;
-              }
-            });
+          this.userService.addUserData(user, update, data.cookbook._id).subscribe((data) => {
+            if (!data.success) {
+              console.log("Could not update user data");
+            } else {
+              this.usersCookbooks = data.cookbooks;
+            }
+          });
         }
       });
     } else {
-      this.cookbookService
-        .updateCookbook(cookbook, { type: "recipes", data: recipe })
-        .subscribe(data => {
-          if (!data.success) {
-            console.log("Unable to add recipe");
-          } else {
-            console.log(data.cookbook.recipes);
-          }
-        });
+      this.cookbookService.updateCookbook(cookbook, { type: "recipes", data: recipe }).subscribe((data) => {
+        if (!data.success) {
+          console.log("Unable to add recipe");
+        } else {
+          console.log(data.cookbook.recipes);
+        }
+      });
 
       // this.cookbookService
       //   .getCookBookById(book.cookbook, false)
@@ -238,6 +268,17 @@ export class ResultsComponent implements OnInit {
     }
     this.openWindow.showOptions = false;
     this.openWindow = undefined;
+  }
+
+  refineSearch() {
+    const refineDialog = this.dialog.open(FilterDialogComponent, {
+      data: {
+        title: "Hello world"
+      }
+    });
+    refineDialog.afterClosed().subscribe((result) => {
+      console.log(result);
+    });
   }
 
   getTimeAgo(timeStamp) {
@@ -292,8 +333,7 @@ export class ResultsComponent implements OnInit {
         additionalMinsS = additionalMins;
       }
 
-      const totHours =
-        parseInt(cook[0], 10) + parseInt(prep[0], 10) + additionalHours;
+      const totHours = parseInt(cook[0], 10) + parseInt(prep[0], 10) + additionalHours;
       const totalTime = totHours + ":" + additionalMinsS;
 
       return totalTime;
@@ -302,68 +342,13 @@ export class ResultsComponent implements OnInit {
     }
   }
 
-  scrollCookbooks(dir, ref) {
-    if (dir === "left") {
-      ref.scrollTo({ left: 0, behavior: "smooth" });
-      this.cookbookPos = "left";
-    } else {
-      ref.scrollTo({ left: ref.scrollWidth, behavior: "smooth" });
-      this.cookbookPos = "right";
-    }
-  }
-
-  moreOptions(e, recipe, optionsMenu) {
-    if (recipe.showOptions) {
-      recipe.showOptions = false;
-      this.openWindow = undefined;
-    } else {
-      if (this.openWindow !== undefined) {
-        this.openWindow.showOptions = false;
-      }
-      optionsMenu.style.top = e.pageY + "px";
-      optionsMenu.style.left = e.pageX + "px";
-      recipe.showOptions = true;
-      this.openWindow = recipe;
-    }
-  }
-
-  onRightClick(e, recipe, optionsMenu) {
-    if (recipe.showOptions) {
-      optionsMenu.style.top = e.pageY + "px";
-      optionsMenu.style.left = e.pageX + "px";
-    } else {
-      if (this.openWindow !== undefined) {
-        this.openWindow.showOptions = false;
-      }
-      optionsMenu.style.top = e.pageY + "px";
-      optionsMenu.style.left = e.pageX + "px";
-      recipe.showOptions = true;
-      this.openWindow = recipe;
-    }
-  }
-
-  copyMessage(recipe) {
-    const val = "http://localhost:4200/recipe/" + recipe._id;
-    const selBox = document.createElement("textarea");
-    selBox.style.position = "fixed";
-    selBox.style.left = "0";
-    selBox.style.top = "0";
-    selBox.style.opacity = "0";
-    selBox.value = val;
-    document.body.appendChild(selBox);
-    selBox.focus();
-    selBox.select();
-    document.execCommand("copy");
-    document.body.removeChild(selBox);
-
-    this.openWindow.showOptions = false;
-    this.openWindow = undefined;
-  }
-
-  windowClick(e) {
-    if (this.openWindow !== undefined) {
-      this.openWindow.showOptions = false;
-      this.openWindow = undefined;
-    }
-  }
+  // scrollCookbooks(dir, ref) {
+  //   if (dir === "left") {
+  //     ref.scrollTo({ left: 0, behavior: "smooth" });
+  //     this.cookbookPos = "left";
+  //   } else {
+  //     ref.scrollTo({ left: ref.scrollWidth, behavior: "smooth" });
+  //     this.cookbookPos = "right";
+  //   }
+  // }
 }

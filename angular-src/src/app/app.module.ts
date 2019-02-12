@@ -5,8 +5,8 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpModule } from "@angular/http";
 import { MatDialogModule } from "@angular/material/dialog";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-
 import { MaterialModule } from "./material.module";
+import { InfiniteScrollModule } from "ngx-infinite-scroll";
 
 import { AppComponent } from "./app.component";
 import { NavbarComponent } from "./components/navbar/navbar.component";
@@ -102,28 +102,8 @@ const appRoutes: Routes = [
     CookbookComponent,
     HistoryComponent
   ],
-  imports: [
-    HttpModule,
-    FormsModule,
-    BrowserModule,
-    RouterModule.forRoot(appRoutes),
-    MatDialogModule,
-    BrowserAnimationsModule,
-    MaterialModule,
-    ReactiveFormsModule
-  ],
-  providers: [
-    UserValidateService,
-    RecipeValidateService,
-    SidenavService,
-    AuthService,
-    UserService,
-    RecipeService,
-    CookbookService,
-    GeneralService,
-    AuthGuard,
-    Title
-  ],
+  imports: [HttpModule, FormsModule, BrowserModule, RouterModule.forRoot(appRoutes), MatDialogModule, BrowserAnimationsModule, MaterialModule, ReactiveFormsModule, InfiniteScrollModule],
+  providers: [UserValidateService, RecipeValidateService, SidenavService, AuthService, UserService, RecipeService, CookbookService, GeneralService, AuthGuard, Title],
   bootstrap: [AppComponent],
   entryComponents: [EditCookbookDialogComponent]
 })

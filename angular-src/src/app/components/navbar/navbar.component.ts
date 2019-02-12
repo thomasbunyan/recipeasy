@@ -10,23 +10,22 @@ import { UserService } from "../../services/user.service";
   styleUrls: ["./navbar.component.css"]
 })
 export class NavbarComponent implements OnInit {
-  user: String;
-  searchQuery: String;
-  sidenavOpen: Boolean = false;
-  lastSearch: String = "";
+  user: string;
+  searchQuery: string;
+  sidenavOpen = false;
+  lastSearch = "";
   userData: any;
+  big = false;
 
-  constructor(
-    private authService: AuthService,
-    private router: Router,
-    private sidenav: SidenavService,
-    private userService: UserService
-  ) {}
+  constructor(private authService: AuthService, private router: Router, private sidenav: SidenavService, private userService: UserService) {}
 
   ngOnInit() {
     this.user = JSON.parse(localStorage.getItem("user")).username;
-    this.userService.getUserData().subscribe(data => {
+    this.userService.getUserData().subscribe((data) => {
       this.userData = data;
+    });
+    this.sidenav.change.subscribe((change) => {
+      this.big = change;
     });
   }
 
@@ -36,33 +35,16 @@ export class NavbarComponent implements OnInit {
     return false;
   }
 
-  sideToggle() {
-    this.sidenav.toggle();
-    // if (this.sidenav.status()) {
-    //   console.log("Opened");
-    //   this.sidenavOpen = true;
-    // } else {
-    //   console.log("Closed");
-    //   this.sidenavOpen = false;
-    // }
-  }
-
   enterSearch() {
-    if (
-      this.searchQuery === undefined ||
-      this.searchQuery === "" ||
-      this.searchQuery === this.lastSearch
-    ) {
+    if (this.searchQuery === undefined || this.searchQuery === "" || this.searchQuery === this.lastSearch) {
     } else {
       this.router.navigate(["/results"], {
         queryParams: { search_query: this.searchQuery }
       });
       this.lastSearch = this.searchQuery;
-      this.userService
-        .updateSearchHistory(this.userData.history, this.searchQuery)
-        .subscribe(data => {
-          this.userData = data;
-        });
+      this.userService.updateSearchHistory(this.userData.history, this.searchQuery).subscribe((data) => {
+        this.userData = data;
+      });
     }
   }
 }

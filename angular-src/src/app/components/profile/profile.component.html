@@ -1,12 +1,15 @@
-<div class="profile-page">
+<div class="profilePage">
   <div *ngIf="user">
-    <div class="profile-card">
+    <div class="profileCard">
       <h2>{{ user.username }}</h2>
       <p>{{ user.email }}</p>
-      <div class="profile-stats">
+      <div class="profileStats">
         <p>Recipe/Cookbook views: 1525</p>
         <p>Score: 144</p>
       </div>
+    </div>
+    <div class="lowerArea">
+      <div class="btn" (click)="logout()">Log out</div>
     </div>
   </div>
 </div>

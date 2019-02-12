@@ -215,6 +215,34 @@ router.get("/confirmation/:token", (req, res, next) => {
   }
 });
 
+router.get("/:id/profile", checkAuth, (req, res, next) => {
+  const userID = req.params.id;
+  User.findById(userID)
+    .exec()
+    .then((doc) => {
+      if (doc) {
+        res.status(200).json({
+          success: true,
+          username: doc.username,
+          email: doc.email,
+          date: doc.date,
+          preferences: doc.preferences
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          message: "User not found for provided ID"
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        error: err
+      });
+    });
+});
+
 // Get a user's (recipes, cookbooks, history) by their id.
 router.get("/:id", checkAuth, (req, res, next) => {
   const userID = req.params.id;

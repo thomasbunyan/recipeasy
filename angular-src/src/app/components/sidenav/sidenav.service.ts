@@ -1,29 +1,28 @@
-import { Injectable } from "@angular/core";
+import { Injectable, Output, EventEmitter } from "@angular/core";
 import { Http, Headers } from "@angular/http";
 import { SidenavComponent } from "./sidenav.component";
 import { MatSidenav } from "@angular/material";
 
 @Injectable()
 export class SidenavService {
-  private sidenav: MatSidenav;
+  isBig = false;
 
-  public setSidenav(sidenav: MatSidenav) {
-    this.sidenav = sidenav;
-  }
+  @Output() change: EventEmitter<boolean> = new EventEmitter();
 
   public open() {
-    return this.sidenav.open();
+    // return this.sidenav.open();
   }
 
   public close() {
-    return this.sidenav.close();
-  }
-
-  public toggle(): void {
-    this.sidenav.toggle();
+    // return this.sidenav.close();
   }
 
   public status() {
-    return this.sidenav.opened;
+    return this.isBig;
+  }
+
+  public toggle() {
+    this.isBig = !this.isBig;
+    this.change.emit(this.isBig);
   }
 }

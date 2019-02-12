@@ -73,9 +73,12 @@
   justify-content: center;
   flex-wrap: wrap;
 }
-.mTypeError {
+.mType {
   text-align: center;
   font-size: 14px;
+}
+.mTypeError {
+  font-weight: bold;
   color: #cc0033;
 }
 .typeIcon {

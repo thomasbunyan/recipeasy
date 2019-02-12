@@ -1,17 +1,17 @@
 <div class="sidenav">
   <div class="wrapper">
-    <div class="navSection">
-      <div class="navItem" [routerLinkActive]="['active']" [routerLink]="['/dashboard']"><i class="fas fa-home"></i>Home</div>
-      <div class="navItem" [routerLinkActive]="['active']" [routerLink]="['/history']"><i class="fas fa-history"></i>Recently viewed</div>
-    </div>
-    <div class="navSection">
-      <div class="navSectionTitle">Saved</div>
-      <div class="navItem" [routerLinkActive]="['active']" [routerLink]="['/recipes']"><i class="fas fa-save"></i>Recipes</div>
-      <div class="navItem" [routerLinkActive]="['active']" [routerLink]="['/cookbooks']"><i class="fas fa-book"></i>Cookbooks</div>
-    </div>
-    <div class="navSection">
-      <div class="navSectionTitle">Created</div>
-      <div class="navItem" [routerLinkActive]="['active']" [routerLink]="['/create']"><i class="fas fa-plus-square"></i>Create new</div>
+    <div class="smallNav" [ngClass]="{ navWide: big }">
+      <div class="topNav">
+        <div class="sidebarToggle"><i class="fas fa-bars" (click)="toggleSidenav()"></i><span># Recipeasy</span></div>
+        <div class="navItem" [routerLinkActive]="['activeLink']" [routerLink]="['/dashboard']"><i class="fas fa-home"></i><span>Home</span></div>
+        <div class="navItem" [routerLinkActive]="['activeLink']" [routerLink]="['/history']"><i class="fas fa-history"></i> <span>History</span></div>
+        <div class="navItem" [routerLinkActive]="['activeLink']" [routerLink]="['/recipes']"><i class="fas fa-save"></i><span>Recipes</span></div>
+        <div class="navItem" [routerLinkActive]="['activeLink']" [routerLink]="['/cookbooks']"><i class="fas fa-book"></i><span>Cookbooks</span></div>
+        <div class="navItem" [routerLinkActive]="['activeLink']" [routerLink]="['/create']"><i class="fas fa-plus-square"></i><span>New recipe</span></div>
+      </div>
+      <div class="bottomNav">
+        <div class="navItem" (click)="logout()"><i class="fas fa-sign-out-alt"></i><span>Sign out</span></div>
+      </div>
     </div>
   </div>
 </div>

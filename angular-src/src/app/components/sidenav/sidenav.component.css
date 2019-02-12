@@ -1,50 +1,110 @@
 .sidenav {
   /*** Vars ***/
-  --secondary-color: #5292ee;
-
-  width: 300px;
-  min-height: calc(100vh - 60px);
-  overflow: hidden;
-  /* background-color: #f8f9fa; */
+  --primary-color: #5292ee;
+  --secondary-color: #a3a3a3;
+  --nav-big: 299px;
+  --nav-small: 59px;
+  /* min-width: 80px !important;
+  max-width: 80px !important;
+  width: 80px !important; */
+  min-height: 100vh;
+  transition: width 0.5s ease-in-out;
 }
 
 .wrapper {
   position: fixed;
   background-color: #ffffff;
-  height: calc(100vh - 60px);
-  width: 300px;
+  height: 100vh;
   overflow: hidden;
 }
 
-.navSection {
-  /* background-color: blueviolet; */
-  margin: 30px 0px;
+i {
+  cursor: pointer;
 }
-.navSectionTitle {
-  margin-left: 15px;
-  font-size: 17px;
-  color: rgb(161, 161, 161);
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/*** Small ***/
+.smallNav {
+  width: var(--nav-small);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 22px;
+  transition: all 0.3s ease-in-out 0.1s;
+}
+.topNav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.bottomNav {
+  padding-left: 5px;
+  padding-bottom: 10px;
+}
+
+.sidebarToggle {
+  height: 60px;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  padding-left: 40px;
+}
+.sidebarToggle span {
+  width: 100%;
+  margin-left: 20px;
+  padding-right: 40px;
+  text-align: center;
+  font-size: 28px;
+  font-weight: bold;
+  /* background-color: red; */
+}
+
+.navSection {
+  margin: 30px 0px;
 }
 
 .navItem {
   width: 100%;
-  /* background-color: aquamarine; */
-  font-size: 15px;
-  padding: 10px 15px;
+  text-align: center;
+  font-size: 22px;
+  padding: 10px 0;
+  margin-top: 10px;
   cursor: pointer;
+  border-left: transparent 10px solid;
+  margin-left: -10px;
+  box-sizing: border-box;
+  color: #5e5e5e;
+  overflow: hidden;
+  white-space: nowrap;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
 }
 .navItem:hover {
-  background-color: #fff;
   color: var(--secondary-color);
 }
-.navItem:hover i {
-  color: var(--secondary-color);
+.navWide {
+  width: var(--nav-big);
+  transition: all 0.3s ease-in-out 0.1s;
 }
 .navItem i {
-  padding-right: 10px;
+  margin-left: 13px;
+  margin-right: 18px;
+}
+.navItem span {
+  font-size: 18px;
 }
 
-a {
-  text-decoration: none;
-  color: inherit;
+.activeLink {
+  border-left: var(--primary-color) 10px solid;
+  color: var(--primary-color);
 }

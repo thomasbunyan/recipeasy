@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { AuthService } from "../../services/auth.service";
 import { Title } from "@angular/platform-browser";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-profile",
@@ -8,22 +9,24 @@ import { Title } from "@angular/platform-browser";
   styleUrls: ["./profile.component.css"]
 })
 export class ProfileComponent implements OnInit {
-  user: Object;
+  user: any;
 
-  constructor(private authService: AuthService, private title: Title) {}
+  constructor(private authService: AuthService, private title: Title, private router: Router) {}
 
   ngOnInit() {
     this.title.setTitle("Profile");
-    this.authService.getProfile().subscribe(data => {
+    this.authService.getProfile().subscribe((data) => {
       if (data.success) {
-        this.user = data.item;
-        console.log(this.user);
+        this.user = data;
+        console.log(data);
       } else {
-        console.log(data.msg);
-        return false;
+        console.log(data);
       }
     });
   }
 
-  // getV
+  logout() {
+    this.authService.logout();
+    this.router.navigate(["/"]);
+  }
 }

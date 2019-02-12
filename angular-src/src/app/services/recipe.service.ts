@@ -14,19 +14,17 @@ export class RecipeService {
       .post("http://localhost:3000/recipes/", recipe, {
         headers: headers
       })
-      .map(res => res.json());
+      .map((res) => res.json());
   }
 
   getRecipes() {
     const headers = new Headers();
     headers.append("Authorization", localStorage.getItem("id_token"));
     headers.append("Content-Type", "application/json");
-    return this.http
-      .get("http://localhost:3000/recipes", { headers: headers })
-      .map(res => res.json());
+    return this.http.get("http://localhost:3000/recipes", { headers: headers }).map((res) => res.json());
   }
 
-  getRecipeSearch(query) {
+  getRecipeSearch(query, last?: number) {
     const headers = new Headers();
     headers.append("Authorization", localStorage.getItem("id_token"));
     headers.append("Content-Type", "application/json");
@@ -34,10 +32,11 @@ export class RecipeService {
       .get("http://localhost:3000/recipes", {
         headers: headers,
         params: {
-          search_query: query
+          search_query: query,
+          last_seen: last
         }
       })
-      .map(res => res.json());
+      .map((res) => res.json());
   }
 
   getRecipesBySelection(selection) {
@@ -51,7 +50,7 @@ export class RecipeService {
           selection: selection
         }
       })
-      .map(res => res.json());
+      .map((res) => res.json());
   }
 
   getRecipe(id) {
@@ -62,7 +61,7 @@ export class RecipeService {
       .get("http://localhost:3000/recipes/" + id, {
         headers: headers
       })
-      .map(res => res.json());
+      .map((res) => res.json());
   }
 
   voteRecipe(id, vote) {
@@ -77,6 +76,6 @@ export class RecipeService {
           headers: headers
         }
       )
-      .map(res => res.json());
+      .map((res) => res.json());
   }
 }

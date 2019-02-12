@@ -1,6 +1,8 @@
 .windowWrapper {
   /******* Vars *******/
   --nav-height: 60px;
+  --sidenav-small: 60px;
+  --sidenav-big: 300px;
   min-height: 100vh;
   width: 100vw;
   overflow: hidden;
@@ -9,32 +11,57 @@
 
 .nav {
   height: var(--nav-height);
-  width: 100%;
+  width: calc(100vw - var(--sidenav-small));
   margin: 0;
   padding: 0;
   position: fixed;
   z-index: 100 !important;
-  box-shadow: 0 0.25rem 0.125rem 0 rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease-in-out 0.1s;
+}
+.bigNav {
+  width: calc(100vw - var(--sidenav-big));
+  transition: all 0.3s ease-in-out 0.1s;
 }
 
 .container {
   min-height: calc(100vh - var(--nav-height));
+  margin-top: var(--nav-height) !important;
   width: 100%;
   margin: 0;
   padding: 0;
-  margin-top: var(--nav-height);
-}
-.containerNavless {
-  min-height: 100vh;
-  margin: 0;
 }
 
-.content {
-  min-height: calc(100vh - var(--nav-height));
+.containerLO {
+  min-height: 100vh;
+  margin: 0 !important;
+}
+.sidenavLO {
+  min-width: 100vw;
+  margin: 0 !important;
+}
+
+/*** Sidenav ***/
+mat-sidenav {
+  min-width: var(--sidenav-small);
+  max-width: var(--sidenav-small);
+  width: var(--sidenav-small);
+  transition: all 0.3s ease-in-out 0.1s;
+}
+.big {
+  min-width: var(--sidenav-big) !important;
+  max-width: var(--sidenav-big) !important;
+  width: var(--sidenav-big) !important;
+  transition: all 0.3s ease-in-out 0.1s;
+}
+
+/*** Content area ***/
+mat-sidenav-content {
   max-width: 100vw;
   overflow: hidden;
+  transition: all 0.3s ease-in-out 0.1s;
+  margin-left: var(--sidenav-small) !important;
 }
-
-mat-sidenav {
-  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.15);
+.bigCont {
+  margin-left: var(--sidenav-big) !important;
+  transition: all 0.3s ease-in-out 0.1s;
 }

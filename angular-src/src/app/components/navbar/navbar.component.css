@@ -1,11 +1,13 @@
 .navbar {
   width: 100%;
-  height: 100%;
+  height: 59px;
   background-color: #fff;
   color: #000;
   display: flex;
+  justify-content: space-between;
   align-items: center;
   overflow: hidden;
+  border-bottom: #e2e2e2 1px solid;
 }
 
 /*** Button to toggle sidebar ***/
@@ -34,90 +36,78 @@
   display: flex;
   /* background-color: #4286f5; */
   height: 100%;
-  width: 225px;
+  padding: 0 50px;
   align-items: center;
   justify-content: space-evenly;
 }
 .logoArea {
-  height: 100%;
-  /* margin-left: 30px; */
-  text-align: center;
-  display: table;
   font-family: "ProductSansRegular", sans-serif;
-  /* z-index: 1; */
-  /* background-color: aquamarine; */
 }
 .logo {
   font-size: 22pt;
+  font-weight: bold;
   cursor: pointer;
   color: #000;
 }
 .logoContainer {
   display: table-cell;
   vertical-align: middle;
+  opacity: 1;
+  transition: all 0.2s ease-out 0.2s;
+}
+.hidden {
+  opacity: 0;
+  transition: all 0.2s ease-out 0s;
 }
 
 /*** Main nav area ***/
-.navbarContent {
+.rightNav {
   height: 100%;
-  flex-grow: 1;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   /* background-color: green; */
   padding-left: 20px;
 }
 
 /*** Search bar ***/
 .searchBar {
-  /* width: 30vw;
-  height: 75%;
-  border-radius: 25px;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  cursor: text;
-  display: flex;
-  align-items: center;
-  padding-left: 15px;
-  padding-right: 15px;
-  background-color: #f1f2f5;
-  overflow: hidden; */
-  /* flex-grow: 1; */
-  /* background-color: red; */
-  height: 70%;
+  height: 65%;
   display: flex;
   align-items: center;
   position: relative;
-  /* background-color: blue; */
 }
 .searchBar input {
-  /* background-color: blue; */
   height: 100%;
-  width: 150px;
+  width: 200px;
   border-radius: 25px;
   padding-left: 20px;
   padding-right: 45px;
-  background-color: #f1eff4;
+  border: #e2e2e2 1px solid;
   font-size: 16px;
+  box-sizing: border-box;
   font-family: "ProductSansRegular", sans-serif;
   transition: all 0.4s ease-in-out 0s;
 }
 .searchBar input:focus {
-  /* background-color: red; */
   width: 400px;
+  border: #92b1ff 2px solid;
   transition: all 0.4s ease-in-out 0s;
 }
+.searchBar input::placeholder {
+  color: #afafaf;
+}
 .searchBar i {
-  color: rgb(133, 133, 133);
+  color: #e2e2e2;
   position: absolute;
-  /* padding-left: 15px; */
   right: 0;
   padding-right: 20px;
   cursor: pointer;
 }
 
 .profileInformation {
+  margin-left: 30px;
+  margin-right: 20px;
   display: flex;
   align-items: center;
 }
@@ -131,7 +121,7 @@
   border-radius: 50%;
   margin-right: 20px;
   cursor: pointer;
-  border: #000 1px solid;
+  border: #e2e2e2 1px solid;
   background-color: #fff;
 }
 
@@ -139,84 +129,3 @@ a {
   text-decoration: none;
   color: inherit;
 }
-
-/* ! NOT USING THIS. */
-/* .navbar-area {
-  height: 100%;
-  width: 70%;
-  float: left;
-  display: flex;
-  justify-content: center;
-}
-.account-area {
-  height: 100%;
-  width: 15%;
-  float: left;
-  display: table;
-}
-
-.nav-item {
-  height: 100%;
-  display: inline-flex;
-  padding-left: 20px;
-  padding-right: 20px;
-  display: table;
-
-  text-align: center;
-  color: #fff;
-  font-family: "ProductSansRegular", sans-serif;
-  font-size: 13pt;
-  font-weight: 400;
-}
-.nav-item:hover {
-  cursor: pointer;
-}
-.nav-item:hover .nav-link {
-  color: orange;
-}
-.nav-sub-link:hover {
-  background-color: rgba(0, 0, 0, 0.25);
-}
-.nav-link-area {
-  display: table-cell;
-  vertical-align: middle;
-}
-
-.account-container {
-  height: 100%;
-  display: flex;
-  justify-content: center;
-}
-
-.drp-nav {
-  margin-top: 60px;
-  margin-left: -60px;
-  display: none;
-  position: absolute;
-  background-color: #f9f9f9;
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  z-index: 1;
-}
-.drp-nav a {
-  color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-  text-align: left;
-}
-.dropdown:hover .drp-nav {
-  display: block;
-}
-
-ul {
-  list-style-type: none;
-}
-
-a {
-  text-decoration: none;
-  color: #fff;
-}
-
-mat-icon:hover {
-  cursor: pointer;
-} */

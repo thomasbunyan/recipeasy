@@ -1,9 +1,15 @@
 <div class="windowWrapper">
-  <div class="nav" *ngIf="authService.loggedIn()"><app-navbar></app-navbar></div>
-  <div class="container" [ngClass]="{ containerNavless: !authService.loggedIn() }">
-    <mat-sidenav-container autosize>
-      <mat-sidenav #sidenav class="sidenav" mode="side"> <app-sidenav *ngIf="authService.loggedIn()"></app-sidenav> </mat-sidenav>
-      <div class="content"><router-outlet></router-outlet></div>
-    </mat-sidenav-container>
-  </div>
+  <mat-sidenav-container autosize>
+    <mat-sidenav *ngIf="authService.loggedIn()" #sidenav mode="side" opened="true" [ngClass]="{ big: big }">
+      <app-sidenav></app-sidenav>
+    </mat-sidenav>
+    <mat-sidenav-content [ngClass]="{ bigCont: big, sidenavLO: !authService.loggedIn() }">
+      <div class="nav" *ngIf="authService.loggedIn()" [ngClass]="{ bigNav: big }">
+        <app-navbar></app-navbar>
+      </div>
+      <div class="container" [ngClass]="{ containerLO: !authService.loggedIn() }">
+        <router-outlet></router-outlet>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
 </div>

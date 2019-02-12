@@ -75,7 +75,10 @@ export class CreateComponent implements OnInit {
     const page = stepper.selectedIndex;
     if (page === 0) {
       if (this.mealType !== undefined) {
+        this.errors[0] = false;
         return true;
+      } else {
+        this.errors[0] = true;
       }
     } else if (page === 1) {
       const details = {
@@ -179,22 +182,6 @@ export class CreateComponent implements OnInit {
     }
   }
 
-  printRecipe() {
-    const recipe = {
-      title: this.title,
-      description: this.description,
-      public: this.public,
-      mealType: this.mealType,
-      prepTime: this.prepTime,
-      cookTime: this.cookTime,
-      difficulty: this.difficulty,
-      servings: this.servings,
-      ingredients: this.ingredients,
-      method: this.method
-    };
-    console.log(recipe);
-  }
-
   // updateIngredient(ingredient, i, food, amount, unit) {
   //   if (food.value !== undefined && food.value !== "") {
   //     ingredient.food = food.value;
@@ -253,6 +240,22 @@ export class CreateComponent implements OnInit {
     }
   }
 
+  printRecipe() {
+    const recipe = {
+      title: this.title,
+      description: this.description,
+      public: this.public,
+      mealType: this.mealType,
+      prepTime: this.prepTime,
+      cookTime: this.cookTime,
+      difficulty: this.difficulty,
+      servings: parseInt(this.servings, 10),
+      ingredients: this.ingredients,
+      method: this.method
+    };
+    console.log(recipe);
+  }
+
   onRecipeSubmit() {
     const recipeData = {
       title: this.title,
@@ -266,6 +269,7 @@ export class CreateComponent implements OnInit {
       ingredients: this.ingredients,
       method: this.method
     };
+
     this.errors = this.recipeValidateService.validateRecipe(recipeData);
     let anyError = false;
     for (let i = 0; i < this.errors.length; i++) {

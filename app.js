@@ -3,6 +3,8 @@ const app = express();
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const schedule = require("node-schedule");
+const scheduleFunctions = require("./api/schedule");
 require("dotenv").config();
 
 // Connect to database
@@ -57,6 +59,10 @@ app.use((error, req, res, next) => {
       message: error.message
     }
   });
+});
+
+schedule.scheduleJob("10 * * * *", () => {
+  scheduleFunctions.startAnalytics();
 });
 
 // Start server

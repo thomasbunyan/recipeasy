@@ -1,9 +1,11 @@
-.profile-page {
+.profilePage {
   min-height: 100%;
   overflow: hidden;
+
+  --button-color: #4286f5;
 }
 
-.profile-card {
+.profileCard {
   margin: auto;
   background-color: #fff;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
@@ -12,4 +14,26 @@
   margin-top: 20px;
   padding: 20px;
   width: 300px;
+}
+
+.lowerArea {
+  width: 100%;
+  display: flex;
+  margin: 100px 0;
+  justify-content: center;
+}
+.btn {
+  color: #fff;
+  background-color: var(--button-color);
+  display: inline-block;
+  border-radius: 5px;
+  padding: 1.15em 2.3em;
+  text-align: center;
+  font-size: 17px;
+  cursor: pointer;
+  transition: 0.15s all ease-in-out;
+}
+.btn:hover {
+  background-color: rgb(53, 92, 165);
+  transition: 0.15s all ease-in-out;
 }

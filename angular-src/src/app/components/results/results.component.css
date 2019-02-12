@@ -42,6 +42,64 @@
   cursor: pointer;
 }
 
+/*** Filter area ***/
+.filterArea {
+  width: 100%;
+  max-height: 0px;
+  overflow: hidden;
+  transition: all 0.5s ease-in-out 0s;
+}
+.filterOpen {
+  max-height: 400px;
+  transition: all 0.5s ease-in-out 0s;
+}
+.filterOptions {
+  padding-top: 15px;
+  padding-bottom: 20px;
+}
+
+.filterOptions input,
+label {
+  display: block;
+  font-size: 16px;
+  font-family: "ProductSansRegular", sans-serif;
+}
+.filterOptions input {
+  padding: 10px;
+  margin-top: 3px;
+  border-radius: 8px;
+  background-color: #ecf0f1;
+  box-sizing: border-box;
+  width: 100%;
+}
+.formElRow {
+  display: flex;
+  flex-direction: row;
+}
+.formElRow .formEl {
+  margin-right: 30px;
+}
+.formEl {
+  margin: 5px 0;
+}
+
+.filterBtns {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 20px;
+}
+.filterBtns div {
+  padding: 9px 15px;
+  color: #fff;
+  background-color: #4286f5;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.resetBtn {
+  background-color: #f1f1f5 !important;
+  color: rgb(97, 97, 97) !important;
+}
+
 /***  Cookbooks ***/
 .cookbookArea {
   /* height: 300px; */
@@ -70,11 +128,11 @@
 }
 
 .boxContainer {
-  height: fit-content;
+  /* height: fit-content; */
   width: 100%;
   display: flex;
   flex-direction: row;
-  overflow: scroll;
+  overflow-x: scroll;
   padding-bottom: 10px;
 }
 /*** Style for the image boxes ***/
@@ -82,7 +140,6 @@
   /* border: 1px rgb(219, 219, 219) solid; */
   margin-right: 20px;
   width: 210px;
-  height: 275px;
 }
 .tImage {
   width: 210px;
@@ -164,7 +221,7 @@
   width: 400px;
   height: 290px;
   border-radius: 25px;
-  margin-bottom: 30px;
+  margin-bottom: 40px;
   box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
   position: relative;
   cursor: pointer;
@@ -223,4 +280,71 @@
 }
 .saved {
   color: #f8c518;
+}
+
+/*** Bottom of page ***/
+.endOfPage {
+  padding-top: 15px;
+  padding-bottom: 30px;
+  text-align: center;
+  color: rgb(107, 107, 107);
+}
+.loadingSpinner {
+  padding-top: 15px;
+  padding-bottom: 30px;
+  display: flex;
+  justify-content: center;
+}
+.lds-facebook {
+  display: inline-block;
+  position: relative;
+  width: 64px;
+  height: 64px;
+}
+.lds-facebook div {
+  display: inline-block;
+  position: absolute;
+  left: 6px;
+  width: 13px;
+  background: #4286f5;
+  animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+}
+.lds-facebook div:nth-child(1) {
+  left: 6px;
+  animation-delay: -0.24s;
+}
+.lds-facebook div:nth-child(2) {
+  left: 26px;
+  animation-delay: -0.12s;
+}
+.lds-facebook div:nth-child(3) {
+  left: 45px;
+  animation-delay: 0;
+}
+@keyframes lds-facebook {
+  0% {
+    top: 6px;
+    height: 51px;
+  }
+  50%,
+  100% {
+    top: 19px;
+    height: 26px;
+  }
+}
+
+/*** General ***/
+
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+.noselect {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }

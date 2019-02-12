@@ -10,14 +10,14 @@ import { AuthService } from "./services/auth.service";
   styleUrls: ["./app.component.css"]
 })
 export class AppComponent implements AfterViewInit {
-  @ViewChild("sidenav") private sidenav: MatSidenav;
-  constructor(
-    private sidenavService: SidenavService,
-    private authService: AuthService
-  ) {}
+  big = false;
+
+  constructor(private sidenavService: SidenavService, private authService: AuthService) {}
 
   // ? Must be after view for the view child to find the element.
   ngAfterViewInit() {
-    this.sidenavService.setSidenav(this.sidenav);
+    this.sidenavService.change.subscribe((isOpen) => {
+      this.big = !this.big;
+    });
   }
 }

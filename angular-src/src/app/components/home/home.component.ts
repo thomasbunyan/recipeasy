@@ -9,9 +9,11 @@ import { Router } from "@angular/router";
 })
 export class HomeComponent implements OnInit {
   show = false;
-  constructor() {}
+  constructor(private authService: AuthService, private router: Router) {}
 
-  ngOnInit() {}
-
-  scrollImage() {}
+  ngOnInit() {
+    if (this.authService.loggedIn()) {
+      this.router.navigate(["/dashboard"]);
+    }
+  }
 }
