@@ -1,5 +1,4 @@
 <div class="navbar">
-  <!-- <div class="sideGraphic" [ngClass]="{ wideGraphic: toggle == true }"></div> -->
   <div class="leftNav">
     <div class="logoArea">
       <div class="logoContainer" [ngClass]="{ hidden: big }" [routerLinkActive]="['active']" [routerLink]="['/']"><a class="logo" [routerLink]="['/']"># Recipeasy</a></div>
@@ -7,7 +6,11 @@
   </div>
   <div class="middleNav"></div>
   <div class="rightNav">
-    <div class="searchBar"><i class="fas fa-search"></i> <input type="text" [(ngModel)]="searchQuery" (keyup.enter)="enterSearch()" placeholder="Search..." /></div>
+    <div class="searchBar">
+      <i class="fas fa-search" [ngClass]="{ textPresent: deleteText }" (click)="enterSearch()"></i>
+      <i class="fas fa-times" [ngClass]="{ textPresent: !deleteText }" (click)="searchQuery = undefined; this.deleteText = false"></i>
+      <input type="text" [(ngModel)]="searchQuery" (keyup.enter)="enterSearch()" placeholder="Search..." />
+    </div>
     <div class="profileInformation">
       <div class="profileIcon" [routerLinkActive]="['active']" [routerLink]="['/profile']"></div>
     </div>

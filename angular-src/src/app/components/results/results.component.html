@@ -42,9 +42,12 @@
     <div class="cookbookArea" *ngIf="cookbooks.length">
       <div class="cookbookTitle">
         <h4>Cookbooks<span class="showMore noselect" *ngIf="recipes.length">Show all</span></h4>
-        L R
+        <div>
+          <i class="fas fa-chevron-left" (click)="scrollCookbooks('left', cookbookContainer)"></i>
+          <i class="fas fa-chevron-right" style="margin-left: 15px" (click)="scrollCookbooks('right', cookbookContainer)"></i>
+        </div>
       </div>
-      <div class="boxContainer">
+      <div class="boxContainer" #cookbookContainer>
         <div class="itemBox" *ngFor="let cookbook of cookbooks">
           <div class="tImage">
             <div class="tPic"></div>
@@ -55,7 +58,7 @@
           <div class="tInfo">
             <h4 class="tInfo-title" (click)="viewCookbook(cookbook)">{{ cookbook.title }}</h4>
             <p>{{ cookbook.description }}</p>
-            <p class="tFol">{{ cookbook.followers }} followers.</p>
+            <p class="tFol">{{ generalService.formatFollowers(cookbook.followers) }} followers.</p>
           </div>
         </div>
       </div>
@@ -64,25 +67,26 @@
     <div class="recipeArea" *ngIf="recipes.length">
       <h4>Recipes<span class="showMore noselect" *ngIf="cookbooks.length">Show all</span></h4>
       <div class="recipeGrid">
-        <div class="recipeCard" *ngFor="let recipe of searchList" (click)="viewRecipe(recipe._id)" (contextmenu)="onRightClick($event, recipe, optionsMenu)">
-          <div class="mainImg"></div>
+        <div class="recipeCard noselect" *ngFor="let recipe of searchList">
+          <div class="mainImg" (click)="viewRecipe(recipe._id)"></div>
           <div class="rInfo">
             <div class="rTitle">{{ recipe.title }}</div>
             <div class="rDetails">
-              {{ recipe.author }} ● <span>{{ recipe.mealType }}</span> ● 2 days ago
+              {{ recipe.author }} ● <span>{{ recipe.mealType }}</span> ● {{ generalService.getTimeAgo(recipe.date) }}
             </div>
             <div class="rInteraction">
-              <p>{{ recipe.score }} points</p>
-              <p><i class="far fa-clock" style="padding-right:3px"></i>1:15</p>
-              <p>
-                Serves: <span style="font-weight: bold">{{ recipe.servings }}</span>
-              </p>
-              <p>Easy</p>
-              <div class="interactionButtons">
-                <i class="fas fa-arrow-up" [ngClass]="{ upvote: recipe.vote == 'up' }" (click)="$event.stopPropagation(); castVote('up', recipe)"></i>
-                <i class="fas fa-arrow-down" [ngClass]="{ downvote: recipe.vote == 'down' }" (click)="$event.stopPropagation(); castVote('down', recipe)"></i>
-                <i class="fas fa-star" [ngClass]="{ saved: recipe.saved == true }" (click)="$event.stopPropagation(); toggleSave(recipe)"></i> <i class="fas fa-ellipsis-v"></i>
+              <p title="Points">{{ recipe.score }} points</p>
+              <p title="Time"><i class="far fa-clock" style="padding-right:3px"></i>{{ generalService.getTotalTime(recipe.prepTime, recipe.cookTime) }}</p>
+              <p title="Servings"><i class="fas fa-utensils"></i> x {{ recipe.servings }}</p>
+              <div class="difficultyCircle" title="Difficulty">
+                {{ generalService.getDifficulty(recipe.difficulty) }}
               </div>
+            </div>
+            <div class="interactionButtons">
+              <i class="fas fa-arrow-up" title="Upvote" [ngClass]="{ upvote: recipe.vote == 'up' }" (click)="$event.stopPropagation(); castVote('up', recipe)"></i>
+              <i class="fas fa-arrow-down" title="Downvote" [ngClass]="{ downvote: recipe.vote == 'down' }" (click)="$event.stopPropagation(); castVote('down', recipe)"></i>
+              <i class="fas fa-star" title="Save" [ngClass]="{ saved: recipe.saved == true }" (click)="$event.stopPropagation(); toggleSave(recipe)"></i>
+              <i class="fas fa-ellipsis-v" title="More options" (click)="$event.stopPropagation(); openRecipeOptions(recipe)"></i>
             </div>
           </div>
         </div>

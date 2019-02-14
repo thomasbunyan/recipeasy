@@ -33,6 +33,7 @@ export class CreateComponent implements OnInit {
   units = ["kg", "g", "lbs", "ml", "oz", "floz"];
 
   method = [];
+  recipeImage: File = null;
 
   dataSource;
   dataSource2;
@@ -240,23 +241,27 @@ export class CreateComponent implements OnInit {
     }
   }
 
-  printRecipe() {
-    const recipe = {
-      title: this.title,
-      description: this.description,
-      public: this.public,
-      mealType: this.mealType,
-      prepTime: this.prepTime,
-      cookTime: this.cookTime,
-      difficulty: this.difficulty,
-      servings: parseInt(this.servings, 10),
-      ingredients: this.ingredients,
-      method: this.method
-    };
-    console.log(recipe);
+  uploadImage(e, image) {
+    if (e.target.files && e.target.files[0]) {
+      this.recipeImage = <File>e.target.files[0];
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        image.src = e.target.result;
+      };
+      reader.readAsDataURL(e.target.files[0]);
+    }
+    // console.log(e);
   }
 
   onRecipeSubmit() {
+    const fd = new FormData();
+    console.log(this.recipeImage);
+    fd.append("image", this.recipeImage, this.recipeImage.name);
+    this.recipeService.addRecipeImage(fd).subscribe((data) => {
+      console.log(data);
+    });
+    return;
+
     const recipeData = {
       title: this.title,
       description: this.description,
@@ -281,6 +286,7 @@ export class CreateComponent implements OnInit {
     if (!anyError) {
       const username = JSON.parse(localStorage.getItem("user")).username;
       const recipe = this.recipeValidateService.generateRecipe(recipeData, username);
+
       this.recipeService.addRecipe(recipe).subscribe((data) => {
         console.log(data);
       });

@@ -1,0 +1,55 @@
+<div class="dialogWindow">
+  <div class="topButtons">
+    <div><i class="fas fa-arrow-left" *ngIf="cookbookAreaOpen" (click)="cookbookAreaOpen = cookbookNameOpen = false; scrollAreaOpen = true"></i></div>
+    <div><i class="fas fa-times" (click)="dialog.close()"></i></div>
+  </div>
+  <div class="scrollArea" [ngClass]="{ hideScrollArea: !scrollAreaOpen }">
+    <div class="recipeInfo">
+      <div class="recipeImage"></div>
+      <div class="recipeTitle">{{ recipe.title }}</div>
+    </div>
+    <div class="recipeButtons noselect">
+      <div class="recipeButton" (click)="saveRecipe()">
+        <i class="fas fa-heart" [ngClass]="{ saved: this.recipe.saved }"></i>
+        <p *ngIf="!this.recipe.saved">Save</p>
+        <p *ngIf="this.recipe.saved">Remove</p>
+      </div>
+      <div class="recipeButton" (click)="cookbookAreaOpen = true; scrollAreaOpen = false">
+        <i class="fas fa-plus"></i>
+        <p>Add to Cookbook</p>
+      </div>
+      <div class="recipeButton" (click)="viewAuthor()">
+        <i class="fas fa-user"></i>
+        <p>View Author</p>
+      </div>
+      <div class="recipeButton" (click)="getLink()">
+        <i class="fas fa-link"></i>
+        <p>Link</p>
+      </div>
+      <div class="recipeButton" (click)="report()">
+        <i class="fas fa-flag"></i>
+        <p>Report</p>
+      </div>
+    </div>
+  </div>
+  <div class="cookbookArea" [ngClass]="{ showCookbookArea: cookbookAreaOpen }">
+    <div>
+      <h3>Add to cookbook</h3>
+      <div class="newBtn" (click)="cookbookNameOpen = true; cookbookAreaOpen = false">NEW COOKBOOK</div>
+    </div>
+    <div class="cookbookList">
+      <div class="cookbookItem" *ngFor="let cookbook of userData?.cookbooks.author" (click)="addToCookbook(cookbook)">
+        <div class="cookbookImage"></div>
+        <p>{{ cookbook.cookbook.title }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="newCookbook" [ngClass]="{ showNewCookbook: cookbookNameOpen }">
+    <h3>Give your cookbook a name</h3>
+    <input type="text" maxlength="20" [(ngModel)]="newCookbookName" />
+    <div class="nameBtns">
+      <div class="btn" (click)="addNewCookbook()">ACCEPT</div>
+      <div class="btn" (click)="cookbookAreaOpen = true; cookbookNameOpen = false">CANCEL</div>
+    </div>
+  </div>
+</div>

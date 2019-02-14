@@ -18,7 +18,7 @@ export class UserService {
       .get("http://localhost:3000/users/" + user, {
         headers: headers
       })
-      .map(res => res.json());
+      .map((res) => res.json());
   }
 
   // Check if username or email is unique.
@@ -29,14 +29,14 @@ export class UserService {
       .get("http://localhost:3000/users/unique/" + query, {
         headers: headers
       })
-      .map(res => res.json());
+      .map((res) => res.json());
   }
 
   // data = history array, value = update. If passed a String adds it to the search history, otherwise, removes it.
   updateSearchHistory(data, value) {
     const history = data.slice();
     if (isNaN(value)) {
-      const index = history.findIndex(e => {
+      const index = history.findIndex((e) => {
         if (e === value) {
           return true;
         }
@@ -62,7 +62,7 @@ export class UserService {
       .patch("http://localhost:3000/users/" + user, update, {
         headers: headers
       })
-      .map(res => res.json());
+      .map((res) => res.json());
   }
 
   addToHistory(id, type) {
@@ -73,20 +73,16 @@ export class UserService {
         data = data.cookbooks;
       }
       const user = JSON.parse(localStorage.getItem("user")).id;
-      this.addUserData(
-        { id: user, data: data },
-        { data: type, type: "history" },
-        id
-      ).subscribe(data => {
+      this.addUserData({ id: user, data: data }, { data: type, type: "history" }, id).subscribe((data) => {
         // console.log(data);
       });
     });
   }
 
   toggleCookbookSave(cookbook) {
-    this.getUserData().subscribe(data => {
+    this.getUserData().subscribe((data) => {
       const cookbooks = data.cookbooks.saved.slice();
-      const index = cookbooks.findIndex(e => {
+      const index = cookbooks.findIndex((e) => {
         return e.cookbook._id === cookbook._id;
       });
       if (index > -1) {
@@ -95,11 +91,7 @@ export class UserService {
         cookbooks.push(cookbook._id);
       }
       const user = JSON.parse(localStorage.getItem("user")).id;
-      this.addUserData(
-        { id: user, data: data.cookbooks },
-        { data: "cookbooks", type: "save" },
-        cookbook._id
-      ).subscribe(data => {});
+      this.addUserData({ id: user, data: data.cookbooks }, { data: "cookbooks", type: "save" }, cookbook._id).subscribe((data) => {});
     });
   }
 
@@ -115,9 +107,7 @@ export class UserService {
     const data = [];
     if (update.data === "recipes") {
       if (update.type === "save") {
-        const index = userData.saved.findIndex(
-          x => x.recipe === dataID || x.recipe._id === dataID
-        );
+        const index = userData.saved.findIndex((x) => x.recipe === dataID || x.recipe._id === dataID);
         if (index === -1) {
           userData.saved.push({
             recipe: dataID,
@@ -127,9 +117,7 @@ export class UserService {
           userData.saved.splice(index, 1);
         }
       } else if (update.type === "vote") {
-        const index = userData.voted.findIndex(
-          x => x.recipe === dataID || x.recipe._id === dataID
-        );
+        const index = userData.voted.findIndex((x) => x.recipe === dataID || x.recipe._id === dataID);
         if (index === -1) {
           userData.voted.push({
             recipe: dataID,
@@ -148,7 +136,7 @@ export class UserService {
           timestamp: new Date().getTime()
         });
       } else if (update.type === "history") {
-        const index = userData.history.findIndex(e => {
+        const index = userData.history.findIndex((e) => {
           if (e.recipe._id === dataID) {
             return true;
           }
@@ -165,9 +153,7 @@ export class UserService {
       data.push({ name: "recipes", value: userData });
     } else if (update.data === "cookbooks") {
       if (update.type === "save") {
-        const index = userData.saved.findIndex(
-          x => x.cookbook === dataID || x.cookbook._id === dataID
-        );
+        const index = userData.saved.findIndex((x) => x.cookbook === dataID || x.cookbook._id === dataID);
         if (index === -1) {
           userData.saved.push({
             cookbook: dataID,
@@ -177,12 +163,13 @@ export class UserService {
           userData.saved.splice(index, 1);
         }
       } else if (update.type === "author") {
-        userData.author.push({
-          cookbook: dataID,
-          timestamp: new Date().getTime()
-        });
+        // userData.author.push({
+        //   cookbook: dataID,
+        //   timestamp: new Date().getTime()
+        // });
+        userData.author = [];
       } else if (update.type === "history") {
-        const index = userData.history.findIndex(e => {
+        const index = userData.history.findIndex((e) => {
           if (e.cookbook._id === dataID) {
             return true;
           }
@@ -206,7 +193,7 @@ export class UserService {
       .patch("http://localhost:3000/users/" + user.id, data, {
         headers: headers
       })
-      .map(res => res.json());
+      .map((res) => res.json());
   }
 
   // ? Private functions

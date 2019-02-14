@@ -16,19 +16,13 @@ export class SavedRecipesComponent implements OnInit {
   usersCookbooks = {};
   contextMenuRecipe: any;
 
-  constructor(
-    private recipeService: RecipeService,
-    private userService: UserService,
-    private cookbookService: CookbookService,
-    private router: Router,
-    private title: Title
-  ) {}
+  constructor(private recipeService: RecipeService, private userService: UserService, private cookbookService: CookbookService, private router: Router, private title: Title) {}
 
   ngOnInit() {
     this.userId = JSON.parse(localStorage.getItem("user")).id;
     this.title.setTitle("Saved recipes");
 
-    this.userService.getUserData().subscribe(data => {
+    this.userService.getUserData().subscribe((data) => {
       this.recipes = data.recipes;
       this.usersCookbooks = data.cookbooks;
     });
@@ -39,15 +33,9 @@ export class SavedRecipesComponent implements OnInit {
   }
 
   removeSaved(recipe) {
-    this.userService
-      .addUserData(
-        { id: this.userId, data: this.recipes },
-        { data: "recipes", type: "save" },
-        recipe.recipe._id
-      )
-      .subscribe(data => {
-        this.recipes = data.recipes;
-      });
+    this.userService.addUserData({ id: this.userId, data: this.recipes }, { data: "recipes", type: "save" }, recipe.recipe._id).subscribe((data) => {
+      this.recipes = data.recipes;
+    });
   }
 
   viewAuthor(recipe) {
@@ -55,23 +43,22 @@ export class SavedRecipesComponent implements OnInit {
   }
 
   addToCookbook(recipe, cookbook) {
-    recipe = recipe.recipe;
-    console.log(recipe);
-    if (cookbook === "new") {
-      this.cookbookService.addCookbook(recipe._id).subscribe(a => {
-        const user = { id: this.userId, data: this.usersCookbooks };
-        const update = { data: "cookbooks", type: "author" };
-        this.userService
-          .addUserData(user, update, a.cookbook._id)
-          .subscribe(data => {});
-      });
-    } else {
-      this.cookbookService
-        .updateCookbook(cookbook, { type: "recipes", recipe: recipe })
-        .subscribe(data => {
-          console.log(data);
-        });
-    }
+    // recipe = recipe.recipe;
+    // console.log(recipe);
+    // if (cookbook === "new") {
+    //   this.cookbookService.addCookbook(recipe._id).subscribe((a) => {
+    //     const user = { id: this.userId, data: this.usersCookbooks };
+    //     const update = { data: "cookbooks", type: "author" };
+    //     this.userService.addUserData(user, update, a.cookbook._id).subscribe((data) => {});
+    //   });
+    // } else {
+    //   this.cookbookService.updateCookbook(cookbook, { type: "recipes", recipe: recipe }).subscribe((data) => {
+    //     console.log(data);
+    //   });
+    // }
+    // const user = { id: this.userId, data: this.usersCookbooks };
+    // const update = { data: "cookbooks", type: "author" };
+    // this.userService.addUserData(user, update, "a.cookbook._id").subscribe((data) => {});
   }
 
   openMenu(e, contextMenu, recipe) {

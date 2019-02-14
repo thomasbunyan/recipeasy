@@ -13,9 +13,9 @@ export class NavbarComponent implements OnInit {
   user: string;
   searchQuery: string;
   sidenavOpen = false;
-  lastSearch = "";
   userData: any;
   big = false;
+  deleteText = false;
 
   constructor(private authService: AuthService, private router: Router, private sidenav: SidenavService, private userService: UserService) {}
 
@@ -36,12 +36,12 @@ export class NavbarComponent implements OnInit {
   }
 
   enterSearch() {
-    if (this.searchQuery === undefined || this.searchQuery === "" || this.searchQuery === this.lastSearch) {
+    if (this.searchQuery === undefined || this.searchQuery === "") {
     } else {
+      this.deleteText = true;
       this.router.navigate(["/results"], {
         queryParams: { search_query: this.searchQuery }
       });
-      this.lastSearch = this.searchQuery;
       this.userService.updateSearchHistory(this.userData.history, this.searchQuery).subscribe((data) => {
         this.userData = data;
       });

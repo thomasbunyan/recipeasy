@@ -218,7 +218,39 @@
           </mat-step>
           <mat-step>
             <ng-template matStepLabel><span class="stepLabel">Review</span></ng-template>
-            <div class="inputArea"><h2>Review</h2></div>
+            <div class="inputArea">
+              <div class="reviewArea">
+                <div class="recipeHeader">
+                  <div class="recipeDetails">
+                    <div class="recipeTitle">
+                      <h1>{{ title }}</h1>
+                      <p>{{ description }}</p>
+                    </div>
+                  </div>
+                  <div class="recipeImageWrapper">
+                    <div class="recipeImage">
+                      <img src="{{recipeImage}}" #rImg>
+                    </div>
+                    <input type="file" accept="image/png, image/jpeg" (change)="uploadImage($event, rImg)"/>
+                  </div>
+                </div>
+                <div class="breakLine"></div>
+                <div class="recipeInformation">
+                  <div class="recipeIngredients half">
+                    <div class="ingredientsList">
+                      <h2>Ingredients</h2>
+                      <p *ngFor="let ingredient of ingredients">{{ ingredient.food }}</p>
+                    </div>
+                  </div>
+                  <div class="recipeMethod half">
+                    <div class="methodList">
+                      <h2>Method</h2>
+                      <p *ngFor="let step of method; let i = index">{{ i + 1 }}. {{ step.step }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </mat-step>
         </mat-horizontal-stepper>
       </form>
@@ -227,7 +259,7 @@
     <div class="lowerFormArea">
       <div class="stepButton" [ngClass]="{ hidden: stepper.selectedIndex == 0 }" (click)="prevPage(stepper)">Prev</div>
       <div class="stepButton" *ngIf="stepper.selectedIndex != 4" [ngClass]="{ continue: canContinue }" (click)="nextPage(stepper)">Next</div>
-      <div class="stepButton" *ngIf="stepper.selectedIndex == 4" (click)="onRecipeSubmit()">Submit</div>
+      <div class="stepButton" *ngIf="stepper.selectedIndex == 4" (click)="onRecipeSubmit()">Save</div>
     </div>
   </div>
 </div>

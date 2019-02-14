@@ -1,61 +1,40 @@
 import { Injectable } from "@angular/core";
 import { UserService } from "./user.service";
 import { RecipeService } from "./recipe.service";
+import { Observable } from "rxjs";
 
 @Injectable()
 export class RecipeValidateService {
-  constructor(
-    private userService: UserService,
-    private recipeService: RecipeService
-  ) {}
+  saveLock = false;
+
+  constructor(private userService: UserService, private recipeService: RecipeService) {}
 
   validateIngredient(ingredient) {
     const errors = new Array(4).fill({ err: false });
-    if (
-      ingredient.food === "" ||
-      ingredient.food === undefined ||
-      ingredient.food.length > 15) {
+    if (ingredient.food === "" || ingredient.food === undefined || ingredient.food.length > 15) {
       errors[0] = { err: true, msg: "Food not valid." };
     }
-    if(ingredient.detail === undefined){
-    } else if (ingredient.detail === "" ||
-      ingredient.detail.length > 15) {
+    if (ingredient.detail === undefined) {
+    } else if (ingredient.detail === "" || ingredient.detail.length > 15) {
       errors[1] = { err: true, msg: "Notes not valid." };
     }
-    if (
-      ingredient.amount === "" ||
-      ingredient.amount === undefined ||
-      isNaN(ingredient.amount) || 
-      ingredient.amount > 10000) {
+    if (ingredient.amount === "" || ingredient.amount === undefined || isNaN(ingredient.amount) || ingredient.amount > 10000) {
       errors[2] = { err: true, msg: "Amount not valid." };
-    }  
-    if (ingredient.unit === "" ||
-      ingredient.unit === undefined) {
+    }
+    if (ingredient.unit === "" || ingredient.unit === undefined) {
       errors[3] = { err: true, msg: "Unit not valid." };
     }
-    return errors; 
+    return errors;
   }
 
   validateDetails(details) {
     const errors = new Array(6).fill({ err: false });
     const testRe = /^[A-Za-z0-9,\.\-/()'# ]+$/;
     const timeRe = /^[0-9]{2}:[0-5][0-9]$/;
-    if (
-      !testRe.test(details.title) ||
-      details.title === "" ||
-      details.title === undefined ||
-      details.title.length < 6 ||
-      details.title.split(" ").length < 1
-    ) {
+    if (!testRe.test(details.title) || details.title === "" || details.title === undefined || details.title.length < 6 || details.title.split(" ").length < 1) {
       errors[0] = { err: true, msg: "Title not valid." };
     }
-    if (
-      !testRe.test(details.description) ||
-      details.description === "" ||
-      details.description === undefined ||
-      details.title.length < 6 ||
-      details.title.split(" ").length < 1
-    ) {
+    if (!testRe.test(details.description) || details.description === "" || details.description === undefined || details.title.length < 6 || details.title.split(" ").length < 1) {
       errors[1] = { err: true, msg: "Description not valid." };
     }
     if (!timeRe.test(details.prepTime)) {
@@ -78,22 +57,10 @@ export class RecipeValidateService {
     const testRe = /^[A-Za-z0-9,\.\-/()'# ]+$/;
     const timeRe = /^[0-9]{2}:[0-5][0-9]$/;
     const intRe = /^[0-9]$/;
-    if (
-      !testRe.test(recipe.title) ||
-      recipe.title === "" ||
-      recipe.title === undefined ||
-      recipe.title.length < 6 ||
-      recipe.title.split(" ").length < 1
-    ) {
+    if (!testRe.test(recipe.title) || recipe.title === "" || recipe.title === undefined || recipe.title.length < 6 || recipe.title.split(" ").length < 1) {
       errors[0] = { err: true, msg: "Title not valid." };
     }
-    if (
-      !testRe.test(recipe.description) ||
-      recipe.description === "" ||
-      recipe.description === undefined ||
-      recipe.title.length < 6 ||
-      recipe.title.split(" ").length < 1
-    ) {
+    if (!testRe.test(recipe.description) || recipe.description === "" || recipe.description === undefined || recipe.title.length < 6 || recipe.title.split(" ").length < 1) {
       errors[1] = { err: true, msg: "Description not valid." };
     }
     if (!timeRe.test(recipe.prepTime)) {
@@ -167,20 +134,14 @@ export class RecipeValidateService {
       amount = -1;
     }
 
-    this.recipeService.voteRecipe(recipe._id, amount).subscribe(data => {
+    this.recipeService.voteRecipe(recipe._id, amount).subscribe((data) => {
       if (data.success) {
-        this.userService
-          .addUserData(
-            user,
-            { data: "recipes", type: "vote", vote: currentVote },
-            recipe._id
-          )
-          .subscribe(data => {
-            if (!data.success) {
-              console.log("Failed to cast vote");
-            }
-            callback();
-          });
+        this.userService.addUserData(user, { data: "recipes", type: "vote", vote: currentVote }, recipe._id).subscribe((data) => {
+          if (!data.success) {
+            console.log("Failed to cast vote");
+          }
+          callback();
+        });
       } else {
         console.log("Failed to cast vote");
       }
@@ -188,13 +149,20 @@ export class RecipeValidateService {
     return { newScore: recipe.score + amount, newVote: currentVote };
   }
 
-  toggleSave(userData, recipeId) {
-    this.userService
-      .addUserData(userData, { data: "recipes", type: "save" }, recipeId)
-      .subscribe(data => {
-        if (!data.success) {
-          console.log("Failed to toggle save");
-        }
-      });
+  toggleSave(data, recipe) {
+    return new Observable((o) => {
+      if (!this.saveLock) {
+        this.saveLock = true;
+        const userData = { id: JSON.parse(localStorage.getItem("user")).id, data: data.recipes };
+        this.userService.addUserData(userData, { data: "recipes", type: "save" }, recipe._id).subscribe((data) => {
+          if (!data.success) {
+            console.log("Failed to toggle save");
+          }
+          o.next(data);
+          this.saveLock = false;
+          o.complete();
+        });
+      }
+    });
   }
 }

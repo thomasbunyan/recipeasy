@@ -1,0 +1,223 @@
+.dialogWindow {
+  height: 50vh;
+  max-height: 550px;
+  width: 350px;
+  overflow: hidden;
+  position: relative;
+}
+.scrollArea {
+  overflow-y: auto;
+  height: calc(100% - 40px);
+  position: absolute;
+  width: 100%;
+  z-index: 1;
+  visibility: visible;
+  opacity: 1;
+  transition: all 0.3s ease-in-out;
+}
+.hideScrollArea {
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
+}
+
+/*** Top buttons ***/
+.topButtons {
+  /* background-color: red; */
+  margin: auto;
+  height: 40px;
+  width: 95%;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 28px;
+}
+.topButtons i {
+  cursor: pointer;
+}
+
+/*** Recipe info ***/
+.recipeInfo {
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 35px;
+}
+.recipeImage {
+  height: 200px;
+  width: 200px;
+  background-color: #f1f0f5;
+  border-radius: 25px;
+  margin: auto;
+}
+.recipeTitle {
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  padding: 5px 0;
+}
+
+/*** Recipe buttons ***/
+.recipeButtons {
+  margin: auto;
+  width: 90%;
+}
+.recipeButton {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  font-size: 16px;
+  margin: 20px 0;
+}
+.recipeButton i {
+  margin-right: 10px;
+  font-size: 20px;
+  cursor: pointer;
+}
+.recipeButton p {
+  cursor: pointer;
+}
+
+/*** Cookbook area ***/
+.cookbookArea {
+  height: calc(100% - 40px);
+  position: absolute;
+  width: 100%;
+  z-index: 2;
+  visibility: hidden;
+  background-color: #fff;
+  margin: auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
+}
+.showCookbookArea {
+  visibility: visible;
+  opacity: 1;
+  transition: all 0.3s ease-in-out;
+}
+
+.cookbookArea h3 {
+  text-align: center;
+}
+.newBtn {
+  margin: 20px auto;
+  display: inline-block;
+  text-align: center;
+  padding: 1em 1.9em;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 25px;
+  background-color: #5c7cf2;
+  color: #fff;
+  cursor: pointer;
+}
+
+.cookbookList {
+  overflow-y: auto;
+  flex-grow: 1;
+  width: 100%;
+  transition: all 0.3s ease-in-out;
+  /* height: 255px; */
+}
+.cookbookItem {
+  /* padding: 15px; */
+  border-radius: 8px;
+  margin-bottom: 10px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  cursor: pointer;
+}
+.cookbookImage {
+  height: 50px;
+  width: 50px;
+  background-color: #f1f0f5;
+  margin-right: 10px;
+  border-radius: 8px;
+}
+
+/*** Name cookbook ***/
+.newCookbook {
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
+
+  height: calc(100% - 40px);
+  position: absolute;
+  width: 100%;
+  z-index: 3;
+  background-color: #fff;
+  margin: auto;
+  text-align: center;
+}
+.showNewCookbook {
+  visibility: visible;
+  opacity: 1;
+  transition: all 0.3s ease-in-out;
+}
+
+.newCoobook h3 {
+  font-size: 14px;
+}
+.newCookbook input {
+  width: 50%;
+  margin: auto;
+  border-bottom: 1px #000 solid;
+  padding: 3px 0;
+  margin: 40px 0;
+  font-size: 18px;
+  font-family: "ProductSansRegular", sans-serif;
+  text-align: center;
+}
+.nameBtns {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.btn {
+  font-size: 13px;
+  font-weight: bold;
+  color: #000;
+  cursor: pointer;
+}
+
+/*** Colors and stuff ***/
+.saved {
+  color: #f1c921;
+}
+
+/*** General changes ***/
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+.scrollArea::-webkit-scrollbar,
+.cookbookList::-webkit-scrollbar {
+  width: 4px;
+}
+.scrollArea::-webkit-scrollbar-thumb,
+.cookbookList::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: #ffffff00;
+  margin: 2px 0;
+}
+.scrollArea:hover::-webkit-scrollbar-thumb,
+.cookbookList:hover::-webkit-scrollbar-thumb {
+  background-color: #dadada;
+}
+
+.noselect {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}

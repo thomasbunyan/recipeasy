@@ -5,9 +5,8 @@ import { UserService } from "../../services/user.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import { RecipeValidateService } from "../../services/recipe-validate.service";
 import { Title } from "@angular/platform-browser";
-import { SidenavService } from "../sidenav/sidenav.service";
-import { MatDialog } from "@angular/material";
-import { FilterDialogComponent } from "./filter-dialog/filter-dialog.component";
+import { RecipeDialogService } from "../recipe-dialog/recipe-dialog.service";
+import { GeneralService } from "../../services/general.service";
 
 @Component({
   selector: "app-results",
@@ -15,6 +14,7 @@ import { FilterDialogComponent } from "./filter-dialog/filter-dialog.component";
   styleUrls: ["./results.component.css"]
 })
 export class ResultsComponent implements OnInit {
+  // Data
   userId: any;
   cookbooks = [];
   recipes = [];
@@ -26,37 +26,35 @@ export class ResultsComponent implements OnInit {
 
   // Filter
   filterOpen = false;
+  filter: any;
   ingredients: string;
-  servings: number;
-  difficulty: number;
+  servings: string;
+  difficulty: any;
   timeMin: string;
   timeMax: string;
 
-  // Sort through these.
-  // step = 0;
+  // General page
+  loading = true;
   lastSeen = undefined;
   endOfPage = false;
 
   voteLock = false;
   saveLock = false;
-  openWindow: any;
   copyText: String;
 
   constructor(
     private recipeService: RecipeService,
     private cookbookService: CookbookService,
     private recipeValidateService: RecipeValidateService,
-    private sidenavService: SidenavService,
     private userService: UserService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private titleService: Title,
-    private dialog: MatDialog
+    private recipeDialog: RecipeDialogService,
+    private generalService: GeneralService
   ) {}
 
   ngOnInit() {
-    console.log("Start load");
-    this.sidenavService.close();
     this.userId = JSON.parse(localStorage.getItem("user")).id;
     this.activatedRoute.queryParams.subscribe((params) => {
       this.searchQuery = params["search_query"];
@@ -88,7 +86,7 @@ export class ResultsComponent implements OnInit {
             this.usersRecipes = data.recipes;
             this.usersCookbooks = data.cookbooks;
             this.recipes = this.applyUserData(recipeData.recipes);
-            console.log("Finish load");
+            this.loading = false;
             this.onScroll();
           } else {
             console.log("User data could not be acquired");
@@ -99,14 +97,14 @@ export class ResultsComponent implements OnInit {
   }
 
   onScroll() {
-    if (this.endOfPage) {
+    if (this.endOfPage || this.recipes.length === 0) {
       return;
     }
-    this.lastSeen = this.searchList[this.searchList.length - 1]._id;
+    this.lastSeen = this.recipes[this.recipes.length - 1]._id;
     this.recipeService.getRecipeSearch(this.searchQuery, this.lastSeen).subscribe((recipeData) => {
       this.recipes = this.recipes.concat(this.applyUserData(recipeData.recipes));
-      this.searchList = this.recipes;
-      if (this.lastSeen === this.searchList[this.searchList.length - 1]._id) {
+      this.applyFilter();
+      if (this.lastSeen === this.recipes[this.recipes.length - 1]._id) {
         this.endOfPage = true;
         return;
       }
@@ -133,37 +131,94 @@ export class ResultsComponent implements OnInit {
     return recipeList;
   }
 
-  viewRecipe(id) {
-    if (this.openWindow === undefined) {
-      this.router.navigate(["recipe", id]);
-    }
-  }
-
-  viewCookbook(cookbook) {
-    this.router.navigate(["cookbook", cookbook._id]);
-  }
-
   filterSearch(apply) {
     if (apply) {
       const filter = {};
-      if (this.ingredients !== undefined) {
-        filter["ingredients"] = this.ingredients.split(",").map(function(item) {
+      if (this.ingredients && !/^\s*$/.test(this.ingredients)) {
+        filter["ingredients"] = this.ingredients.split(",").map((item) => {
           return item.trim();
         });
       }
       if (this.servings !== undefined) {
+        const regex = /^([0-9][0-9]*-[0-9][0-9]*|[0-9][0-9]*)$/;
+        if (regex.test(this.servings)) {
+          if (this.servings.indexOf("-") > -1) {
+            const numbers = this.servings.split("-");
+            if (parseInt(numbers[0], 10) < parseInt(numbers[1], 10)) {
+              filter["servings"] = [parseInt(numbers[0], 10), parseInt(numbers[1], 10)];
+            } else {
+              filter["servings"] = [parseInt(numbers[1], 10), parseInt(numbers[0], 10)];
+            }
+          } else {
+            filter["servings"] = [parseInt(this.servings, 10)];
+          }
+        } else {
+          console.log("bad");
+        }
       }
       if (this.difficulty !== undefined) {
+        if (!isNaN(this.difficulty) && this.difficulty >= 0 && this.difficulty < 3) {
+          filter["difficulty"] = parseInt(this.difficulty, 10);
+        }
       }
       if (this.timeMin !== undefined) {
       }
       if (this.timeMax !== undefined) {
       }
+      this.filter = filter;
+      // console.log(filter);
       this.filterOpen = false;
-      console.log(filter);
     } else {
       this.ingredients = this.servings = this.difficulty = this.timeMin = this.timeMax = undefined;
+      this.filter = {};
     }
+    this.applyFilter();
+  }
+
+  applyFilter() {
+    const list = this.recipes.filter((x) => {
+      for (const key in this.filter) {
+        if (!this.filter.hasOwnProperty(key)) {
+          continue;
+        }
+        if (key === "ingredients") {
+          const ing = x.ingredients.map((ingr) => ingr.food);
+          if (!this.filter.ingredients.some((e) => ing.indexOf(e) > -1)) {
+            return false;
+          }
+        } else if (key === "servings") {
+          if (this.filter.servings.length === 1) {
+            if (this.filter.servings[0] !== parseInt(x.servings, 10)) {
+              return false;
+            }
+          } else {
+            if (this.filter.servings[0] > x.servings || this.filter.servings[1] < x.servings) {
+              return false;
+            }
+          }
+        } else if (key === "difficulty") {
+          if (this.filter.difficulty !== parseInt(x.difficulty, 10)) {
+            return false;
+          }
+        }
+      }
+      return true;
+    });
+    this.searchList = list;
+  }
+
+  openRecipeOptions(recipe) {
+    this.recipeDialog.open(recipe).subscribe((data) => {
+      // console.log(data);
+    });
+  }
+
+  viewRecipe(id) {
+    this.router.navigate(["recipe", id]);
+  }
+
+  viewCookbook(cookbook) {
+    this.router.navigate(["cookbook", cookbook._id]);
   }
 
   toggleCookbookSave(cookbook) {
@@ -174,17 +229,6 @@ export class ResultsComponent implements OnInit {
       cookbook.followers++;
     }
     cookbook.saved = !cookbook.saved;
-  }
-
-  updateSearch() {
-    const query = this.filterQuery;
-    const newFoods = [];
-    this.recipes.forEach((el) => {
-      if (el.name.toLowerCase().includes(query.toLowerCase())) {
-        newFoods.push(el);
-      }
-    });
-    this.searchList = newFoods;
   }
 
   toggleSave(recipe) {
@@ -199,10 +243,6 @@ export class ResultsComponent implements OnInit {
         }
         this.saveLock = false;
       });
-      if (this.openWindow !== undefined) {
-        this.openWindow.showOptions = false;
-        this.openWindow = undefined;
-      }
     }
   }
 
@@ -219,136 +259,13 @@ export class ResultsComponent implements OnInit {
     }
   }
 
-  addToCookbook(cookbook, recipe) {
-    if (cookbook === "new") {
-      this.cookbookService.addCookbook(recipe._id).subscribe((data) => {
-        if (!data.success) {
-          console.log("Could not create cookbook");
-        } else {
-          const user = { id: this.userId, data: this.usersCookbooks };
-          const update = { data: "cookbooks", type: "author" };
-          this.userService.addUserData(user, update, data.cookbook._id).subscribe((data) => {
-            if (!data.success) {
-              console.log("Could not update user data");
-            } else {
-              this.usersCookbooks = data.cookbooks;
-            }
-          });
-        }
-      });
+  scrollCookbooks(dir, ref) {
+    if (dir === "left") {
+      ref.scrollTo({ left: 0, behavior: "smooth" });
+      // this.cookbookPos = "left";
     } else {
-      this.cookbookService.updateCookbook(cookbook, { type: "recipes", data: recipe }).subscribe((data) => {
-        if (!data.success) {
-          console.log("Unable to add recipe");
-        } else {
-          console.log(data.cookbook.recipes);
-        }
-      });
-
-      // this.cookbookService
-      //   .getCookBookById(book.cookbook, false)
-      //   .subscribe(data => {
-      //     if (data.success) {
-      //       const recipes = data.cookbook.recipes.slice(0);
-      //       const index = recipes.findIndex(x => x === recipe._id);
-      //       if (index !== -1) {
-      //         console.log("Duplicate");
-      //         return;
-      //       }
-      //       recipes.push(recipe._id);
-      //       this.cookbookService
-      //         .updateCookbookRecipes(data.cookbook._id, recipes)
-      //         .subscribe(data => {
-      //           if (!data.success) {
-      //             console.log("Could not add to cookbook");
-      //           }
-      //         });
-      //     }
-      //   });
-    }
-    this.openWindow.showOptions = false;
-    this.openWindow = undefined;
-  }
-
-  refineSearch() {
-    const refineDialog = this.dialog.open(FilterDialogComponent, {
-      data: {
-        title: "Hello world"
-      }
-    });
-    refineDialog.afterClosed().subscribe((result) => {
-      console.log(result);
-    });
-  }
-
-  getTimeAgo(timeStamp) {
-    let diff = (new Date().getTime() - new Date(timeStamp).getTime()) / 60000;
-    if (isNaN(diff)) {
-      return "not a valid time";
-    } else if (diff < 1) {
-      return "less than a minute ago";
-    } else if (diff < 60) {
-      if (Math.round(diff) === 1) {
-        return Math.round(diff) + " minute ago";
-      }
-      return Math.round(diff) + " minutes ago";
-    } else if ((diff = diff / 60) < 24) {
-      if (Math.round(diff) === 1) {
-        return Math.round(diff) + " hour ago";
-      }
-      return Math.round(diff) + " hours ago";
-    } else if ((diff = diff / 24) < 30) {
-      if (Math.round(diff) === 1) {
-        return Math.round(diff) + " day ago";
-      }
-      return Math.round(diff) + " days ago";
-    } else if ((diff = diff / 30) < 12) {
-      if (Math.round(diff) === 1) {
-        return Math.round(diff) + " month ago";
-      }
-      return Math.round(diff) + " months ago";
-    } else {
-      diff = diff / 12;
-      if (Math.round(diff) === 1) {
-        return Math.round(diff) + " year ago";
-      }
-      return Math.round(diff) + " years ago";
+      ref.scrollTo({ left: ref.scrollWidth, behavior: "smooth" });
+      // this.cookbookPos = "right";
     }
   }
-
-  // TODO: Move this to the adding stage and save to DB.
-  getTotalTime(recipe) {
-    if (recipe.cookTime !== undefined) {
-      const cook = recipe.cookTime.split(":");
-      const prep = recipe.prepTime.split(":");
-
-      const totMins = parseInt(cook[1], 10) + parseInt(prep[1], 10);
-      const additionalHours = Math.floor(totMins / 60);
-      const additionalMins = totMins % 60;
-
-      let additionalMinsS;
-      if (additionalMins < 10) {
-        additionalMinsS = "0" + additionalMins;
-      } else {
-        additionalMinsS = additionalMins;
-      }
-
-      const totHours = parseInt(cook[0], 10) + parseInt(prep[0], 10) + additionalHours;
-      const totalTime = totHours + ":" + additionalMinsS;
-
-      return totalTime;
-    } else {
-      return "00:15";
-    }
-  }
-
-  // scrollCookbooks(dir, ref) {
-  //   if (dir === "left") {
-  //     ref.scrollTo({ left: 0, behavior: "smooth" });
-  //     this.cookbookPos = "left";
-  //   } else {
-  //     ref.scrollTo({ left: ref.scrollWidth, behavior: "smooth" });
-  //     this.cookbookPos = "right";
-  //   }
-  // }
 }

@@ -11,10 +11,7 @@ export class EditCookbookDialogComponent implements OnInit {
   description: string;
   public = true;
 
-  constructor(
-    private dialog: MatDialogRef<EditCookbookDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) private data: any
-  ) {}
+  constructor(private dialog: MatDialogRef<EditCookbookDialogComponent>, @Inject(MAT_DIALOG_DATA) private data: any) {}
 
   ngOnInit() {
     this.title = this.data.title;

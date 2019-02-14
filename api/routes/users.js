@@ -311,8 +311,6 @@ router.patch("/:id", checkAuth, (req, res, next) => {
       });
     })
     .catch((err) => {
-      // console.log("YESSS", query);
-      // console.log("YESSS", update);
       res.status(500).json({
         success: false,
         error: err

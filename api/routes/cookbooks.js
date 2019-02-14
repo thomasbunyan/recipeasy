@@ -4,25 +4,31 @@ const checkAuth = require("../middleware/check-auth");
 require("dotenv").config();
 
 const Cookbook = require("../models/cookbook");
+const User = require("../models/user");
 
 // Add cookbook
 router.post("/", checkAuth, (req, res, next) => {
   let cookbook = new Cookbook({
     title: req.body.title,
     description: req.body.description,
-    // public: req.body.public,
     public: true,
     recipes: req.body.recipes,
     author: req.userData.user.username,
     date: req.body.date
   });
+
   cookbook
     .save()
     .then((cookbook) => {
-      res.status(201).json({
-        success: true,
-        cookbook: cookbook
-      });
+      User.findByIdAndUpdate(req.userData.user._id, { $push: { "cookbooks.author": { cookbook: cookbook._id, timestamp: new Date() } } }, { new: true })
+        .exec()
+        .then((user) => {
+          res.status(200).json({
+            success: true,
+            user: user,
+            cookbook: cookbook
+          });
+        });
     })
     .catch((err) => {
       res.status(500).json({

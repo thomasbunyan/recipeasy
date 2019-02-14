@@ -38,7 +38,8 @@
 .front {
   background-color: #fff;
   border-radius: 25px;
-  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1); */
+  border: rgb(231, 231, 231) solid 1px;
   padding: 20px;
 }
 .cookbookTitle h3 {
@@ -154,7 +155,8 @@
   background-color: #fff;
   /* height: 300px; */
   border-radius: 25px;
-  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1); */
+  border: rgb(231, 231, 231) solid 1px;
   padding: 20px;
   display: flex;
   justify-content: center;
@@ -167,7 +169,8 @@
   /* height: 300px; */
   /* width: 100px; */
   border-radius: 25px;
-  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1); */
+  border: rgb(231, 231, 231) solid 1px;
   padding: 25px;
 }
 .trending h3 {

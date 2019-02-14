@@ -47,4 +47,44 @@ export class GeneralService {
       return Math.round(diff) + " years ago";
     }
   }
+
+  getTotalTime(prep, cook): String {
+    if (isNaN(prep)) {
+      return cook;
+    }
+
+    const timestamp = prep + cook;
+    let minutes = Math.floor(timestamp / 60);
+    const hours = minutes % 60;
+    minutes = minutes - hours * 60;
+
+    let hoursFormatted, minsFormatted;
+    if (hours < 10) {
+      hoursFormatted = "0" + hours;
+    } else {
+      hoursFormatted = hours;
+    }
+    if (minutes < 10) {
+      minsFormatted = "0" + minutes;
+    } else {
+      minsFormatted = minutes;
+    }
+    return hoursFormatted + ":" + minsFormatted;
+  }
+
+  getDifficulty(difficulty) {
+    if (difficulty === "0") {
+      return "Easy";
+    } else if (difficulty === "1") {
+      return "Medium";
+    } else if (difficulty === "2") {
+      return "Hard";
+    } else {
+      return "Invalid difficulty";
+    }
+  }
+
+  formatFollowers(followers) {
+    return followers.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+  }
 }

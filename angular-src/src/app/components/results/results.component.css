@@ -68,7 +68,7 @@ label {
   padding: 10px;
   margin-top: 3px;
   border-radius: 8px;
-  background-color: #ecf0f1;
+  background-color: #f1f0f5;
   box-sizing: border-box;
   width: 100%;
 }
@@ -116,6 +116,9 @@ label {
   justify-content: space-between;
   align-items: center;
 }
+.cookbookTitle i {
+  cursor: pointer;
+}
 .showMore {
   font-size: 12px;
   font-weight: normal;
@@ -137,7 +140,6 @@ label {
 }
 /*** Style for the image boxes ***/
 .itemBox {
-  /* border: 1px rgb(219, 219, 219) solid; */
   margin-right: 20px;
   width: 210px;
 }
@@ -185,29 +187,25 @@ label {
   font-size: 10pt;
   text-align: left;
   font-family: "ProductSansRegular", sans-serif;
-  /* white-space: normal; */
-}
-.tInfo-title {
-  /* display: inline-block; */
 }
 .tInfo-title:hover {
   text-decoration: underline;
   cursor: pointer;
 }
+.tInfo h4 {
+  padding-bottom: 10px;
+}
 .tFol {
-  margin-top: 5px;
+  margin-top: 10px;
   font-size: 9pt;
 }
 
 /*** Recipes ***/
-.recipeArea {
-}
 .recipeArea h4 {
   padding-top: 10px;
   padding-bottom: 15px;
 }
 .recipeGrid {
-  /* background-color: red; */
   overflow: hidden;
   display: flex;
   flex-wrap: wrap;
@@ -218,68 +216,62 @@ label {
 }
 .recipeCard {
   background-color: #fff;
-  width: 400px;
-  height: 290px;
+  width: 300px;
   border-radius: 25px;
   margin-bottom: 40px;
-  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+  border: rgb(230, 230, 230) solid 1px;
   position: relative;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out 0s;
-}
-.recipeCard:hover {
-  /* transform: scale(1.04); */
   transition: all 0.3s ease-in-out 0s;
 }
 .mainImg {
-  height: 55%;
+  height: 175px;
   background-color: #f1f0f5;
   border-top-left-radius: 25px;
   border-top-right-radius: 25px;
+  cursor: pointer;
 }
 .rInfo {
-  height: 45%;
   padding: 15px;
 }
 .rTitle {
   font-size: 16px;
   font-weight: bold;
-  cursor: pointer;
 }
 .rDetails {
   font-size: 12px;
-  padding: 3px 0;
+  padding-top: 3px;
 }
 .rDetails span {
   color: #4286f5;
 }
 .rInteraction {
-  /* background-color: rgba(255, 0, 0, 0.308); */
-  height: 30px;
-  width: 95%;
-  position: absolute;
-  bottom: 15px;
-  left: 0;
-  padding: 0 10px;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
+  box-sizing: border-box;
   font-size: 14px;
+  margin: 15px 0;
 }
+
 .interactionButtons i {
-  margin: 0 7px;
-  font-size: 18px;
+  margin-right: 20px;
+  padding: 5px;
+  font-size: 19px;
   cursor: pointer;
+  transition: all 0.2s ease-in-out 0s;
 }
 
 .upvote {
   color: #eb6c1a;
+  transition: all 0.2s ease-in-out 0s;
 }
 .downvote {
   color: #6664bd;
+  transition: all 0.2s ease-in-out 0s;
 }
 .saved {
   color: #f8c518;
+  transition: all 0.2s ease-in-out 0s;
 }
 
 /*** Bottom of page ***/

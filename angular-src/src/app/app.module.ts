@@ -26,6 +26,7 @@ import { SavedRecipesComponent } from "./components/saved-recipes/saved-recipes.
 import { CookbookComponent } from "./components/cookbook/cookbook.component";
 
 import { EditCookbookDialogComponent } from "./components/cookbook/edit-cookbook-dialog/edit-cookbook-dialog.component";
+import { RecipeDialogComponent } from "./components/recipe-dialog/recipe-dialog.component";
 
 import { AuthGuard } from "./guards/auth.guard";
 import { AuthService } from "./services/auth.service";
@@ -36,6 +37,7 @@ import { RecipeService } from "./services/recipe.service";
 import { CookbookService } from "./services/cookbook.service";
 import { SidenavService } from "./components/sidenav/sidenav.service";
 import { GeneralService } from "./services/general.service";
+import { RecipeDialogService } from "./components/recipe-dialog/recipe-dialog.service";
 
 const appRoutes: Routes = [
   { path: "", component: HomeComponent, pathMatch: "full" },
@@ -95,6 +97,7 @@ const appRoutes: Routes = [
     ProfileComponent,
     CreateComponent,
     EditCookbookDialogComponent,
+    RecipeDialogComponent,
     SavedRecipesComponent,
     RecipeComponent,
     VerifyComponent,
@@ -103,8 +106,8 @@ const appRoutes: Routes = [
     HistoryComponent
   ],
   imports: [HttpModule, FormsModule, BrowserModule, RouterModule.forRoot(appRoutes), MatDialogModule, BrowserAnimationsModule, MaterialModule, ReactiveFormsModule, InfiniteScrollModule],
-  providers: [UserValidateService, RecipeValidateService, SidenavService, AuthService, UserService, RecipeService, CookbookService, GeneralService, AuthGuard, Title],
+  providers: [UserValidateService, RecipeValidateService, SidenavService, AuthService, UserService, RecipeService, CookbookService, GeneralService, RecipeDialogService, AuthGuard, Title],
   bootstrap: [AppComponent],
-  entryComponents: [EditCookbookDialogComponent]
+  entryComponents: [EditCookbookDialogComponent, RecipeDialogComponent]
 })
 export class AppModule {}
