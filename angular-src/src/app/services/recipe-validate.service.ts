@@ -2,12 +2,13 @@ import { Injectable } from "@angular/core";
 import { UserService } from "./user.service";
 import { RecipeService } from "./recipe.service";
 import { Observable } from "rxjs";
+import { Http, Headers } from "@angular/http";
 
 @Injectable()
 export class RecipeValidateService {
   saveLock = false;
 
-  constructor(private userService: UserService, private recipeService: RecipeService) {}
+  constructor(private userService: UserService, private recipeService: RecipeService, private http: Http) {}
 
   validateIngredient(ingredient) {
     const errors = new Array(4).fill({ err: false });
@@ -164,5 +165,19 @@ export class RecipeValidateService {
         });
       }
     });
+  }
+
+  getIngredients(query) {
+    const headers = new Headers();
+    headers.append("Authorization", localStorage.getItem("id_token"));
+    headers.append("Content-Type", "application/json");
+    return this.http
+      .get("http://localhost:3000/ingredients", {
+        headers: headers,
+        params: {
+          search_query: query
+        }
+      })
+      .map((res) => res.json());
   }
 }

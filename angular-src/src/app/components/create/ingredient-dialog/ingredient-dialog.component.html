@@ -1,0 +1,28 @@
+<div class="dialogWindow">
+  <div class="topButtons">
+    <div></div>
+    <div><i class="fas fa-times" (click)="dialog.close()"></i></div>
+  </div>
+  <form autocomplete="off">
+    <div class="mainInfo">
+      <h1>{{ ingredient?.ingredient }}</h1>
+      <div class="amountArea">
+        <label>Add an amount:</label>
+        <div class="amounts">
+          <input placeholder='"100"' class="wide" name="amount" [(ngModel)]="amount" [ngClass]="{'error': errors[0]}" />
+          <input placeholder='"g"' list="acceptedUnits" name="unit" [(ngModel)]="unit" [ngClass]="{'error': errors[1]}" />
+          <datalist id="acceptedUnits">
+            <option *ngFor="let uom of units" value="{{ uom.id }}">{{ uom.unit }}</option>
+          </datalist>
+        </div>
+        <div class="details">
+          <label for="details">Additional details (optional):</label>
+          <input placeholder='"Peeled and chopped"' name="details" name="details" [(ngModel)]="details" [ngClass]="{'error': errors[2]}" />
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="btnArea">
+    <div class="addBtn noselect" (click)="addIngredient()">Add</div>
+  </div>
+</div>

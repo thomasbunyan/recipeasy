@@ -1,0 +1,110 @@
+/*** Top buttons ***/
+.dialogWindow {
+  /* height: 50vh;
+  max-height: 550px; */
+  width: 350px;
+  overflow: hidden;
+  position: relative;
+}
+
+/*** Top buttons ***/
+.topButtons {
+  /* background-color: red; */
+  margin: auto;
+  height: 40px;
+  width: 95%;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 28px;
+}
+.topButtons i {
+  cursor: pointer;
+}
+
+/*** Main info ***/
+.mainInfo h1 {
+  text-align: center;
+  font-size: 38px;
+  text-transform: capitalize;
+}
+
+/*** Amount area ***/
+.amountArea {
+  /* background-color: rgba(255, 0, 0, 0.226); */
+  margin: 20px auto;
+  width: 80%;
+}
+
+label {
+  font-size: 14px;
+}
+
+.amounts {
+  display: flex;
+  justify-content: center;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+.amounts input {
+  font-family: "ProductSansRegular", sans-serif;
+  background-color: #ecf0f1;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 16px;
+  width: 50px;
+  border: 2px solid transparent;
+}
+.wide {
+  flex-grow: 1;
+  margin-right: 10px;
+}
+
+/*** Details area ***/
+.details {
+  margin: 20px 0;
+}
+.details input {
+  font-family: "ProductSansRegular", sans-serif;
+  background-color: #ecf0f1;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  border: 2px solid transparent;
+}
+
+/*** Add btn ***/
+.btnArea {
+  display: flex;
+  justify-content: center;
+}
+.addBtn {
+  display: inline-block;
+  background-color: #03a9f4;
+  color: #fff;
+  margin: 10px 0;
+  padding: 0.7em 1.6em;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/*** Errors ***/
+.error {
+  color: #cc0033 !important;
+  background-color: #fce4e4 !important;
+  border: 2px solid #cc0033 !important;
+}
+
+/*** General ***/
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}

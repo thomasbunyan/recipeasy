@@ -18,7 +18,7 @@
           </mat-step>
           <mat-step>
             <ng-template matStepLabel><span class="stepLabel">Details</span></ng-template>
-            <div class="inputArea">
+            <div class="inputArea detailArea">
               <!-- ? Details -->
               <h2>Details</h2>
               <div class="formSection">
@@ -30,7 +30,7 @@
                 <label for="description">Description:</label>
                 <textarea
                   class="inputField"
-                  rows="4"
+                  rows="3"
                   type="text"
                   maxlength="192"
                   [(ngModel)]="description"
@@ -41,7 +41,7 @@
                 ></textarea>
                 <div class="errorMessage" [ngClass]="{ showErrorMessage: errors[1].err == true }">Error: {{ errors[1].msg }}</div>
               </div>
-              <div class="informationArea">
+              <div class="recipeTime">
                 <div class="formSection">
                   <label for="difficulty">Difficulty:</label>
                   <div class="recipeSkill">
@@ -54,7 +54,7 @@
                   <div class="errorMessage" [ngClass]="{ showErrorMessage: errors[4].err == true }">Error: {{ errors[4].msg }}</div>
                 </div>
                 <div class="formSection">
-                  <div class="recipeServings">
+                  <div class="formSection">
                     <label for="servings">Servings:</label>
                     <input
                       type="text"
@@ -69,43 +69,45 @@
                   </div>
                   <div class="errorMessage" [ngClass]="{ showErrorMessage: errors[5].err == true }">Error: {{ errors[5].msg }}</div>
                 </div>
+              </div>
+              <div class="formSection">
                 <div class="formSection">
-                  <label for="recipeTime">Recipe time:</label>
-                  <div class="recipeTime">
-                    <div class="cookTime">
-                      <!-- <div class="cookTimeLabel"><i class="far fa-clock" style="padding-right: 5px;"></i> Prep</div> -->
-                      <input
-                        class="timeInput"
-                        type="text"
-                        [(ngModel)]="prepTime"
-                        name="prepTime"
-                        [ngClass]="{ error: errors[2].err == true }"
-                        (keydown)="timeInput($event, 'prep')"
-                        placeholder="00:00"
-                        maxlength="5"
-                        onpaste="return false"
-                        (focusout)="clickOut('prep', prepTime); checkErrors(stepper, 2)"
-                        (focusin)="prepTime = ''"
-                      />
-                    </div>
-                    <div class="cookTime">
-                      <!-- <div class="cookTimeLabel"><i class="far fa-clock" style="padding-right: 5px;"></i> Cook</div> -->
-                      <input
-                        class="timeInput"
-                        type="text"
-                        [(ngModel)]="cookTime"
-                        name="cookTime"
-                        [ngClass]="{ error: errors[3].err == true }"
-                        (keydown)="timeInput($event, 'cook')"
-                        placeholder="00:00"
-                        maxlength="5"
-                        onpaste="return false"
-                        (focusout)="clickOut('cook', cookTime); checkErrors(stepper, 3)"
-                        (focusin)="cookTime = ''"
-                      />
-                    </div>
+                  <label for="prepTime">Preparation time:</label>
+                  <div>
+                    <input
+                      class="timeInput"
+                      type="text"
+                      [(ngModel)]="prepTime"
+                      name="prepTime"
+                      [ngClass]="{ error: errors[2].err == true }"
+                      (keydown)="timeInput($event, 'prep')"
+                      placeholder="00:00"
+                      maxlength="5"
+                      onpaste="return false"
+                      (focusout)="clickOut('prep', prepTime, stepper)"
+                      (focusin)="prepTime = ''"
+                    />
                   </div>
-                  <div class="errorMessage" [ngClass]="{ showErrorMessage: errors[2].err == true || errors[3].err == true }">Error: {{ errors[2].msg }} {{ errors[3].msg }}</div>
+                  <div class="errorMessage" [ngClass]="{ showErrorMessage: errors[2].err == true }">Error: {{ errors[2].msg }}</div>
+                </div>
+                <div class="formSection">
+                  <label for="prepTime">Cooking time:</label>
+                  <div>
+                    <input
+                      class="timeInput"
+                      type="text"
+                      [(ngModel)]="cookTime"
+                      name="cookTime"
+                      [ngClass]="{ error: errors[3].err == true }"
+                      (keydown)="timeInput($event, 'cook')"
+                      placeholder="00:00"
+                      maxlength="5"
+                      onpaste="return false"
+                      (focusout)="clickOut('cook', cookTime, stepper)"
+                      (focusin)="cookTime = ''"
+                    />
+                  </div>
+                  <div class="errorMessage" [ngClass]="{ showErrorMessage: errors[3].err == true }">Error: {{ errors[3].msg }}</div>
                 </div>
               </div>
               <div class="formSection"><label for="public">Public:</label> <input class="publicCheck" type="checkbox" name="public" [(ngModel)]="public" /></div>
@@ -117,9 +119,18 @@
               <!-- ? Ingredients -->
               <h2>Ingredients</h2>
               <div>
-                <div class="addIngredients" (keyup.enter)="addIngredient(food, amount, unit, ingField); food = ''; amount = ''; unit = ''">
+                <!-- <div class="addIngredients" (keyup.enter)="addIngredient(food, amount, unit, ingField); food = ''; amount = ''; unit = ''">
                   <div class="ingredientContainer">
-                    <input type="text" class="ingredientField" [(ngModel)]="food" [ngClass]="{ error: ingErrors[0].err == true }" name="food" placeholder="Ingredient" (keyup)="checkErrors(stepper, 0)" #ingField />
+                    <input
+                      type="text"
+                      class="ingredientField"
+                      [(ngModel)]="food"
+                      [ngClass]="{ error: ingErrors[0].err == true }"
+                      name="food"
+                      placeholder="Ingredient"
+                      (keyup)="checkErrors(stepper, 0); getIngredients()"
+                      #ingField
+                    />
                     <div class="errorMessage" [ngClass]="{ showErrorMessage: ingErrors[0].err == true }">Error: {{ ingErrors[0].msg }}</div>
                   </div>
                   <div class="ingredientContainer">
@@ -157,6 +168,27 @@
                   <div class="addIngredientButton">
                     <div class="button" (click)="addIngredient(ingField)"><i class="fas fa-plus"></i></div>
                   </div>
+                </div> -->
+                <div class="ingredientContainer detailArea">
+                  <div class="formSection">
+                    <label for="food">Ingredient:</label>
+                    <input
+                      type="text"
+                      class="ingredientField"
+                      [(ngModel)]="food"
+                      [ngClass]="{ error: ingErrors[0].err == true }"
+                      name="food"
+                      placeholder="eg. 'Apple'"
+                      #ingField
+                      (keyup)="getIngredients()"
+                      (focusin)="dropdownOpen = true"
+                      (focusout)="dropdownOpen = false"
+                    />
+                    <div class="ingredientDropdown" *ngIf="dropdownOpen || food">
+                      <div class="ingredientElement" *ngFor="let item of ingredientsList" (click)="addIngredient(item)">{{ item.ingredient }}</div>
+                    </div>
+                  </div>
+                  <div class="errorMessage" [ngClass]="{ showErrorMessage: ingErrors[0].err == true }">Error: {{ ingErrors[0].msg }}</div>
                 </div>
                 <div class="addedIngredients">
                   <div class="emptyTable" *ngIf="ingredients.length == 0" [ngClass]="{ etError: ingErrors[4].err }">
@@ -164,19 +196,28 @@
                   </div>
                   <table *ngIf="ingredients.length > 0" mat-table [dataSource]="dataSource" class="ingredientTable">
                     <ng-container matColumnDef="ingredient">
-                      <th mat-header-cell *matHeaderCellDef>Ingredient</th>
-                      <td mat-cell *matCellDef="let ingredient">{{ ingredient.food }}</td>
+                      <th mat-header-cell *matHeaderCellDef class="ingredientCol">Ingredient</th>
+                      <td mat-cell *matCellDef="let ingredient" class="ingredientCol">{{ ingredient.name }}</td>
                     </ng-container>
                     <ng-container matColumnDef="amount">
-                      <th mat-header-cell *matHeaderCellDef>Amount</th>
-                      <td mat-cell *matCellDef="let ingredient">{{ ingredient.amount }}</td>
+                      <th mat-header-cell *matHeaderCellDef class="narrow">Amount</th>
+                      <td mat-cell *matCellDef="let ingredient" class="narrow">{{ getAmount(ingredient.amount, ingredient.unit) }}</td>
                     </ng-container>
-                    <ng-container matColumnDef="unit">
-                      <th mat-header-cell *matHeaderCellDef>Unit</th>
-                      <td mat-cell *matCellDef="let ingredient">{{ ingredient.unit }}</td>
+                    <ng-container matColumnDef="details">
+                      <th mat-header-cell *matHeaderCellDef class="detailCol">Details</th>
+                      <td mat-cell *matCellDef="let ingredient" class="detailCol">
+                        <span *ngIf="ingredient.details">{{ ingredient.details }}</span>
+                        <span *ngIf="!ingredient.details">-</span>
+                      </td>
                     </ng-container>
-                    <tr mat-header-row *matHeaderRowDef="['ingredient', 'amount', 'unit']"></tr>
-                    <tr mat-row *matRowDef="let myRowData; columns: ['ingredient', 'amount', 'unit']" class="elementRow"></tr>
+                    <ng-container matColumnDef="button">
+                      <th mat-header-cell *matHeaderCellDef class="narrow endColumn"></th>
+                      <td mat-cell *matCellDef="let ingredient; let i = index" class="narrow endColumn">
+                        <i class="fas fa-times" (click)="removeIngredient(i)"></i>
+                      </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="['ingredient', 'amount', 'details', 'button']"></tr>
+                    <tr mat-row *matRowDef="let myRowData; columns: ['ingredient', 'amount', 'details', 'button']" class="elementRow"></tr>
                   </table>
                 </div>
                 <div class="ingredient-error">{{ ingredientError }}</div>
@@ -229,9 +270,9 @@
                   </div>
                   <div class="recipeImageWrapper">
                     <div class="recipeImage">
-                      <img src="{{recipeImage}}" #rImg>
+                      <img src="{{ recipeImage }}" #rImg />
                     </div>
-                    <input type="file" accept="image/png, image/jpeg" (change)="uploadImage($event, rImg)"/>
+                    <input type="file" accept="image/png, image/jpeg" (change)="uploadImage($event, rImg)" />
                   </div>
                 </div>
                 <div class="breakLine"></div>

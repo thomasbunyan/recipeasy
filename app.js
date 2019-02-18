@@ -23,6 +23,7 @@ mongoose.connection.on("error", (err) => {
 const users = require("./api/routes/users");
 const recipes = require("./api/routes/recipes");
 const cookbooks = require("./api/routes/cookbooks");
+const ingredients = require("./api/routes/ingredients");
 
 //Port
 const port = 3000;
@@ -45,6 +46,7 @@ app.use(bodyParser.json());
 app.use("/users", users);
 app.use("/recipes", recipes);
 app.use("/cookbooks", cookbooks);
+app.use("/ingredients", ingredients);
 
 // Invalid route.
 app.use((req, res, next) => {
@@ -64,6 +66,7 @@ app.use((error, req, res, next) => {
 schedule.scheduleJob("10 * * * *", () => {
   scheduleFunctions.startAnalytics();
 });
+// ingredients.addIngredient();
 
 // Start server
 app.listen(port, () => {

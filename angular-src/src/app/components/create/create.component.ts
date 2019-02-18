@@ -3,7 +3,8 @@ import { Title } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 import { RecipeService } from "../../services/recipe.service";
 import { RecipeValidateService } from "../../services/recipe-validate.service";
-import { MatTableDataSource } from "@angular/material";
+import { MatTableDataSource, MatDialog } from "@angular/material";
+import { IngredientDialogComponent } from "./ingredient-dialog/ingredient-dialog.component";
 
 @Component({
   selector: "app-create",
@@ -26,10 +27,13 @@ export class CreateComponent implements OnInit {
   public = true;
 
   food: string;
+  ingredient: any;
   detail: string;
   amount = "";
   unit: string;
   ingredients = [];
+  ingredientsList = [];
+  dropdownOpen = false;
   units = ["kg", "g", "lbs", "ml", "oz", "floz"];
 
   method = [];
@@ -37,6 +41,7 @@ export class CreateComponent implements OnInit {
 
   dataSource;
   dataSource2;
+  timeout: any;
 
   mealError = false;
   errors = new Array(6).fill({ err: false });
@@ -44,7 +49,7 @@ export class CreateComponent implements OnInit {
   methErrors = new Array(4).fill({ err: false });
   canContinue = false;
 
-  constructor(private titleService: Title, private router: Router, private recipeService: RecipeService, private recipeValidateService: RecipeValidateService) {}
+  constructor(private titleService: Title, private router: Router, private recipeService: RecipeService, private recipeValidateService: RecipeValidateService, private dialog: MatDialog) {}
 
   ngOnInit() {
     this.titleService.setTitle("Create a recipe");
@@ -132,33 +137,29 @@ export class CreateComponent implements OnInit {
     return false;
   }
 
-  addIngredient(ingField) {
-    const ingredient = {
-      food: this.food,
-      amount: this.amount,
-      unit: this.unit,
-      detail: this.detail
-    };
-    this.ingErrors = this.recipeValidateService.validateIngredient(ingredient);
-    const errs = this.ingErrors.filter((e) => {
-      return e.err;
-    });
-    if (errs.length === 0) {
-      this.ingredients.push(ingredient);
-      this.dataSource._updateChangeSubscription();
-      this.food = "";
-      this.amount = "";
-      this.unit = "";
-      ingField.focus();
-      if (this.ingredients.length > 0) {
-        this.canContinue = true;
-      }
-    }
-  }
-
-  removeIngredient(i) {
-    this.ingredients.splice(i, 1);
-  }
+  // addIngredient(ingField) {
+  //   const ingredient = {
+  //     food: this.food,
+  //     amount: this.amount,
+  //     unit: this.unit,
+  //     detail: this.detail
+  //   };
+  //   this.ingErrors = this.recipeValidateService.validateIngredient(ingredient);
+  //   const errs = this.ingErrors.filter((e) => {
+  //     return e.err;
+  //   });
+  //   if (errs.length === 0) {
+  //     this.ingredients.push(ingredient);
+  //     this.dataSource._updateChangeSubscription();
+  //     this.food = "";
+  //     this.amount = "";
+  //     this.unit = "";
+  //     ingField.focus();
+  //     if (this.ingredients.length > 0) {
+  //       this.canContinue = true;
+  //     }
+  //   }
+  // }
 
   addStep(step) {
     if (step === null || step === undefined) {
@@ -174,7 +175,6 @@ export class CreateComponent implements OnInit {
       this.methErrors[0].err = false;
     }
   }
-
   removeStep(i) {
     this.method.splice(i, 1);
     this.dataSource2._updateChangeSubscription();
@@ -293,6 +293,7 @@ export class CreateComponent implements OnInit {
     }
   }
 
+  // Formatting for the time inputs.
   timeInput(key, time) {
     if (key.key === "Tab") {
       return;
@@ -359,8 +360,7 @@ export class CreateComponent implements OnInit {
       }
     }
   }
-
-  clickOut(type, value) {
+  clickOut(type, value, stepper) {
     let time = "";
     if (value === "") {
       time = "";
@@ -382,13 +382,18 @@ export class CreateComponent implements OnInit {
         time = value;
       }
     }
-    if (type === "cook") {
-      this.cookTime = time;
-    } else {
+    let num = 3;
+    if (type === "prep") {
       this.prepTime = time;
+      num = 2;
+    } else {
+      this.cookTime = time;
+      this.errors[num] = { err: false };
+    }
+    if (time !== "") {
+      this.checkErrors(stepper, num);
     }
   }
-
   enterInt(key) {
     if (key.key === "Tab") {
       return;
@@ -402,5 +407,51 @@ export class CreateComponent implements OnInit {
     if (re.test(keyPressed)) {
       this.servings += keyPressed;
     }
+  }
+
+  addIngredient(ingredient) {
+    const ingredientDialog = this.dialog.open(IngredientDialogComponent, {
+      data: {
+        ingredient: ingredient
+      }
+    });
+    ingredientDialog.afterClosed().subscribe((data) => {
+      if (data !== undefined) {
+        data["ingredient"] = ingredient._id;
+        data["name"] = ingredient.ingredient;
+        this.dropdownOpen = false;
+        this.food = undefined;
+        this.ingredients.push(data);
+        this.dataSource._updateChangeSubscription();
+      }
+    });
+  }
+  removeIngredient(i) {
+    this.ingredients.splice(i, 1);
+    this.dataSource._updateChangeSubscription();
+  }
+
+  getAmount(amount, unit) {
+    if (isNaN(unit)) {
+      return amount + unit;
+    } else {
+      return amount;
+    }
+  }
+
+  getIngredients() {
+    const query = this.food;
+    if (query === "" || query === undefined) {
+      return false;
+    }
+    if (this.timeout) {
+      clearTimeout(this.timeout);
+      this.timeout = null;
+    }
+    this.timeout = setTimeout(() => {
+      this.recipeValidateService.getIngredients(query).subscribe((data) => {
+        this.ingredientsList = data.ingredients;
+      });
+    }, 1000);
   }
 }

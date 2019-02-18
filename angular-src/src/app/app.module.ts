@@ -27,6 +27,7 @@ import { CookbookComponent } from "./components/cookbook/cookbook.component";
 
 import { EditCookbookDialogComponent } from "./components/cookbook/edit-cookbook-dialog/edit-cookbook-dialog.component";
 import { RecipeDialogComponent } from "./components/recipe-dialog/recipe-dialog.component";
+import { IngredientDialogComponent } from "./components/create/ingredient-dialog/ingredient-dialog.component";
 
 import { AuthGuard } from "./guards/auth.guard";
 import { AuthService } from "./services/auth.service";
@@ -98,6 +99,7 @@ const appRoutes: Routes = [
     CreateComponent,
     EditCookbookDialogComponent,
     RecipeDialogComponent,
+    IngredientDialogComponent,
     SavedRecipesComponent,
     RecipeComponent,
     VerifyComponent,
@@ -108,6 +110,6 @@ const appRoutes: Routes = [
   imports: [HttpModule, FormsModule, BrowserModule, RouterModule.forRoot(appRoutes), MatDialogModule, BrowserAnimationsModule, MaterialModule, ReactiveFormsModule, InfiniteScrollModule],
   providers: [UserValidateService, RecipeValidateService, SidenavService, AuthService, UserService, RecipeService, CookbookService, GeneralService, RecipeDialogService, AuthGuard, Title],
   bootstrap: [AppComponent],
-  entryComponents: [EditCookbookDialogComponent, RecipeDialogComponent]
+  entryComponents: [EditCookbookDialogComponent, RecipeDialogComponent, IngredientDialogComponent]
 })
 export class AppModule {}

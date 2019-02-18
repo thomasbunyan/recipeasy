@@ -60,7 +60,6 @@ router.get("/", checkAuth, (req, res, next) => {
     query = { $and: [{ _id: { $lt: last_seen } }, { public: true }, { title: regex }] };
   } else if (search_query != undefined) {
     query = { $and: [{ public: true }, { title: regex }] };
-    //, { title: regex }
   }
   Recipe.find(query)
     .sort({ _id: -1 })
