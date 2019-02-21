@@ -17,10 +17,10 @@ export class RecipeService {
       .map((res) => res.json());
   }
 
-  addRecipeImage(recipeImage){
+  addRecipeImage(recipeImage) {
     const headers = new Headers();
     headers.append("Authorization", localStorage.getItem("id_token"));
-    headers.append("Content-Type", "mulipart/form-data");
+    // headers.append("Content-Type", "multipart/form-data");
     return this.http
       .post("http://localhost:3000/recipes/image", recipeImage, {
         headers: headers

@@ -410,56 +410,45 @@ td {
 /*** Top recipe information ***/
 .recipeHeader {
   margin: 30px auto;
+  margin-bottom: 20px;
   width: 70%;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  /* background-color: red; */
 }
 .recipeDetails {
-  height: 325px;
-  display: flex;
+  flex-grow: 1;
+  /* height: 325px; */
+  /* display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  /* background-color: red; */
+  justify-content: space-between; */
 }
 .recipeDetails h1 {
+  margin: 0;
   font-size: 50px;
 }
 .recipeTitle {
-  display: flex;
-  height: 100%;
-  flex-direction: column;
-  justify-content: center;
-}
-.recipeStats {
-  font-size: 13px;
-}
-.recipeButtons {
-  font-size: 20px;
-  display: flex;
-  /* justify-content: space-around; */
-  align-items: center;
-  height: 35px;
-}
-.recipeButtons i {
-  margin-right: 30px;
-  cursor: pointer;
-}
-.recipeImageWrapper {
-  position: relative;
-  overflow: hidden;
-  display: inline-block;
-  cursor: pointer;
+  /* display: flex; */
+  /* height: 100%; */
+  /* flex-direction: column;
+  justify-content: center; */
 }
 .recipeImage {
+  border-radius: 25px;
+}
+.recipeImageWrapper {
+  overflow: hidden;
+  position: relative;
+  display: inline-block;
+  border-radius: 25px;
+}
+.image {
   width: 250px;
   height: 250px;
   border-radius: 25px;
   background-color: #f1eff4;
-  cursor: pointer;
 }
-.recipeImage img {
+.image img {
   height: 100%;
   width: 100%;
   object-fit: cover;
@@ -471,7 +460,6 @@ td {
   left: 0;
   top: 0;
   opacity: 0;
-  cursor: pointer;
 }
 
 /*** Lower recipe information ***/
@@ -522,6 +510,9 @@ td {
 }
 .hidden {
   visibility: hidden;
+}
+.pointer {
+  cursor: pointer !important;
 }
 
 .formSection {

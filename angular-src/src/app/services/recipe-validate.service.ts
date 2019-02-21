@@ -92,6 +92,7 @@ export class RecipeValidateService {
     const recipe = {
       title: recipeData.title,
       description: recipeData.description,
+      image: recipeData.image,
       public: recipeData.public,
       mealType: recipeData.mealType,
       prepTime: recipeData.prepTime,

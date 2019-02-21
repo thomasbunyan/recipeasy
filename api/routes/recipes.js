@@ -2,7 +2,17 @@ const express = require("express");
 const router = express.Router();
 const checkAuth = require("../middleware/check-auth");
 const multer = require("multer");
-const upload = multer({ dest: "uploads/" });
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/");
+  },
+  filename: (req, file, cb) => {
+    console.log(file);
+    cb(null, Date.now() + file.originalname);
+  }
+});
+const upload = multer({ storage });
+// const upload = multer({ dest: "uploads/" });
 
 const Recipe = require("../models/recipe");
 const User = require("../models/user");
@@ -12,6 +22,7 @@ router.post("/", checkAuth, (req, res, next) => {
   let recipe = new Recipe({
     title: req.body.title,
     description: req.body.description,
+    image: req.body.image,
     public: req.body.public,
     mealType: req.body.mealType,
     prepTime: req.body.prepTime,
@@ -28,6 +39,7 @@ router.post("/", checkAuth, (req, res, next) => {
   recipe
     .save()
     .then((doc) => {
+      console.log(doc.image);
       res.status(201).json({
         success: true,
         message: "Recipe added",
@@ -43,10 +55,10 @@ router.post("/", checkAuth, (req, res, next) => {
 });
 
 router.post("/image", upload.single("recipeImage"), (req, res, next) => {
-  console.log(req.file);
+  const path = req.file.path;
   res.status(200).json({
     success: true,
-    msg: "Hi"
+    path: path
   });
 });
 

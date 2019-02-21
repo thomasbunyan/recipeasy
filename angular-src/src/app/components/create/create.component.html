@@ -212,19 +212,20 @@
           <mat-step>
             <ng-template matStepLabel><span class="stepLabel">Review</span></ng-template>
             <div class="inputArea">
+              <!-- ? Review -->
               <div class="reviewArea">
                 <div class="recipeHeader">
                   <div class="recipeDetails">
-                    <div class="recipeTitle">
-                      <h1>{{ title }}</h1>
-                      <p>{{ description }}</p>
-                    </div>
+                    <h1>{{ title }}</h1>
+                    <p>{{ description }}</p>
                   </div>
-                  <div class="recipeImageWrapper">
-                    <div class="recipeImage">
-                      <img src="{{ recipeImage }}" #rImg />
+                  <div class="recipeImage" (mouseenter)="imageHover = true" (mouseleave)="imageHover = false" [ngClass]="{ pointer: imageHover }">
+                    <div class="recipeImageWrapper">
+                      <div class="image">
+                        <img [ngClass]="{ hidden: !recipeImage }" src="{{ recipeImage }}" #rImg />
+                      </div>
+                      <input type="file" accept="image/png, image/jpeg" (change)="uploadImage($event, rImg)" />
                     </div>
-                    <input type="file" accept="image/png, image/jpeg" (change)="uploadImage($event, rImg)" />
                   </div>
                 </div>
                 <div class="breakLine"></div>
@@ -232,13 +233,13 @@
                   <div class="recipeIngredients half">
                     <div class="ingredientsList">
                       <h2>Ingredients</h2>
-                      <p *ngFor="let ingredient of ingredients">{{ ingredient.food }}</p>
+                      <p *ngFor="let ingredient of ingredients">{{ generalService.formatIngredient(ingredient) }}</p>
                     </div>
                   </div>
                   <div class="recipeMethod half">
                     <div class="methodList">
                       <h2>Method</h2>
-                      <p *ngFor="let step of method; let i = index">{{ i + 1 }}. {{ step.step }}</p>
+                      <p *ngFor="let step of method; let i = index">{{ i + 1 }}. {{ step }}</p>
                     </div>
                   </div>
                 </div>

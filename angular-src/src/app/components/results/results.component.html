@@ -68,7 +68,11 @@
       <h4>Recipes<span class="showMore noselect" *ngIf="cookbooks.length">Show all</span></h4>
       <div class="recipeGrid">
         <div class="recipeCard noselect" *ngFor="let recipe of searchList">
-          <div class="mainImg" (click)="viewRecipe(recipe._id)"></div>
+          <div class="mainImg" (click)="viewRecipe(recipe._id)">
+            <div class="image">
+              <img [ngClass]="{ hidden: !recipe.image }" src="{{ generalService.getImageLink(recipe.image) }}" #rImg />
+            </div>
+          </div>
           <div class="rInfo">
             <div class="rTitle">{{ recipe.title }}</div>
             <div class="rDetails">

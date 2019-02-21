@@ -126,12 +126,21 @@ export class GeneralService {
   }
 
   formatIngredient(ingredient) {
-    let ing = ingredient.ingredient.ingredient.toLowerCase();
-    ing = ing[0].toUpperCase() + ing.slice(1, ing.length);
+    let ing = ingredient.ingredient.ingredient;
+    if (!ingredient.ingredient.ingredient) {
+      ing = ingredient.name;
+    }
     if (ingredient.unit === "1") {
       return ingredient.amount + " " + ing;
     } else {
       return ingredient.amount + ingredient.unit + " " + ing;
     }
+  }
+
+  getImageLink(image) {
+    if (!image) {
+      return;
+    }
+    return "http://localhost:3000/uploads/" + image.split("\\")[1];
   }
 }

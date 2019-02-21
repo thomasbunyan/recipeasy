@@ -44,6 +44,9 @@ app.use(cors());
 // Body parser
 app.use(bodyParser.json());
 
+// Uploaded images.
+app.use("/uploads", express.static("uploads"));
+
 // Routes
 app.use("/users", users);
 app.use("/recipes", recipes);

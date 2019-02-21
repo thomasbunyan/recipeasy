@@ -66,6 +66,41 @@ function addTop(d, callback) {
 
 function addLibraries(d, callback) {
   // Add logic for stipulation here.
+
+  const time = new Date().getHours();
+  const day = new Date().getDay();
+  if (time >= 5 && time < 10) {
+    console.log("Breakfast");
+  }
+  if (time >= 10 && time < 15) {
+    console.log("Brunch");
+  }
+  if (time >= 11 && time < 14) {
+    console.log("Lunch");
+  }
+  if (time >= 15 && time < 16) {
+    console.log("Afternoon tea");
+  }
+  if (time >= 17 && time < 21) {
+    console.log("Dinner");
+  }
+
+  if (day == 0 || day == 7) {
+    console.log("Sunday");
+  } else if (day == 1) {
+    console.log("Monday");
+  } else if (day == 2) {
+    console.log("Tuesday");
+  } else if (day == 3) {
+    console.log("Wednesday");
+  } else if (day == 4) {
+    console.log("Thursday");
+  } else if (day == 5) {
+    console.log("Friday");
+  } else if (day == 6) {
+    console.log("Saturday");
+  }
+
   const query = {};
   Library.find(query, (err, docs) => {
     d.libraries = docs.map((e) => {

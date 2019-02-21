@@ -258,18 +258,9 @@ export class CreateComponent implements OnInit {
       };
       reader.readAsDataURL(e.target.files[0]);
     }
-    // console.log(e);
   }
 
   onRecipeSubmit() {
-    // const fd = new FormData();
-    // console.log(this.recipeImage);
-    // fd.append("image", this.recipeImage, this.recipeImage.name);
-    // this.recipeService.addRecipeImage(fd).subscribe((data) => {
-    //   console.log(data);
-    // });
-    // return;
-
     // TODO: Convert the amount and unit to gram.
 
     const ing = this.ingredients.map((e) => {
@@ -280,17 +271,16 @@ export class CreateComponent implements OnInit {
     const recipeData = {
       title: this.title,
       description: this.description,
+      image: "",
       public: this.public,
       mealType: this.mealType,
       prepTime: this.generalService.getSeconds(this.prepTime),
       cookTime: this.generalService.getSeconds(this.cookTime),
       difficulty: this.difficulty,
       servings: parseInt(this.servings, 10),
-      ingredients: ing,
+      ingredients: this.ingredients,
       method: this.method
     };
-
-    console.log(recipeData);
 
     this.errors = this.recipeValidateService.validateRecipe(recipeData);
     let anyError = false;
@@ -300,14 +290,30 @@ export class CreateComponent implements OnInit {
         console.log("Validation errors", this.errors[i].msg);
       }
     }
-    if (!anyError) {
-      const username = JSON.parse(localStorage.getItem("user")).username;
-      const recipe = this.recipeValidateService.generateRecipe(recipeData, username);
 
-      this.recipeService.addRecipe(recipe).subscribe((data) => {
-        console.log(data);
-      });
+    if (!anyError) {
+      if (this.recipeImage) {
+        const fd = new FormData();
+        fd.append("recipeImage", this.recipeImage, this.recipeImage.name);
+        this.recipeService.addRecipeImage(fd).subscribe((data) => {
+          recipeData.image = data.path;
+          // console.log(recipeData.image);
+          const username = JSON.parse(localStorage.getItem("user")).username;
+          const recipe = this.recipeValidateService.generateRecipe(recipeData, username);
+          this.recipeService.addRecipe(recipe).subscribe((data) => {
+            console.log(data);
+          });
+        });
+      } else {
+        console.log(recipeData);
+        const username = JSON.parse(localStorage.getItem("user")).username;
+        const recipe = this.recipeValidateService.generateRecipe(recipeData, username);
+        this.recipeService.addRecipe(recipe).subscribe((data) => {
+          console.log(data);
+        });
+      }
     }
+    return;
   }
 
   // Formatting for the time inputs.
