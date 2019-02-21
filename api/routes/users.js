@@ -66,7 +66,8 @@ router.post("/", (req, res) => {
                           message: "User added"
                         });
                         // TODO: Re-add this.
-                        // const url = "http://localhost:3000/users/confirmation/" + emailToken;
+                        const url = "http://localhost:4200/verify?token=" + emailToken;
+                        console.log(url);
                         // transporter.sendMail(
                         //   {
                         //     from: "Recipeasy <" + process.env.EMAIL_USER + ">",
@@ -118,22 +119,22 @@ router.post("/authenticate", (req, res, next) => {
     .exec()
     .then((user) => {
       if (!user) {
-        res.status(401).json({
+        res.status(200).json({
           success: false,
-          message: "Auth failed"
+          message: "User not found"
         });
       } else if (!user.active) {
-        res.status(401).json({
+        res.status(202).json({
           success: false,
           inactive: true,
-          message: "Auth failed, account inactive"
+          message: "Account inactive"
         });
       } else {
         bcrypt.compare(req.body.password, user.password, (err, match) => {
           if (err) {
-            return res.status(401).json({
+            return res.status(200).json({
               success: false,
-              message: "Auth failed"
+              message: "Auth failed."
             });
           }
           if (match) {
@@ -145,7 +146,7 @@ router.post("/authenticate", (req, res, next) => {
               },
               (err, token) => {
                 if (err) {
-                  return res.status(401).json({
+                  return res.status(200).json({
                     success: false,
                     message: "Auth failed"
                   });
@@ -162,9 +163,9 @@ router.post("/authenticate", (req, res, next) => {
               }
             );
           } else {
-            return res.status(401).json({
+            return res.status(200).json({
               success: false,
-              message: "Auth failed"
+              message: "Password incorrect."
             });
           }
         });
@@ -179,40 +180,48 @@ router.post("/authenticate", (req, res, next) => {
 });
 
 // Activate a user's account
-router.get("/confirmation/:token", (req, res, next) => {
-  const token = req.params.token;
+router.patch("/verify", (req, res, next) => {
+  const token = req.body.token;
   try {
-    const user = jwt.verify(token, process.env.EMAIL_SECRET).user;
+    jwt.verify(token, process.env.EMAIL_SECRET).user;
+  } catch (e) {
+    return res.status(200).json({
+      success: false,
+      error: "Invalid token"
+    });
+  }
 
-    const query = { $and: [{ _id: user }, { active: false }] };
-    const update = { active: true };
-
-    User.findOneAndUpdate(query, update)
-      .exec()
-      .then((result) => {
-        if (!result) {
-          res.status(401).json({
-            success: false,
-            error: "Auth failed"
-          });
-        } else {
-          res.status(200).json({
-            success: true
-          });
-        }
-      })
-      .catch((err) => {
-        res.status(401).json({
+  const user = jwt.verify(token, process.env.EMAIL_SECRET).user;
+  const query = { $and: [{ _id: user }, { active: false }] };
+  const update = { active: true };
+  User.findOneAndUpdate(query, update)
+    .exec()
+    .then((result) => {
+      if (!result) {
+        res.status(200).json({
           success: false,
           error: "Auth failed"
         });
+      } else {
+        res.status(200).json({
+          success: true
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        error: "Auth failed"
       });
-  } catch (error) {
-    res.status(401).json({
-      success: false,
-      error: "Auth failed"
     });
-  }
+});
+
+router.patch("/verify/resend", (req, res, next) => {
+  const email = req.body.email;
+  console.log(email);
+  res.status(200).json({
+    success: true
+  });
 });
 
 router.get("/:id/profile", checkAuth, (req, res, next) => {

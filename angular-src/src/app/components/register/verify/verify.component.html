@@ -1,21 +1,12 @@
 <div class="verify">
-  <div class="splash" *ngIf="splash">
-    <div class="infoBox">
-      <div class="message">
-        Success! Your account has been verified. You will now be redirected to the next page where you can login.
-      </div>
-      <div class="load">
-        <div class="line"></div>
-        <div class="line"></div>
-        <div class="line"></div>
-      </div>
+  <div class="vInfo">
+    <div [ngClass]="{ show: !resend }">
+      <h1>{{ title }}</h1>
+      <p [ngClass]="{ clickable: err }" (click)="resendEmail()">{{ message }}</p>
     </div>
-  </div>
-  <div class="verify" *ngIf="expired">
-    <div class="infoBox">
-      <div class="message">
-        Uh oh! Looks like that token has expired. Click the button to receive a new link to activate your account.
-      </div>
+    <div class="resend" [ngClass]="{ show: resend }">
+      <h1>Resend email</h1>
+      <input type="text" placeholder="eg. 123@resend.com" />
     </div>
   </div>
 </div>

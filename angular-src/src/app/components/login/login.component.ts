@@ -20,31 +20,24 @@ export class LoginComponent implements OnInit {
 
   returnUrl: String = "/";
 
-  constructor(
-    private authService: AuthService,
-    private router: Router,
-    private titleService: Title,
-    private route: ActivatedRoute
-  ) {}
+  constructor(private authService: AuthService, private router: Router, private titleService: Title, private route: ActivatedRoute) {}
 
   ngOnInit() {
     if (this.authService.loggedIn()) {
       return this.router.navigate(["/"]);
     }
     this.titleService.setTitle("Login");
-    this.returnUrl =
-      this.route.snapshot.queryParams["returnUrl"] || "/dashboard";
+    this.returnUrl = this.route.snapshot.queryParams["returnUrl"] || "/dashboard";
   }
 
   onLoginSubmit() {
+    console.log("here");
     const user = {
       username: this.username,
       password: this.password
     };
 
-    console.log("here");
-    this.authService.authenticateUser(user).subscribe(data => {
-      console.log(data);
+    this.authService.authenticateUser(user).subscribe((data) => {
       if (data.success) {
         this.authService.storeUserData(data.jwt, data.user);
         this.error = false;
@@ -52,11 +45,10 @@ export class LoginComponent implements OnInit {
       } else {
         if (data.inactive) {
           this.error = true;
-          this.errorMessage =
-            "The account has not yet been authenticated. Please check your email to activate your account.";
+          this.errorMessage = "The account has not yet been authenticated. Please check your email to activate your account.";
         } else {
           this.error = true;
-          this.errorMessage = data.msg;
+          this.errorMessage = data.message;
         }
       }
     });
@@ -64,20 +56,11 @@ export class LoginComponent implements OnInit {
 
   onRecoverSubmit() {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    const removeIllegal = this.recovery;
     if (re.test(String(this.recovery).toLowerCase())) {
-      // Recover using the email.
-    } else if (removeIllegal.replace(/\W/g, "") === this.recovery) {
-      // Recover using the username.
+      console.log("here");
     } else {
       // Don't recover.
+      console.log("aler");
     }
-  }
-
-  forgotPw() {
-    this.username = "";
-    this.password = "";
-    this.error = false;
-    this.forgot = !this.forgot;
   }
 }

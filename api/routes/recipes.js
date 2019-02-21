@@ -21,7 +21,7 @@ router.post("/", checkAuth, (req, res, next) => {
     ingredients: req.body.ingredients,
     method: req.body.method,
     author: req.userData.user.username,
-    date: new Date(),
+    timestamp: new Date(),
     score: 0,
     views: 0
   });
@@ -101,6 +101,78 @@ router.get("/selection", checkAuth, (req, res, next) => {
     });
 });
 
+router.get("/recommended", (req, res, next) => {
+  const query = { username: "tom" };
+  User.findOne(query)
+    .populate("recipes.saved.recipe recipes.history.recipe")
+    .exec()
+    .then((user) => {
+      getRecommended(user.recipes.saved, user.recipes.history, (recipes) => {
+        res.status(200).json({
+          success: true,
+          recipes: recipes
+        });
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        error: err
+      });
+    });
+});
+function getRecommended(saved, history, cb) {
+  let ingredients = getIngredients(saved);
+  ingredients = ingredients.concat(getIngredients(history));
+  const savedId = saved.map((e) => {
+    return e.recipe._id;
+  });
+  Recipe.find({ $and: [{ "ingredients.ingredient": { $in: ingredients } }, { _id: { $nin: savedId } }] })
+    .exec()
+    .then((recipes) => {
+      recipes.sort((a, b) => {
+        return matches(ingredients, a) - matches(ingredients, b);
+      });
+      cb(recipes);
+    });
+}
+function matches(list, recipe) {
+  let counter = 0;
+  recipe.ingredients.forEach((e) => {
+    if (list.indexOf(e.ingredient) > -1) {
+      counter++;
+    }
+  });
+  return counter;
+}
+function getIngredients(recipes) {
+  const ingredients = {};
+  recipes.forEach((recipe) => {
+    recipe.recipe.ingredients.forEach((ingredient) => {
+      const key = ingredient.ingredient;
+      if (ingredients[key]) {
+        ingredients[key] = ingredients[key] + 1;
+      } else {
+        ingredients[key] = 1;
+      }
+    });
+  });
+
+  let ingredientCount = [];
+  for (var key in ingredients) {
+    ingredientCount.push({ ingredient: key, count: ingredients[key] });
+  }
+  ingredientCount = ingredientCount
+    .sort((a, b) => {
+      return b.count - a.count;
+    })
+    .slice(0, 10);
+  const ingredientsList = ingredientCount.map((e) => {
+    return e.ingredient;
+  });
+  return ingredientsList;
+}
+
 // Get the recipe and update the views.
 router.get("/:id", checkAuth, (req, res, next) => {
   if (!req.params.id.match(/^[0-9a-fA-F]{24}$/)) {
@@ -112,9 +184,10 @@ router.get("/:id", checkAuth, (req, res, next) => {
   const query = { $or: [{ $and: [{ _id: req.params.id }, { public: true }] }, { $and: [{ _id: req.params.id }, { author: user }] }] };
   const update = { $inc: { views: 1 } };
   Recipe.findOneAndUpdate(query, update)
+    .populate("ingredients.ingredient")
     .exec()
     .then((recipe) => {
-      console.log(recipe);
+      // console.log(recipe);
       if (recipe === null) {
         return res.status(403).json({
           success: false,

@@ -31,7 +31,7 @@
         <tr mat-row *matRowDef="let myRowData; columns: ['save', 'recipe', 'type', 'ellipsis', 'added']" (click)="viewRecipe(myRowData)" class="elementRow"></tr>
       </table>
     </div>
-    <div *ngIf="!recipes.saved.length" class="noRecipe"><h1>No recipes saved. Go and add some.</h1></div>
+    <div *ngIf="!recipes.saved.length" class="noRecipe"><h2>No recipes saved. Go and add some.</h2></div>
   </div>
   <div class="contextMenu" #contextMenu>
     <div class="cmWrapper">

@@ -24,7 +24,7 @@ export class IngredientDialogComponent implements OnInit {
     // if (this.ingredient.servings.house) {
     //   this.units.push(this.ingredient.servings.house.uom.toLowerCase());
     // }
-    console.log(this.ingredient);
+    // console.log(this.ingredient);
   }
 
   addIngredient() {

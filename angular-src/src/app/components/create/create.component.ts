@@ -5,6 +5,7 @@ import { RecipeService } from "../../services/recipe.service";
 import { RecipeValidateService } from "../../services/recipe-validate.service";
 import { MatTableDataSource, MatDialog } from "@angular/material";
 import { IngredientDialogComponent } from "./ingredient-dialog/ingredient-dialog.component";
+import { GeneralService } from "../../services/general.service";
 
 @Component({
   selector: "app-create",
@@ -49,7 +50,14 @@ export class CreateComponent implements OnInit {
   methErrors = new Array(4).fill({ err: false });
   canContinue = false;
 
-  constructor(private titleService: Title, private router: Router, private recipeService: RecipeService, private recipeValidateService: RecipeValidateService, private dialog: MatDialog) {}
+  constructor(
+    private titleService: Title,
+    private router: Router,
+    private recipeService: RecipeService,
+    private recipeValidateService: RecipeValidateService,
+    private dialog: MatDialog,
+    private generalService: GeneralService
+  ) {}
 
   ngOnInit() {
     this.titleService.setTitle("Create a recipe");
@@ -169,7 +177,7 @@ export class CreateComponent implements OnInit {
     const re = /^[A-Za-z0-9,\.\-/;()'" ]+$/;
     if (step !== null && step !== undefined && re.test(step)) {
       step = step.charAt(0).toUpperCase() + step.slice(1);
-      this.method.push({ step: step });
+      this.method.push(step);
       this.dataSource2._updateChangeSubscription();
       this.canContinue = true;
       this.methErrors[0].err = false;
@@ -254,26 +262,35 @@ export class CreateComponent implements OnInit {
   }
 
   onRecipeSubmit() {
-    const fd = new FormData();
-    console.log(this.recipeImage);
-    fd.append("image", this.recipeImage, this.recipeImage.name);
-    this.recipeService.addRecipeImage(fd).subscribe((data) => {
-      console.log(data);
+    // const fd = new FormData();
+    // console.log(this.recipeImage);
+    // fd.append("image", this.recipeImage, this.recipeImage.name);
+    // this.recipeService.addRecipeImage(fd).subscribe((data) => {
+    //   console.log(data);
+    // });
+    // return;
+
+    // TODO: Convert the amount and unit to gram.
+
+    const ing = this.ingredients.map((e) => {
+      delete e.name;
+      return e;
     });
-    return;
 
     const recipeData = {
       title: this.title,
       description: this.description,
       public: this.public,
       mealType: this.mealType,
-      prepTime: this.prepTime,
-      cookTime: this.cookTime,
+      prepTime: this.generalService.getSeconds(this.prepTime),
+      cookTime: this.generalService.getSeconds(this.cookTime),
       difficulty: this.difficulty,
       servings: parseInt(this.servings, 10),
-      ingredients: this.ingredients,
+      ingredients: ing,
       method: this.method
     };
+
+    console.log(recipeData);
 
     this.errors = this.recipeValidateService.validateRecipe(recipeData);
     let anyError = false;

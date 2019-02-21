@@ -1,4 +1,4 @@
-<div class="login">
+<!-- <div class="login">
   <div *ngIf="!forgot" class="login-form">
     <h1 class="login-title">Log in</h1>
     <input class="input-field" id="usernameField" type="text" [(ngModel)]="username" name="username" placeholder="username" />
@@ -7,13 +7,44 @@
       <p>{{ errorMessage }}</p>
     </div>
     <button mat-stroked-button class="login-button" (click)="onLoginSubmit()">Log in</button>
-    <!-- <input class="login-button" (click)="onLoginSubmit()" type="button" value="Login" /> -->
-    <a class="forgot-button" (click)="forgotPw()">Forgot your username or password?</a> <a class="forgot-button" [routerLinkActive]="['active']" [routerLink]="['/register']">Don't have an account? Register!</a>
+    <a class="forgot-button" (click)="forgotPw()">Forgot your username or password?</a> <a class="forgot-button" [routerLinkActive]="['active']" [routerLink]="['/login']">Don't have an account? login!</a>
   </div>
 
   <div *ngIf="forgot" class="login-form">
     <h1 class="login-title">Recover</h1>
     <input class="input-field" type="text" [(ngModel)]="recovery" name="recovery" placeholder="email or username" /> <button mat-stroked-button class="login-button" (click)="onRecoverSubmit()">Send recovery</button>
     <a class="forgot-button" (click)="forgotPw()">Go back.</a>
+  </div>
+</div> -->
+
+<div class="login">
+  <nav id="nav">
+    <div class="navLeft"><a href="#" class="logo">Recipeasy</a> <a href="#" class="subPoint">About</a> <a href="#" class="subPoint">How it works</a> <a href="#" class="subPoint">Contact</a></div>
+    <div class="navRight"><a class="subPoint" [routerLinkActive]="['active']" [routerLink]="['/login']">Register</a></div>
+  </nav>
+  <div class="content-area">
+    <div class="loginForm" [ngClass]="{ show: !forgot }">
+      <h1>Log in</h1>
+      <form autocomplete="off">
+        <div class="input-col">
+          <input type="text" [(ngModel)]="username" name="username" class="input-field" placeholder="Username" />
+        </div>
+        <div class="input-col">
+          <input type="password" [(ngModel)]="password" name="password" class="input-field" placeholder="Password" autocomplete="password" />
+        </div>
+        <div class="errorMessage">
+          <p>{{ errorMessage }}</p>
+        </div>
+        <input class="loginButton" (click)="onLoginSubmit()" type="button" value="Log in" />
+        <a class="forgot-button" (click)="forgot = !forgot">Forgot your username or password?</a>
+        <a class="forgot-button" [routerLink]="['/register']">Don't have an account? Register!</a>
+      </form>
+    </div>
+    <div class="loginForm" [ngClass]="{ show: forgot }">
+      <h1 class="login-title">Recover</h1>
+      <input class="input-field forgotInput" type="text" [(ngModel)]="recovery" name="recovery" placeholder="Email" />
+      <input class="loginButton" (click)="onRecoverSubmit()" type="button" value="Send recovery" />
+      <a class="forgot-button" (click)="forgot = !forgot">Go back.</a>
+    </div>
   </div>
 </div>

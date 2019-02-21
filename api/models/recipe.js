@@ -12,47 +12,64 @@ const RecipeSchema = mongoose.Schema({
   },
   public: {
     type: Boolean,
-    required: true
+    required: true,
+    default: true
   },
   mealType: {
     type: String,
     required: true
   },
   prepTime: {
-    type: String,
+    type: Number,
     required: true
   },
   cookTime: {
-    type: String,
+    type: Number,
     required: true
   },
   difficulty: {
-    type: String,
+    type: Number,
     required: true
   },
   servings: {
-    type: String,
+    type: Number,
     required: true
   },
-  ingredients: {
-    type: Array,
-    required: true
-  },
-  method: {
-    type: Array,
-    required: true
-  },
+  ingredients: [
+    {
+      ingredient: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Ingredient",
+        required: true
+      },
+      unit: {
+        type: String,
+        required: true
+      },
+      amount: {
+        type: Number,
+        required: true
+      }
+    }
+  ],
+  method: [
+    {
+      type: String,
+      required: true
+    }
+  ],
   author: {
     type: String,
     required: true
   },
-  date: {
+  timestamp: {
     type: Date,
     required: true
   },
   score: {
     type: Number,
-    required: true
+    required: true,
+    default: 0
   },
   views: {
     type: Number,

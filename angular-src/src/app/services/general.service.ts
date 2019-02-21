@@ -1,10 +1,22 @@
 import { Injectable } from "@angular/core";
+import { Http, Headers } from "@angular/http";
 
 @Injectable({
   providedIn: "root"
 })
 export class GeneralService {
-  constructor() {}
+  constructor(private http: Http) {}
+
+  getDash() {
+    const headers = new Headers();
+    headers.append("Authorization", localStorage.getItem("id_token"));
+    headers.append("Content-Type", "application/json");
+    return this.http
+      .get("http://localhost:3000/libraries/dash", {
+        headers: headers
+      })
+      .map((res) => res.json());
+  }
 
   // Returns the phrase that is displayed on the dashboard.
   getDashPhrase() {
@@ -72,12 +84,37 @@ export class GeneralService {
     return hoursFormatted + ":" + minsFormatted;
   }
 
+  getSeconds(time) {
+    const halves = time.split(":");
+    let seconds = parseInt(halves[0], 10) * 60 * 60;
+    seconds = seconds + parseInt(halves[1], 10) * 60;
+    return seconds;
+  }
+
+  getTime(timestamp) {
+    const minutes = Math.floor(timestamp / 60) % 60;
+    const hours = Math.floor(timestamp / 3600);
+
+    let hoursFormatted, minsFormatted;
+    if (hours < 10) {
+      hoursFormatted = "0" + hours;
+    } else {
+      hoursFormatted = hours;
+    }
+    if (minutes < 10) {
+      minsFormatted = "0" + minutes;
+    } else {
+      minsFormatted = minutes;
+    }
+    return hoursFormatted + ":" + minsFormatted;
+  }
+
   getDifficulty(difficulty) {
-    if (difficulty === "0") {
+    if (difficulty === 0) {
       return "Easy";
-    } else if (difficulty === "1") {
+    } else if (difficulty === 1) {
       return "Medium";
-    } else if (difficulty === "2") {
+    } else if (difficulty === 2) {
       return "Hard";
     } else {
       return "Invalid difficulty";
@@ -86,5 +123,15 @@ export class GeneralService {
 
   formatFollowers(followers) {
     return followers.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+  }
+
+  formatIngredient(ingredient) {
+    let ing = ingredient.ingredient.ingredient.toLowerCase();
+    ing = ing[0].toUpperCase() + ing.slice(1, ing.length);
+    if (ingredient.unit === "1") {
+      return ingredient.amount + " " + ing;
+    } else {
+      return ingredient.amount + ingredient.unit + " " + ing;
+    }
   }
 }

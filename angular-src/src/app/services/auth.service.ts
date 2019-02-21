@@ -13,9 +13,21 @@ export class AuthService {
   registerUser(user) {
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
-    return this.http
-      .post("http://localhost:3000/users/", user, { headers: headers })
-      .map(res => res.json());
+    return this.http.post("http://localhost:3000/users/", user, { headers: headers }).map((res) => res.json());
+  }
+
+  // Verify the user to activate the account
+  verifyUser(token) {
+    const headers = new Headers();
+    headers.append("Content-Type", "application/json");
+    return this.http.patch("http://localhost:3000/users/verify/", { token }, { headers: headers }).map((res) => res.json());
+  }
+
+  // Resend the email verification.
+  resendVerification(email) {
+    const headers = new Headers();
+    headers.append("Content-Type", "application/json");
+    return this.http.patch("http://localhost:3000/users/verify/resend", { email }, { headers: headers }).map((res) => res.json());
   }
 
   // Authenticate the login for the user.
@@ -26,7 +38,7 @@ export class AuthService {
       .post("http://localhost:3000/users/authenticate", user, {
         headers: headers
       })
-      .map(res => res.json());
+      .map((res) => res.json());
   }
 
   // Get profile.
@@ -43,7 +55,7 @@ export class AuthService {
           item: "profile"
         }
       })
-      .map(res => res.json());
+      .map((res) => res.json());
   }
 
   // Cache the user login.

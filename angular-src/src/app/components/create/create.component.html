@@ -66,49 +66,51 @@
                       (keydown)="enterInt($event)"
                       (keyup)="checkErrors(stepper, 5)"
                     />
+                    <div class="errorMessage" [ngClass]="{ showErrorMessage: errors[5].err == true }">Error: {{ errors[5].msg }}</div>
                   </div>
-                  <div class="errorMessage" [ngClass]="{ showErrorMessage: errors[5].err == true }">Error: {{ errors[5].msg }}</div>
                 </div>
               </div>
               <div class="formSection">
-                <div class="formSection">
-                  <label for="prepTime">Preparation time:</label>
-                  <div>
-                    <input
-                      class="timeInput"
-                      type="text"
-                      [(ngModel)]="prepTime"
-                      name="prepTime"
-                      [ngClass]="{ error: errors[2].err == true }"
-                      (keydown)="timeInput($event, 'prep')"
-                      placeholder="00:00"
-                      maxlength="5"
-                      onpaste="return false"
-                      (focusout)="clickOut('prep', prepTime, stepper)"
-                      (focusin)="prepTime = ''"
-                    />
+                <div class="recipeTime">
+                  <div class="formSection">
+                    <label for="prepTime">Preparation time:</label>
+                    <div>
+                      <input
+                        class="timeInput"
+                        type="text"
+                        [(ngModel)]="prepTime"
+                        name="prepTime"
+                        [ngClass]="{ error: errors[2].err == true }"
+                        (keydown)="timeInput($event, 'prep')"
+                        placeholder="00:00"
+                        maxlength="5"
+                        onpaste="return false"
+                        (focusout)="clickOut('prep', prepTime, stepper)"
+                        (focusin)="prepTime = ''"
+                      />
+                    </div>
+                    <!-- <div class="errorMessage" [ngClass]="{ showErrorMessage: errors[2].err == true }">Error: {{ errors[2].msg }}</div> -->
                   </div>
-                  <div class="errorMessage" [ngClass]="{ showErrorMessage: errors[2].err == true }">Error: {{ errors[2].msg }}</div>
-                </div>
-                <div class="formSection">
-                  <label for="prepTime">Cooking time:</label>
-                  <div>
-                    <input
-                      class="timeInput"
-                      type="text"
-                      [(ngModel)]="cookTime"
-                      name="cookTime"
-                      [ngClass]="{ error: errors[3].err == true }"
-                      (keydown)="timeInput($event, 'cook')"
-                      placeholder="00:00"
-                      maxlength="5"
-                      onpaste="return false"
-                      (focusout)="clickOut('cook', cookTime, stepper)"
-                      (focusin)="cookTime = ''"
-                    />
+                  <div class="formSection">
+                    <label for="prepTime">Cooking time:</label>
+                    <div>
+                      <input
+                        class="timeInput"
+                        type="text"
+                        [(ngModel)]="cookTime"
+                        name="cookTime"
+                        [ngClass]="{ error: errors[3].err == true }"
+                        (keydown)="timeInput($event, 'cook')"
+                        placeholder="00:00"
+                        maxlength="5"
+                        onpaste="return false"
+                        (focusout)="clickOut('cook', cookTime, stepper)"
+                        (focusin)="cookTime = ''"
+                      />
+                    </div>
                   </div>
-                  <div class="errorMessage" [ngClass]="{ showErrorMessage: errors[3].err == true }">Error: {{ errors[3].msg }}</div>
                 </div>
+                <div class="errorMessage" [ngClass]="{ showErrorMessage: errors[3].err == true }">Error: {{ errors[3].msg }}</div>
               </div>
               <div class="formSection"><label for="public">Public:</label> <input class="publicCheck" type="checkbox" name="public" [(ngModel)]="public" /></div>
             </div>
@@ -119,58 +121,8 @@
               <!-- ? Ingredients -->
               <h2>Ingredients</h2>
               <div>
-                <!-- <div class="addIngredients" (keyup.enter)="addIngredient(food, amount, unit, ingField); food = ''; amount = ''; unit = ''">
-                  <div class="ingredientContainer">
-                    <input
-                      type="text"
-                      class="ingredientField"
-                      [(ngModel)]="food"
-                      [ngClass]="{ error: ingErrors[0].err == true }"
-                      name="food"
-                      placeholder="Ingredient"
-                      (keyup)="checkErrors(stepper, 0); getIngredients()"
-                      #ingField
-                    />
-                    <div class="errorMessage" [ngClass]="{ showErrorMessage: ingErrors[0].err == true }">Error: {{ ingErrors[0].msg }}</div>
-                  </div>
-                  <div class="ingredientContainer">
-                    <input
-                      type="text"
-                      class="ingredientField"
-                      [(ngModel)]="detail"
-                      [ngClass]="{ error: ingErrors[1].err == true }"
-                      name="detail"
-                      placeholder="Notes (eg. chopped, peeled, ect.)"
-                      (keyup)="checkErrors(stepper, 1)"
-                    />
-                    <div class="errorMessage" [ngClass]="{ showErrorMessage: ingErrors[1].err == true }">Error: {{ ingErrors[1].msg }}</div>
-                  </div>
-                  <div class=" ">
-                    <input type="text" class="ingredientField smallField" [(ngModel)]="amount" [ngClass]="{ error: ingErrors[2].err == true }" name="amount" placeholder="Amount" (keyup)="checkErrors(stepper, 2)" />
-                    <div class="errorMessage" [ngClass]="{ showErrorMessage: ingErrors[2].err == true }">Error: {{ ingErrors[2].msg }}</div>
-                  </div>
-                  <div class=" ">
-                    <input
-                      list="acceptedUnits"
-                      class="ingredientField smallField"
-                      [(ngModel)]="unit"
-                      [ngClass]="{ error: ingErrors[3].err == true }"
-                      name="measureUnit"
-                      placeholder="Unit"
-                      (click)="unit = ''"
-                      (keyup)="checkErrors(stepper, 3)"
-                    />
-                    <div class="errorMessage" [ngClass]="{ showErrorMessage: ingErrors[3].err == true }">Error: {{ ingErrors[3].msg }}</div>
-                  </div>
-                  <div class="">
-                    <datalist id="acceptedUnits"><option *ngFor="let unit of units" data-value="{{ unit }}"></option></datalist>
-                  </div>
-                  <div class="addIngredientButton">
-                    <div class="button" (click)="addIngredient(ingField)"><i class="fas fa-plus"></i></div>
-                  </div>
-                </div> -->
                 <div class="ingredientContainer detailArea">
-                  <div class="formSection">
+                  <div class="formSection noflex">
                     <label for="food">Ingredient:</label>
                     <input
                       type="text"
@@ -181,10 +133,10 @@
                       placeholder="eg. 'Apple'"
                       #ingField
                       (keyup)="getIngredients()"
-                      (focusin)="dropdownOpen = true"
+                      (focusin)="food = ''; ingredientsList = []; dropdownOpen = true"
                       (focusout)="dropdownOpen = false"
                     />
-                    <div class="ingredientDropdown" *ngIf="dropdownOpen || food">
+                    <div class="ingredientDropdown" *ngIf="dropdownOpen || dropdownHover" (mouseover)="dropdownHover = true" (mouseout)="dropdownHover = false">
                       <div class="ingredientElement" *ngFor="let item of ingredientsList" (click)="addIngredient(item)">{{ item.ingredient }}</div>
                     </div>
                   </div>

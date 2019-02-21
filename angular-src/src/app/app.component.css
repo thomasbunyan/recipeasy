@@ -6,7 +6,6 @@
   min-height: 100vh;
   width: 100vw;
   overflow: hidden;
-  background-color: red;
 }
 
 .nav {
@@ -17,6 +16,7 @@
   position: fixed;
   z-index: 100 !important;
   transition: all 0.3s ease-in-out 0.1s;
+  box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 3px -2px rgba(0, 0, 0, 0.12), 0 1px 8px 0 rgba(0, 0, 0, 0.08);
 }
 .bigNav {
   width: calc(100vw - var(--sidenav-big));
@@ -46,6 +46,7 @@ mat-sidenav {
   max-width: var(--sidenav-small);
   width: var(--sidenav-small);
   transition: all 0.3s ease-in-out 0.1s;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
 }
 .big {
   min-width: var(--sidenav-big) !important;

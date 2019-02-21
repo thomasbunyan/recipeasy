@@ -66,28 +66,6 @@ function formatQuery(text) {
   return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 }
 
-// Get cookbooks from a selection.
-router.get("/selection", checkAuth, (req, res, next) => {
-  const user = "admin";
-  const selectedCookbooks = req.query.selection;
-  Cookbook.find({ _id: { $in: selectedCookbooks }, $or: [{ public: true }, { author: user }] }, { new: true })
-    .populate("recipes.recipe")
-    .exec()
-    .then((cookbooks) => {
-      console.log(cookbooks);
-      res.status(200).json({
-        success: true,
-        cookbooks: cookbooks
-      });
-    })
-    .catch((error) => {
-      res.status(500).json({
-        success: false,
-        error: error
-      });
-    });
-});
-
 // Get cookbook by ID and update its views, providing it is public.
 router.get("/:id", checkAuth, (req, res, next) => {
   if (!req.params.id.match(/^[0-9a-fA-F]{24}$/)) {

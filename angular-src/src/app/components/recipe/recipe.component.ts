@@ -5,6 +5,8 @@ import { RecipeValidateService } from "../../services/recipe-validate.service";
 import { UserService } from "../../services/user.service";
 import { Title } from "@angular/platform-browser";
 import { Router } from "@angular/router";
+import { GeneralService } from "../../services/general.service";
+import { RecipeDialogService } from "../recipe-dialog/recipe-dialog.service";
 
 @Component({
   selector: "app-recipe",
@@ -14,7 +16,7 @@ import { Router } from "@angular/router";
 export class RecipeComponent implements OnInit {
   recipeId: String;
   user: any;
-  recipe: any = {};
+  recipe: any;
   usersRecipes: any;
 
   voteLock = false;
@@ -26,28 +28,26 @@ export class RecipeComponent implements OnInit {
     private recipeValidateService: RecipeValidateService,
     private userService: UserService,
     private titleService: Title,
-    private router: Router
+    private router: Router,
+    private generalService: GeneralService,
+    private recipeDialog: RecipeDialogService
   ) {}
 
   ngOnInit() {
     this.recipeId = this.route.snapshot.paramMap.get("id");
     this.user = JSON.parse(localStorage.getItem("user"));
-    this.recipeService.getRecipe(this.recipeId).subscribe(data => {
+    this.recipeService.getRecipe(this.recipeId).subscribe((data) => {
       if (!data.success) {
         this.router.navigate(["/recipes"]);
       } else {
         this.recipe = data.recipe;
         this.titleService.setTitle(this.recipe.title);
-        this.userService.getUserData().subscribe(data => {
+        this.userService.getUserData().subscribe((data) => {
           if (data.success) {
             this.usersRecipes = data.recipes;
             this.userService.addToHistory(this.recipeId, "recipes");
-            const indexVote = this.usersRecipes.voted.findIndex(
-              y => y.recipe._id === this.recipe._id
-            );
-            const indexSave = this.usersRecipes.saved.findIndex(
-              y => y.recipe._id === this.recipe._id
-            );
+            const indexVote = this.usersRecipes.voted.findIndex((y) => y.recipe._id === this.recipe._id);
+            const indexSave = this.usersRecipes.saved.findIndex((y) => y.recipe._id === this.recipe._id);
             if (indexVote !== -1) {
               this.recipe.vote = this.usersRecipes.voted[indexVote].vote;
             }
@@ -60,19 +60,19 @@ export class RecipeComponent implements OnInit {
     });
   }
 
+  openRecipeOptions() {
+    this.recipeDialog.open(this.recipe).subscribe((data) => {
+      // console.log(data);
+    });
+  }
+
   castVote(vote) {
     if (!this.voteLock) {
       this.voteLock = true;
       const userData = { id: this.user.id, data: this.usersRecipes };
-      const newVote = this.recipeValidateService.castVote(
-        vote,
-        this.recipe.vote,
-        this.recipe,
-        userData,
-        () => {
-          this.voteLock = false;
-        }
-      );
+      const newVote = this.recipeValidateService.castVote(vote, this.recipe.vote, this.recipe, userData, () => {
+        this.voteLock = false;
+      });
       this.recipe.score = newVote.newScore;
       this.recipe.vote = newVote.newVote;
     }
@@ -82,16 +82,14 @@ export class RecipeComponent implements OnInit {
     if (!this.saveLock) {
       this.saveLock = true;
       const userData = { id: this.user.id, data: this.usersRecipes };
-      this.userService
-        .addUserData(userData, { data: "recipes", type: "save" }, this.recipeId)
-        .subscribe(data => {
-          if (!data.success) {
-            console.log("Failed to toggle save");
-          } else {
-            this.recipe.saved = !this.recipe.saved;
-          }
-          this.saveLock = false;
-        });
+      this.userService.addUserData(userData, { data: "recipes", type: "save" }, this.recipeId).subscribe((data) => {
+        if (!data.success) {
+          console.log("Failed to toggle save");
+        } else {
+          this.recipe.saved = !this.recipe.saved;
+        }
+        this.saveLock = false;
+      });
     }
   }
 }

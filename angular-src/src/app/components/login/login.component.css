@@ -1,4 +1,4 @@
-.login {
+/* .login {
   height: 100vh;
   width: 100%;
   font-family: "ProductSansRegular";
@@ -88,7 +88,207 @@
   color: #1ecd97;
 }
 .errorMessage {
+  width: 90%;
+  margin: auto;
   padding-top: 10px;
   font-size: 10pt;
   color: #cc0033;
+} */
+
+.login {
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  background-color: #fff;
+  font-family: "ProductSansRegular";
+  color: #555555;
+}
+
+/******* Nav *******/
+nav {
+  width: 86%;
+  margin: auto;
+  text-align: right;
+  margin-top: 50px;
+  padding: 1vh 20px;
+  overflow: hidden;
+  z-index: 100 !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+a {
+  text-decoration: none;
+  color: var(--main-dark-text);
+  font-size: 20px;
+  font-weight: 300;
+  margin: 0 10px;
+}
+.navLeft {
+  /* background-color: #0066ff; */
+  /* width: 450px; */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.navRight {
+  display: flex;
+  align-items: flex-end;
+}
+.logo {
+  padding: 0;
+  font-size: 32px;
+  font-weight: 900;
+  margin-right: 30px;
+}
+.subPoint {
+  padding: 0;
+  font-size: 18px;
+}
+.btnSmall {
+  background-color: #4286f5;
+  color: #fff;
+  border-radius: 5px;
+  font-size: 18px;
+  padding: 0.75em 1.1em;
+  text-align: center;
+}
+
+/*** Form ***/
+
+.content-area {
+  height: 100%;
+  width: 100%;
+}
+.loginForm h1 {
+  font-family: "ProductSansRegular", sans-serif;
+  font-weight: normal;
+  font-size: 30px;
+}
+.loginForm h3 {
+  font-family: "ProductSansRegular", sans-serif;
+  font-weight: normal;
+  font-size: 14px;
+  margin-top: 5px;
+  margin-bottom: 40px;
+}
+.loginForm {
+  background-color: #fff;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.25);
+  margin-top: 4vh;
+  width: 250px;
+  text-align: center;
+  padding: 60px;
+  border-radius: 25px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease-in-out;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.input-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  justify-content: center;
+}
+.input-field {
+  font-family: "ProductSansRegular", sans-serif;
+  text-align: left;
+  background-color: #f0f0f0;
+  border: 2px solid transparent;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: normal;
+  padding: 10px 0px 10px 10px;
+  width: 95%;
+  margin-top: 20px;
+  transition: border 0.5s;
+}
+.input-field::placeholder {
+  color: #c4c4c4;
+}
+.input-field:focus {
+  border: 2px solid #71c6f7;
+  box-shadow: none;
+}
+.errorMessage {
+  width: 100%;
+  height: 15px;
+  margin: auto;
+  font-size: 10pt;
+  /* padding: 10px 0; */
+  margin-top: 5px;
+  margin-bottom: 15px;
+  color: #cc0033;
+}
+
+.forgotInput {
+  margin-bottom: 20px;
+}
+
+/*** Bottom buttons ***/
+.loginButton {
+  font-family: "ProductSansRegular", sans-serif;
+  /* margin-top: 30px; */
+  margin-bottom: 20px;
+  font-size: 17px;
+  padding: 10px 20px;
+  color: #fff;
+  border-radius: 5px;
+  background-color: #4286f5;
+  transition: 0.15s all ease-in-out;
+  cursor: pointer;
+}
+.loginButton:hover {
+  background-color: #7aadff;
+  transition: 0.15s all ease-in-out;
+}
+.forgot-button {
+  padding-top: 5px;
+  font-size: 14px;
+  color: #c4c4c4;
+  display: block;
+  cursor: pointer;
+  text-decoration-line: underline;
+}
+
+/*** Form validation ***/
+.flag {
+  position: absolute;
+  color: #cc0033;
+  margin-left: 8px;
+  margin-top: 13px;
+}
+.error {
+  color: #cc0033;
+  background-color: #fce4e4;
+  border: 2px solid #cc0033;
+}
+.error::placeholder {
+  color: #cc0033;
+}
+.errorBtn {
+  color: #cc0033;
+  background-color: #fce4e4;
+  border: 2px solid #cc0033;
+}
+.errorBtn:hover {
+  background-color: #cc0033;
+  color: #fce4e4;
+}
+.success {
+  background-color: #dff0d8;
+  color: #1ecd97;
+  border: 2px solid #1ecd97;
+}
+.success::placeholder {
+  color: #1ecd97;
+}
+
+.show {
+  opacity: 1;
+  visibility: visible;
+  transition: all 0.3s ease-in-out;
 }

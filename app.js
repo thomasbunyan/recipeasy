@@ -8,12 +8,12 @@ const scheduleFunctions = require("./api/schedule");
 require("dotenv").config();
 
 // Connect to database
-mongoose.connect(process.env.DB, {
+mongoose.connect(process.env.MLAB_DB, {
   useCreateIndex: true,
   useNewUrlParser: true
 });
 mongoose.connection.on("connected", () => {
-  console.log("Connected to database: " + process.env.DB);
+  console.log("Connected to database: " + process.env.MLAB_DB);
 });
 mongoose.connection.on("error", (err) => {
   console.log("Database error: " + err);
@@ -24,6 +24,8 @@ const users = require("./api/routes/users");
 const recipes = require("./api/routes/recipes");
 const cookbooks = require("./api/routes/cookbooks");
 const ingredients = require("./api/routes/ingredients");
+const libraries = require("./api/routes/libraries");
+const dashes = require("./api/routes/dashes");
 
 //Port
 const port = 3000;
@@ -47,6 +49,8 @@ app.use("/users", users);
 app.use("/recipes", recipes);
 app.use("/cookbooks", cookbooks);
 app.use("/ingredients", ingredients);
+app.use("/libraries", libraries);
+app.use("/dashes", dashes);
 
 // Invalid route.
 app.use((req, res, next) => {
@@ -63,10 +67,11 @@ app.use((error, req, res, next) => {
   });
 });
 
-schedule.scheduleJob("10 * * * *", () => {
-  scheduleFunctions.startAnalytics();
-});
-// ingredients.addIngredient();
+scheduleFunctions.startAnalytics();
+// schedule.scheduleJob("10 * * * *", () => {
+//   scheduleFunctions.startAnalytics();
+// });
+// scheduleFunctions.addIngredient();
 
 // Start server
 app.listen(port, () => {

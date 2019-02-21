@@ -4,12 +4,14 @@
     <div class="recipeHeader">
       <div class="recipeDetails">
         <div class="recipeTitle">
-          <h1>{{ recipe.title }}</h1>
-          <p>{{ recipe.description }}</p>
+          <h1>{{ recipe?.title }}</h1>
+          <p>{{ recipe?.description }}</p>
         </div>
         <div class="recipeButtons">
-          <i class="fas fa-arrow-up" (click)="castVote('up')" [ngClass]="{ upvote: recipe.vote == 'up' }"></i> <i class="fas fa-arrow-down" (click)="castVote('down')" [ngClass]="{ downvote: recipe.vote == 'down' }"></i>
-          <i class="fas fa-star" (click)="toggleSave()" [ngClass]="{ saved: recipe.saved }"></i> <i class="fas fa-ellipsis-v"></i>
+          <i class="fas fa-arrow-up" (click)="castVote('up')" [ngClass]="{ upvote: recipe?.vote == 'up' }"></i>
+          <i class="fas fa-arrow-down" (click)="castVote('down')" [ngClass]="{ downvote: recipe?.vote == 'down' }"></i>
+          <i class="fas fa-star" (click)="toggleSave()" [ngClass]="{ saved: recipe?.saved }"></i>
+          <i class="fas fa-ellipsis-v" (click)="openRecipeOptions()"></i>
         </div>
       </div>
       <div class="recipeImage"></div>
@@ -19,13 +21,13 @@
       <div class="recipeIngredients half">
         <div class="ingredientsList">
           <h2>Ingredients</h2>
-          <p *ngFor="let ingredient of recipe.ingredients">{{ ingredient.food }}</p>
+          <p *ngFor="let ingredient of recipe?.ingredients">{{ generalService.formatIngredient(ingredient) }}</p>
         </div>
       </div>
       <div class="recipeMethod half">
         <div class="methodList">
           <h2>Method</h2>
-          <p *ngFor="let step of recipe.method; let i = index">{{ i + 1 }}. {{ step.step }}</p>
+          <p *ngFor="let step of recipe?.method; let i = index">{{ i + 1 }}. {{ step }}</p>
         </div>
       </div>
     </div>

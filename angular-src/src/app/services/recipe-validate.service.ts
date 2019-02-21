@@ -64,10 +64,10 @@ export class RecipeValidateService {
     if (!testRe.test(recipe.description) || recipe.description === "" || recipe.description === undefined || recipe.title.length < 6 || recipe.title.split(" ").length < 1) {
       errors[1] = { err: true, msg: "Description not valid." };
     }
-    if (!timeRe.test(recipe.prepTime)) {
+    if (recipe.prepTime === undefined || recipe.prepTime < 59) {
       errors[2] = { err: true, msg: "Preparation time not valid." };
     }
-    if (!timeRe.test(recipe.cookTime)) {
+    if (recipe.prepTime === undefined) {
       errors[3] = { err: true, msg: "Cooking time not valid." };
     }
     if (recipe.mealType === undefined) {
@@ -89,7 +89,6 @@ export class RecipeValidateService {
   }
 
   generateRecipe(recipeData, user) {
-    const date = new Date();
     const recipe = {
       title: recipeData.title,
       description: recipeData.description,

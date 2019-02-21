@@ -3,7 +3,7 @@
     <div class="headerArea">
       <h2 *ngIf="cookbooks.length || recipes.length">Showing results for "{{ searchQuery }}"</h2>
       <h2 *ngIf="!cookbooks.length && !recipes.length">No results found for "{{ searchQuery }}"</h2>
-      <div class="refineFilter noselect" *ngIf="cookbooks.length && recipes.length" (click)="filterOpen = !filterOpen"><i class="fas fa-filter"></i><span>Refine search</span></div>
+      <div class="refineFilter noselect" *ngIf="cookbooks.length || recipes.length" (click)="filterOpen = !filterOpen"><i class="fas fa-filter"></i><span>Refine search</span></div>
     </div>
     <div class="filterArea" [ngClass]="{ filterOpen: filterOpen }">
       <div class="breakLine"></div>
@@ -72,11 +72,11 @@
           <div class="rInfo">
             <div class="rTitle">{{ recipe.title }}</div>
             <div class="rDetails">
-              {{ recipe.author }} ● <span>{{ recipe.mealType }}</span> ● {{ generalService.getTimeAgo(recipe.date) }}
+              {{ recipe.author }} ● <span>{{ recipe.mealType }}</span> ● {{ generalService.getTimeAgo(recipe.timestamp) }}
             </div>
             <div class="rInteraction">
               <p title="Points">{{ recipe.score }} points</p>
-              <p title="Time"><i class="far fa-clock" style="padding-right:3px"></i>{{ generalService.getTotalTime(recipe.prepTime, recipe.cookTime) }}</p>
+              <p title="Time"><i class="far fa-clock" style="padding-right:3px"></i>{{ generalService.getTime(recipe.prepTime + recipe.cookTime) }}</p>
               <p title="Servings"><i class="fas fa-utensils"></i> x {{ recipe.servings }}</p>
               <div class="difficultyCircle" title="Difficulty">
                 {{ generalService.getDifficulty(recipe.difficulty) }}

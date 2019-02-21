@@ -1,9 +1,0 @@
-{
-  "env": {
-    "DB": "mongodb://localhost:27017/meanauth",
-    "MONGO_ATLAS_PW": "null",
-    "JWT_KEY": "secret",
-    "EMAIL": "recipe@email.com",
-    "EMAIL_PW": "pw"
-  }
-}
