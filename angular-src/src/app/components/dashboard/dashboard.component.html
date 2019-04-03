@@ -15,7 +15,9 @@
       <div class="boxContainer">
         <div class="itemBox" *ngFor="let cookbook of library.cookbooks">
           <div class="tImage">
-            <div class="tPic"></div>
+            <div class="tPic">
+              <img [ngClass]="{ hidden: !cookbook?.image }" src="{{ generalService.getImageLink(cookbook?.image) }}" #rImg />
+            </div>
             <div class="tImageOverlay" (click)="viewCookbook(cookbook)">
               <i class="tImageFav fas fa-heart" [ngClass]="{ saved: cookbook.saved == true }" (click)="$event.stopPropagation(); toggleSave(cookbook)"></i>
             </div>

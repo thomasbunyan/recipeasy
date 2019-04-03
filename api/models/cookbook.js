@@ -10,6 +10,11 @@ const CookbookSchema = mongoose.Schema({
     type: String,
     required: true
   },
+  image: {
+    type: String,
+    required: false,
+    default: ""
+  },
   public: {
     type: Boolean,
     required: true

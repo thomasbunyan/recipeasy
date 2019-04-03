@@ -1,6 +1,17 @@
 const express = require("express");
 const router = express.Router();
 const checkAuth = require("../middleware/check-auth");
+const multer = require("multer");
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/");
+  },
+  filename: (req, file, cb) => {
+    console.log(file);
+    cb(null, Date.now() + file.originalname);
+  }
+});
+const upload = multer({ storage });
 require("dotenv").config();
 
 const Cookbook = require("../models/cookbook");
@@ -11,6 +22,7 @@ router.post("/", checkAuth, (req, res, next) => {
   let cookbook = new Cookbook({
     title: req.body.title,
     description: req.body.description,
+    image: req.body.image,
     public: true,
     recipes: req.body.recipes,
     author: req.userData.user.username,
@@ -117,12 +129,21 @@ router.get("/:id", checkAuth, (req, res, next) => {
     });
 });
 
+router.post("/image", upload.single("cookbookImage"), (req, res, next) => {
+  console.log("hit");
+  const path = req.file.path;
+  res.status(200).json({
+    success: true,
+    path: path
+  });
+});
+
 // Update cookbook.
 router.patch("/:id", checkAuth, (req, res, next) => {
   const query = { _id: req.params.id, author: req.userData.user.username };
   let update = {};
   for (const ops of req.body) {
-    if (["title", "description", "public", "recipes"].indexOf(ops.name) >= 0) {
+    if (["title", "description", "public", "recipes", "image"].indexOf(ops.name) >= 0) {
       update[ops.name] = ops.value;
     } else if (req.body[0].name == "followers") {
       update = { $inc: { followers: req.body[0].value } };

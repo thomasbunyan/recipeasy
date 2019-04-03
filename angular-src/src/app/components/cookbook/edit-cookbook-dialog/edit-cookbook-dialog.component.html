@@ -2,14 +2,26 @@
   <h2 style="padding-bottom: 10px">Edit cookbook</h2>
   <div class="edit-area">
     <div class="left">
-      <div class="image-area"></div>
+      <!-- <div class="mainImg">
+        <div class="image">
+          <img [ngClass]="{ hidden: !recipe.image }" src="{{ generalService.getImageLink(recipe.image) }}" #rImg />
+        </div>
+      </div> -->
+      <div class="recipeImage" (mouseenter)="imageHover = true" (mouseleave)="imageHover = false" [ngClass]="{ pointer: imageHover }">
+        <div class="recipeImageWrapper">
+          <div class="image">
+            <img [ngClass]="{ hidden: !cookbookImage }" src="{{ cookbookImage }}" #rImg />
+          </div>
+          <input type="file" accept="image/png, image/jpeg" (change)="uploadImage($event, rImg)" />
+        </div>
+      </div>
       <div class="public-switch noselect">
         <div class="switch-button" [ngClass]="{ 'switch-good': public }" (click)="public = true">Public</div>
         <div class="switch-button switch-right" [ngClass]="{ 'switch-bad': !public }" (click)="public = false">Private</div>
       </div>
     </div>
     <div class="right">
-      <div class="input-area"><input type="text" class="input-field" [(ngModel)]="title" name="title" placeholder="Title" maxlength="64" value="{{title}}" /></div>
+      <div class="input-area"><input type="text" class="input-field" [(ngModel)]="title" name="title" placeholder="Title" maxlength="64" value="{{ title }}" /></div>
       <div class="input-area"><textarea class="input-field" [(ngModel)]="description" rows="8" type="text" maxlength="199" name="description" placeholder="Description"></textarea></div>
     </div>
   </div>

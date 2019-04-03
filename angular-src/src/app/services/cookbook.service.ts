@@ -53,6 +53,16 @@ export class CookbookService {
       .map((res) => res.json());
   }
 
+  addCookbookImage(cookbookImage) {
+    const headers = new Headers();
+    headers.append("Authorization", localStorage.getItem("id_token"));
+    return this.http
+      .post("http://localhost:3000/cookbooks/image", cookbookImage, {
+        headers: headers
+      })
+      .map((res) => res.json());
+  }
+
   getCookbooks() {
     const headers = new Headers();
     headers.append("Authorization", localStorage.getItem("id_token"));

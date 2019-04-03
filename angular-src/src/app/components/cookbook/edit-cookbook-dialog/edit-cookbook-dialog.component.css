@@ -1,5 +1,4 @@
-.edit-dialog{
-
+.edit-dialog {
 }
 
 .noselect {
@@ -12,23 +11,22 @@
                                   supported by Chrome and Opera */
 }
 
-
-.edit-area{
+.edit-area {
   width: 30vw;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: center;
   align-items: flex-start;
-} 
-.left{
+}
+.left {
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
   justify-content: space-between;
   align-items: center;
 }
-.right{
+.right {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -38,14 +36,58 @@
   padding-left: 10px;
 }
 
-.image-area{
+/* .mainImg {
   height: 175px;
   width: 175px;
   margin-bottom: 10px;
-  border-radius: 3px;
-  background-color: #ecf0f1;
+  border-radius: 8px;
+  background-color: #f1f0f5;
+  cursor: pointer;
 }
-.description-area{
+.image {
+  width: 100%;
+  height: 100%;
+}
+.image img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 25px;
+} */
+
+.recipeImage {
+  border-radius: 25px;
+}
+.recipeImageWrapper {
+  overflow: hidden;
+  position: relative;
+  display: inline-block;
+  border-radius: 25px;
+}
+.image {
+  width: 175px;
+  height: 175px;
+  border-radius: 25px;
+  background-color: #f1eff4;
+}
+.image img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 25px;
+}
+.recipeImageWrapper input[type="file"] {
+  font-size: 1000px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+}
+.hidden {
+  visibility: hidden;
+}
+
+.description-area {
   flex-grow: 1;
 }
 
@@ -56,9 +98,9 @@
   width: 100%;
 }
 .input-field {
-  background-color: #ecf0f1;
+  background-color: #f1f0f5;
   border: 2px solid transparent;
-  border-radius: 3px;
+  border-radius: 8px;
   flex-grow: 1;
   resize: none;
   font-size: 16px;
@@ -68,12 +110,12 @@
   transition: border 0.5s;
   font-family: inherit;
 }
-.private-toggle{
+.private-toggle {
   height: 30px;
   background-color: cadetblue;
 }
 
-.button-area{
+.button-area {
   padding-top: 10px;
   width: 100%;
 }
@@ -84,7 +126,7 @@
   height: 40px;
   text-align: center;
   padding: 0px 20px;
-  border-radius: 3px;
+  border-radius: 8px;
   background: #03a9f4;
   color: #fff;
   letter-spacing: 1px;
@@ -109,16 +151,16 @@
   height: 35px;
   width: 100%;
   display: inline-table;
-  border-radius: 3px;
+  border-radius: 8px;
   text-align: center;
 }
 .switch-button {
   display: table-cell;
   vertical-align: middle;
-  background-color: #ecf0f1;
+  background-color: #f1f0f5;
   color: rgba(0, 0, 0, 0.5);
-  border-top-left-radius: 3px;
-  border-bottom-left-radius: 3px;
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
   width: 50%;
   height: 100%;
   cursor: pointer;
@@ -127,8 +169,8 @@
 .switch-right {
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
-  border-top-right-radius: 3px;
-  border-bottom-right-radius: 3px;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
 }
 .switch-good {
   background-color: #03a9f4;

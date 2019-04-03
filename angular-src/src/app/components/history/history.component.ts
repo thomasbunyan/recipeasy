@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { UserService } from "../../services/user.service";
+import { GeneralService } from "../../services/general.service";
 import { Title } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 
@@ -16,7 +17,8 @@ export class HistoryComponent implements OnInit {
   constructor(
     private userService: UserService,
     private titleService: Title,
-    private router: Router
+    private router: Router,
+    private generalService: GeneralService
   ) {}
 
   ngOnInit() {

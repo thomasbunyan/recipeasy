@@ -3,6 +3,7 @@ import { UserService } from "../../services/user.service";
 import { CookbookService } from "../../services/cookbook.service";
 import { Title } from "@angular/platform-browser";
 import { Router } from "@angular/router";
+import { GeneralService } from "../../services/general.service";
 
 @Component({
   selector: "app-cookbooks",
@@ -15,22 +16,17 @@ export class CookbooksComponent implements OnInit {
   savedCookbooks = [];
   userCookbooks: any;
 
-  constructor(
-    private userService: UserService,
-    private cookbookService: CookbookService,
-    private titleService: Title,
-    private router: Router
-  ) {}
+  constructor(private userService: UserService, private cookbookService: CookbookService, private titleService: Title, private router: Router, private generalService: GeneralService) {}
 
   ngOnInit() {
     this.userId = JSON.parse(localStorage.getItem("user")).id;
     this.titleService.setTitle("Your cookbooks");
-    this.userService.getUserData().subscribe(data => {
+    this.userService.getUserData().subscribe((data) => {
       if (!data.success) {
         console.log("Could not get cookbooks");
       } else {
         this.cookbooks = data.cookbooks;
-        this.userCookbooks = this.cookbooks.saved.map(x => {
+        this.userCookbooks = this.cookbooks.saved.map((x) => {
           return x.cookbook._id;
         });
       }
@@ -42,18 +38,12 @@ export class CookbooksComponent implements OnInit {
   }
 
   toggleSave(cookbook) {
-    this.userService
-      .addUserData(
-        { id: this.userId, data: this.cookbooks },
-        { data: "cookbooks", type: "save" },
-        cookbook.cookbook._id
-      )
-      .subscribe(data => {
-        if (!data.success) {
-          console.log("Couldn't add cookbook");
-        } else {
-          this.userCookbooks = data.cookbooks;
-        }
-      });
+    this.userService.addUserData({ id: this.userId, data: this.cookbooks }, { data: "cookbooks", type: "save" }, cookbook.cookbook._id).subscribe((data) => {
+      if (!data.success) {
+        console.log("Couldn't add cookbook");
+      } else {
+        this.userCookbooks = data.cookbooks;
+      }
+    });
   }
 }

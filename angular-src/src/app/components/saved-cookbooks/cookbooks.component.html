@@ -5,8 +5,9 @@
     <div class="cookbookArea" *ngIf="cookbooks.saved.length">
       <div class="cookbookTile" *ngFor="let cookbook of cookbooks.saved">
         <div class="cookbookImage" (click)="viewCookbook(cookbook.cookbook)">
+          <img [ngClass]="{ hidden: !cookbook?.cookbook.image }" src="{{ generalService.getImageLink(cookbook?.cookbook.image) }}" #rImg />
           <div class="cookbookOverlay">
-            <div class="remove" (click)="$event.stopPropagation(); toggleSave(cookbook)"><i class="cookbookFavorite fas fa-heart"></i> <i class="cookbookFavorite fas fa-times"></i></div>
+            <div class="remove" (click)="$event.stopPropagation(); toggleSave(cookbook)"><i class="cookbookFavorite fas fa-times"></i></div>
           </div>
         </div>
         <div class="cookbookInfo">

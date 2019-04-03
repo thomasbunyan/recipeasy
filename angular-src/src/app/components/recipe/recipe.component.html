@@ -14,7 +14,11 @@
           <i class="fas fa-ellipsis-v" (click)="openRecipeOptions()"></i>
         </div>
       </div>
-      <div class="recipeImage"></div>
+      <div class="mainImg">
+        <div class="image">
+          <img [ngClass]="{ hidden: !recipe?.image }" src="{{ generalService.getImageLink(recipe?.image) }}" #rImg />
+        </div>
+      </div>
     </div>
     <div class="breakLine"></div>
     <div class="recipeInformation">

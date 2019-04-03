@@ -8,7 +8,11 @@
     <div class="breakLine" *ngIf="searchQueries.length"></div>
     <div class="historyArea">
       <div class="historyTile" *ngFor="let item of history">
-        <div class="historyImage" (click)="viewItem(item)"><div class="historyOverlay"></div></div>
+        <div class="historyImage" (click)="viewItem(item)">
+          <img *ngIf="item.cookbook == undefined" [ngClass]="{ hidden: !item?.recipe.image }" src="{{ generalService.getImageLink(item?.recipe.image) }}" #rImg />
+          <img *ngIf="item.cookbook != undefined" [ngClass]="{ hidden: !item?.cookbook.image }" src="{{ generalService.getImageLink(item?.cookbook.image) }}" #rImg />
+          <div class="historyOverlay"></div>
+        </div>
         <div class="historyInfo">
           <h3 (click)="viewItem(item)" *ngIf="item.cookbook == undefined">{{ item.recipe.title }}</h3>
           <h3 (click)="viewItem(item)" *ngIf="item.cookbook != undefined">{{ item.cookbook.title }}</h3>

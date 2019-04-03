@@ -1,7 +1,9 @@
 <div class="cookbookPage">
   <div class="wrapper">
     <div class="topArea">
-      <div class="cookbookImage"></div>
+      <div class="cookbookImage">
+        <img [ngClass]="{ hidden: !cookbook?.image }" src="{{ generalService.getImageLink(cookbook?.image) }}" #rImg />
+      </div>
       <h1 class="cookbookTitle">{{ cookbook.title }}</h1>
       <p class="cookbookDescription">{{ cookbook.description }}</p>
       <p class="cookbookInfo">Created by {{ cookbook.author }} {{ getTimeAgo(cookbook.date) }}.</p>
