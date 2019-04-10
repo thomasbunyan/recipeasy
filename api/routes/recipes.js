@@ -16,6 +16,7 @@ const upload = multer({ storage });
 
 const Recipe = require("../models/recipe");
 const User = require("../models/user");
+const Dash = require("../models/dash");
 
 // Add recipe
 router.post("/", checkAuth, (req, res, next) => {
@@ -78,6 +79,18 @@ router.get("/", checkAuth, (req, res, next) => {
     .limit(6)
     .exec()
     .then((recipes) => {
+      Dash.find({})
+        .exec()
+        .then((d) => {
+          let searches = d[0].searches;
+          if (searches == null) {
+            searches = [];
+          }
+          searches.push({ query: search_query, timestamp: new Date().getTime() });
+          Dash.findOneAndUpdate({}, { searches: searches })
+            .exec()
+            .then(() => {});
+        });
       res.status(200).json({
         success: true,
         recipes: recipes

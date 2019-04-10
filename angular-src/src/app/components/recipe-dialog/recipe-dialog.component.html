@@ -5,7 +5,11 @@
   </div>
   <div class="scrollArea" [ngClass]="{ hideScrollArea: !scrollAreaOpen }">
     <div class="recipeInfo">
-      <div class="recipeImage"></div>
+      <div class="recipeImage">
+        <div class="image">
+          <img [ngClass]="{ hidden: !recipe?.image }" src="{{ generalService.getImageLink(recipe?.image) }}" #rImg />
+        </div>
+      </div>
       <div class="recipeTitle">{{ recipe.title }}</div>
     </div>
     <div class="recipeButtons noselect">

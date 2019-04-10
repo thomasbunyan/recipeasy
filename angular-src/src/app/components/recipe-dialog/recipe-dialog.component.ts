@@ -3,6 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
 import { UserService } from "../../services/user.service";
 import { CookbookService } from "../../services/cookbook.service";
 import { RecipeValidateService } from "../../services/recipe-validate.service";
+import { GeneralService } from "../../services/general.service";
 
 @Component({
   selector: "app-recipe-dialog",
@@ -24,7 +25,8 @@ export class RecipeDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) private data: any,
     private userService: UserService,
     private cookbookService: CookbookService,
-    private recipeValService: RecipeValidateService
+    private recipeValService: RecipeValidateService,
+    private generalService: GeneralService
   ) {}
 
   ngOnInit() {

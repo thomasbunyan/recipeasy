@@ -35,6 +35,37 @@
   border-radius: 25px;
 }
 
+/*** Search area ***/
+.searchArea {
+  /* margin: auto; */
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 15px;
+}
+.searchArea i {
+  font-size: 20px;
+  margin-right: 10px;
+}
+.searchItem {
+  padding: 7px 12px;
+  margin: 5px 7px;
+  font-size: 14px;
+  border-radius: 25px;
+  font-weight: 500;
+  cursor: default;
+  background-color: #f1eff4;
+}
+.searchItem:hover {
+  text-decoration: underline;
+}
+.searchItem i {
+  margin-left: 5px;
+  cursor: pointer;
+}
+
 /***  Top 'front' box ***/
 .front {
   background-color: #fff;

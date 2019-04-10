@@ -20,9 +20,11 @@ function updateDash() {
         addLibraries(d, (d) => {
           addRecipes(d, (d) => {
             calcTrending(d, (d) => {
-              Dash.findByIdAndUpdate(d._id, d)
-                .exec()
-                .then((doc) => {});
+              calcSearches(d, (d) => {
+                Dash.findByIdAndUpdate(d._id, d)
+                  .exec()
+                  .then((doc) => {});
+              });
             });
           });
         });
@@ -39,13 +41,20 @@ function addTop(d, callback) {
   const tsDay = new Date(new Date().getTime() - 1 * 24 * 60 * 60 * 1000);
   const tsHour = new Date(new Date().getTime() - 1 * 60 * 60 * 1000);
 
-  Recipe.find({ timestamp: { $gt: tsMonth } }, (err, doc) => {
+  Recipe.find({}, (err, doc) => {
     doc.sort((a, b) => {
       return b.views - a.views;
     });
-    d.top.month = doc.slice(0, 10).map((e) => {
+    d.top.all = doc.slice(0, 10).map((e) => {
       return e._id;
     });
+    d.top.month = doc
+      .filter((e) => {
+        return e.timestamp > tsMonth;
+      })
+      .map((e) => {
+        return e._id;
+      });
     d.top.week = doc
       .filter((e) => {
         return e.timestamp > tsWeek;
@@ -69,36 +78,43 @@ function addLibraries(d, callback) {
 
   const time = new Date().getHours();
   const day = new Date().getDay();
+
   if (time >= 5 && time < 10) {
-    console.log("Breakfast");
+    // console.log("Breakfast");
   }
   if (time >= 10 && time < 15) {
-    console.log("Brunch");
+    // console.log("Brunch");
   }
   if (time >= 11 && time < 14) {
-    console.log("Lunch");
+    // console.log("Lunch");
   }
   if (time >= 15 && time < 16) {
-    console.log("Afternoon tea");
+    // console.log("Afternoon tea");
   }
   if (time >= 17 && time < 21) {
-    console.log("Dinner");
+    // console.log("Dinner");
   }
+  // if (time >= 21 && time < 1) {
+  //   console.log("Midnight snack");
+  // }
+  // if (time >= 1 && time < 5) {
+  //   console.log("Sleep eating");
+  // }
 
   if (day == 0 || day == 7) {
-    console.log("Sunday");
+    // console.log("Sunday");
   } else if (day == 1) {
-    console.log("Monday");
+    // console.log("Monday");
   } else if (day == 2) {
-    console.log("Tuesday");
+    // console.log("Tuesday");
   } else if (day == 3) {
-    console.log("Wednesday");
+    // console.log("Wednesday");
   } else if (day == 4) {
-    console.log("Thursday");
+    // console.log("Thursday");
   } else if (day == 5) {
-    console.log("Friday");
+    // console.log("Friday");
   } else if (day == 6) {
-    console.log("Saturday");
+    // console.log("Saturday");
   }
 
   const query = {};
@@ -141,6 +157,22 @@ function calcTrending(d, callback) {
     .catch((err) => {
       console.log("Error:", err);
     });
+}
+
+function calcSearches(d, callback) {
+  const tsDay = new Date(new Date().getTime() - 1 * 24 * 60 * 60 * 1000);
+  const searches = {};
+  d.searches.forEach((e) => {
+    if (e.timestamp > tsDay) {
+      if (searches[e.query]) {
+        searches[e.query] = searches[e.query] + 1;
+      } else {
+        searches[e.query] = 1;
+      }
+    }
+  });
+  d.trendingSearches = searches;
+  callback(d);
 }
 
 // Add the ingredients.

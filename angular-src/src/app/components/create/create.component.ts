@@ -3,6 +3,7 @@ import { Title } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 import { RecipeService } from "../../services/recipe.service";
 import { RecipeValidateService } from "../../services/recipe-validate.service";
+import { UserService } from "../../services/user.service";
 import { MatTableDataSource, MatDialog } from "@angular/material";
 import { IngredientDialogComponent } from "./ingredient-dialog/ingredient-dialog.component";
 import { GeneralService } from "../../services/general.service";
@@ -55,6 +56,7 @@ export class CreateComponent implements OnInit {
     private router: Router,
     private recipeService: RecipeService,
     private recipeValidateService: RecipeValidateService,
+    private userService: UserService,
     private dialog: MatDialog,
     private generalService: GeneralService
   ) {}
@@ -301,15 +303,20 @@ export class CreateComponent implements OnInit {
           const username = JSON.parse(localStorage.getItem("user")).username;
           const recipe = this.recipeValidateService.generateRecipe(recipeData, username);
           this.recipeService.addRecipe(recipe).subscribe((data) => {
-            console.log(data);
+            if (data.success) {
+              this.userService.addToAuthor(data.recipe._id, "recipes");
+              this.router.navigate(["/recipe" + data.recipe._id]);
+            }
           });
         });
       } else {
-        console.log(recipeData);
+        // console.log(recipeData);
         const username = JSON.parse(localStorage.getItem("user")).username;
         const recipe = this.recipeValidateService.generateRecipe(recipeData, username);
         this.recipeService.addRecipe(recipe).subscribe((data) => {
-          console.log(data);
+          if (data.success) {
+            this.router.navigate(["/recipe" + data.recipe._id]);
+          }
         });
       }
     }

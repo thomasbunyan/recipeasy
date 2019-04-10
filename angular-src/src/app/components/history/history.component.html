@@ -14,10 +14,10 @@
           <div class="historyOverlay"></div>
         </div>
         <div class="historyInfo">
-          <h3 (click)="viewItem(item)" *ngIf="item.cookbook == undefined">{{ item.recipe.title }}</h3>
-          <h3 (click)="viewItem(item)" *ngIf="item.cookbook != undefined">{{ item.cookbook.title }}</h3>
-          <p *ngIf="item.cookbook == undefined">{{ item.recipe.description }}</p>
-          <p *ngIf="item.cookbook != undefined">{{ item.cookbook.description }}</p>
+          <h3 (click)="viewItem(item)" *ngIf="item.cookbook == undefined">{{ item.recipe.title | textLimit: 50 }}</h3>
+          <h3 (click)="viewItem(item)" *ngIf="item.cookbook != undefined">{{ item.cookbook.title | textLimit: 50 }}</h3>
+          <p *ngIf="item.cookbook == undefined">{{ item.recipe.description | textLimit: 50 }}</p>
+          <p *ngIf="item.cookbook != undefined">{{ item.cookbook.description | textLimit: 50 }}</p>
         </div>
       </div>
     </div>

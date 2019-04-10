@@ -21,6 +21,13 @@
       </div>
     </div>
     <div class="breakLine"></div>
+    <div class="nutrition">
+      <div class="nut" *ngFor="let nut of recipe?.nutrition">
+        <div class="nutName">{{ nut.nutrient }}</div>
+        <div class="nutVal">{{ nut.val }} {{ nut.uom }}</div>
+      </div>
+    </div>
+    <div class="breakLine"></div>
     <div class="recipeInformation">
       <div class="recipeIngredients half">
         <div class="ingredientsList">

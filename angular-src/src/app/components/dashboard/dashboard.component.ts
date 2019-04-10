@@ -18,6 +18,7 @@ export class DashboardComponent implements OnInit {
   userRecipes = [];
   dash: any;
   loading = true;
+  searchQueries = [];
 
   constructor(
     private titleService: Title,
@@ -35,7 +36,6 @@ export class DashboardComponent implements OnInit {
     this.generalService.getDash().subscribe((data) => {
       this.dash = data.dash;
       this.dash.top.day = this.dash.top.day.splice(0, 5);
-      console.log(this.dash);
       this.userService.getUserData().subscribe((data) => {
         this.userCookbooks = data.cookbooks;
         this.dash.libraries.forEach((e) => {
@@ -66,6 +66,12 @@ export class DashboardComponent implements OnInit {
         this.userCookbooks = data.cookbooks;
         cookbook.saved = !cookbook.saved;
       }
+    });
+  }
+
+  searchQuery(query) {
+    this.router.navigate(["/results"], {
+      queryParams: { search_query: query }
     });
   }
 }

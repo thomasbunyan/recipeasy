@@ -15,6 +15,20 @@
   margin-bottom: 10px;
 }
 
+.titleButtons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.titleButtons h1 {
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+.deselected {
+  transition: all 0.2s ease-in-out;
+  color: rgb(165, 165, 165);
+}
+
 /*** Card for the table ***/
 .recipeCard {
   /* background-color: #fff; */
@@ -25,9 +39,68 @@
   margin: 20px auto;
 }
 
+/*** Search bar for the table ***/
+.searchBar {
+  width: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+  position: relative;
+  margin: auto;
+}
+.searchBar input {
+  background-color: rgb(241, 241, 241);
+  border-radius: 8px;
+  width: 100%;
+  padding: 14px 20px;
+  box-sizing: border-box;
+  font-size: 16px;
+  border: transparent 2px solid;
+  transition: all 0.2s ease-in-out;
+}
+.searchBar input:focus {
+  border: #92b1ff 2px solid;
+  transition: all 0.2s ease-in-out;
+}
+.searchBar i {
+  color: #888888;
+  position: absolute;
+  right: 0;
+  padding-right: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out 0s;
+  visibility: visible;
+  opacity: 0;
+  font-size: 18px;
+}
+.visible {
+  opacity: 1 !important;
+  transition: all 0.2s ease-in-out 0s;
+}
+
+/*** Table spacing ***/
+.tableWrapper {
+  height: 100%;
+  width: 945px;
+  overflow-x: hidden;
+  display: flex;
+  scroll-behavior: smooth;
+  flex-direction: row;
+  align-items: flex-start;
+}
+.tableWrapper::-webkit-scrollbar {
+  width: 0 !important;
+}
+.tableArea {
+  height: 100%;
+  min-width: 945px;
+}
+
 /*** Recipe table ***/
 .recipe-table {
-  width: 100%;
+  min-width: 945px;
+  display: inline-block;
   font-family: inherit;
   margin: auto;
   background-color: rgba(255, 255, 255, 0);
@@ -36,6 +109,7 @@ th,
 td {
   vertical-align: middle;
   transition: all 0.2s ease-in-out;
+  width: 945px;
 }
 th {
   font-size: 13px;
@@ -76,6 +150,10 @@ td {
   color: #e42063;
 }
 .remove:hover .fa-heart,
+.remove .fa-times {
+  display: none;
+}
+.remove:hover .fa-trash-alt,
 .remove .fa-times {
   display: none;
 }

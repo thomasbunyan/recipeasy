@@ -54,9 +54,18 @@ router.get("/dash", (req, res, next) => {
     })
     .exec()
     .then((dash) => {
+      const d = dash[0];
+      const d2 = [];
+      for (var key in d.trendingSearches) {
+        d2.push({ query: key, count: d.trendingSearches[key] });
+      }
+      d2.sort((a, b) => {
+        return b.count - a.count;
+      });
+      d.searches = d2.slice(0, 10);
       res.status(200).json({
         success: true,
-        dash: dash[0]
+        dash: d
       });
     })
     .catch((err) => {

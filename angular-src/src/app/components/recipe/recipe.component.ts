@@ -41,6 +41,7 @@ export class RecipeComponent implements OnInit {
         this.router.navigate(["/recipes"]);
       } else {
         this.recipe = data.recipe;
+        this.recipe["nutrition"] = this.recipeService.getNutrition(this.recipe);
         this.titleService.setTitle(this.recipe.title);
         this.userService.getUserData().subscribe((data) => {
           if (data.success) {

@@ -37,13 +37,14 @@ mat-icon {
   /* background-color: red; */
 }
 .recipeDetails {
-  height: 325px;
+  /* height: 325px; */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  /* background-color: red; */
+  /* background-color: blue; */
+  padding: 10px;
 }
-.recipeDetails h1 {
+.recipeTitle h1 {
   font-size: 50px;
 }
 .recipeTitle {
@@ -69,13 +70,13 @@ mat-icon {
 
 .mainImg {
   height: 350px;
-  width: 600px;
+  min-width: 350px !important;
   background-color: #f1f0f5;
   border-radius: 25px;
 }
 .image {
-  width: 100%;
-  height: 100%;
+  height: 350px;
+  width: 350px !important;
 }
 .image img {
   height: 100%;
@@ -83,8 +84,27 @@ mat-icon {
   object-fit: cover;
   border-radius: 25px;
 }
-.hidden{
-  visibility:hidden;
+.hidden {
+  visibility: hidden;
+}
+
+/*** Nutritional information ***/
+.nutrition {
+  width: 100%;
+  /* height: 60px; */
+  display: flex;
+  flex-direction: row;
+  padding: 8px;
+}
+.nut {
+  margin: auto;
+  font-size: 13px;
+  /* background-color: #f1f0f4; */
+  border-radius: 8px;
+  /* border: rgb(185, 185, 185) 1px solid; */
+  color: rgb(68, 68, 68);
+  text-align: center;
+  padding: 2px;
 }
 
 /*** Lower recipe information ***/

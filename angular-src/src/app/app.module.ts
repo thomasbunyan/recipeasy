@@ -29,6 +29,8 @@ import { EditCookbookDialogComponent } from "./components/cookbook/edit-cookbook
 import { RecipeDialogComponent } from "./components/recipe-dialog/recipe-dialog.component";
 import { IngredientDialogComponent } from "./components/create/ingredient-dialog/ingredient-dialog.component";
 
+import { TextLimitPipe } from "./pipes/text-limit.pipe";
+
 import { AuthGuard } from "./guards/auth.guard";
 import { AuthService } from "./services/auth.service";
 import { UserValidateService } from "./services/user-validate.service";
@@ -105,7 +107,8 @@ const appRoutes: Routes = [
     VerifyComponent,
     CookbooksComponent,
     CookbookComponent,
-    HistoryComponent
+    HistoryComponent,
+    TextLimitPipe
   ],
   imports: [HttpModule, FormsModule, BrowserModule, RouterModule.forRoot(appRoutes), MatDialogModule, BrowserAnimationsModule, MaterialModule, ReactiveFormsModule, InfiniteScrollModule],
   providers: [UserValidateService, RecipeValidateService, SidenavService, AuthService, UserService, RecipeService, CookbookService, GeneralService, RecipeDialogService, AuthGuard, Title],

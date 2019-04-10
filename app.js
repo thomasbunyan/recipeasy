@@ -70,10 +70,10 @@ app.use((error, req, res, next) => {
   });
 });
 
-scheduleFunctions.startAnalytics();
-// schedule.scheduleJob("10 * * * *", () => {
-//   scheduleFunctions.startAnalytics();
-// });
+// scheduleFunctions.startAnalytics();
+schedule.scheduleJob("*/15 * * * * *", () => {
+  scheduleFunctions.startAnalytics();
+});
 // scheduleFunctions.addIngredient();
 
 // Start server

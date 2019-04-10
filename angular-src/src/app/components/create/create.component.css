@@ -8,6 +8,7 @@
   width: 1350px;
   /* min-height: 100%; */
   margin: auto;
+  margin-bottom: 60px;
 }
 .wrapper h1 {
   font-size: 50px;
@@ -358,6 +359,10 @@ td {
   padding: 10px 0;
   margin-right: 20px;
   text-align: left;
+}
+.addIngredients {
+  margin: auto;
+  max-width: 800px;
 }
 
 .methodTable {

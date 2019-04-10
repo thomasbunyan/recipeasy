@@ -50,11 +50,24 @@
   border-radius: 25px;
   margin: auto;
 }
+.image {
+  height: 200px;
+  width: 200px;
+}
+.image img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 25px;
+}
+.hidden {
+  visibility: hidden;
+}
 .recipeTitle {
   font-size: 18px;
   font-weight: bold;
   text-align: center;
-  padding: 5px 0;
+  padding: 10px 0 0 0;
 }
 
 /*** Recipe buttons ***/

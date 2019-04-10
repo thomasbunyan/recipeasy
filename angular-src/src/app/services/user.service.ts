@@ -79,6 +79,20 @@ export class UserService {
     });
   }
 
+  addToAuthor(id, type) {
+    this.getUserData().subscribe((data: any) => {
+      if (type === "recipes") {
+        data = data.recipes;
+      } else {
+        data = data.cookbooks;
+      }
+      const user = JSON.parse(localStorage.getItem("user")).id;
+      this.addUserData({ id: user, data: data }, { data: type, type: "author" }, id).subscribe((data) => {
+        // console.log(data);
+      });
+    });
+  }
+
   toggleCookbookSave(cookbook) {
     this.getUserData().subscribe((data) => {
       const cookbooks = data.cookbooks.saved.slice();

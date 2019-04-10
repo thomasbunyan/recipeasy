@@ -89,4 +89,29 @@ export class RecipeService {
       )
       .map((res) => res.json());
   }
+
+  getNutrition(recipe) {
+    const nutrition = {};
+    const nutritionArray = [];
+    const regex = /\,.*$/;
+    const ingredient = recipe.ingredients.map((e) => {
+      return e.ingredient;
+    });
+    ingredient.forEach((eIng) => {
+      eIng.nutrients.forEach((e) => {
+        const nutName = e.nutrient.replace(regex, "");
+        if (nutrition[nutName]) {
+          nutrition[nutName][0] = nutrition[nutName][0] + e.val;
+        } else {
+          nutrition[nutName] = [e.val, e.uom];
+        }
+      });
+    });
+    for (const key in nutrition) {
+      if (nutrition[key] !== 0) {
+        nutritionArray.push({ nutrient: key, val: nutrition[key][0].toFixed(1), uom: nutrition[key][1] });
+      }
+    }
+    return nutritionArray;
+  }
 }

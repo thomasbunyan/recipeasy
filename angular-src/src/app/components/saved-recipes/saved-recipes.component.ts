@@ -1,9 +1,10 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 import { RecipeService } from "../../services/recipe.service";
 import { UserService } from "../../services/user.service";
 import { CookbookService } from "../../services/cookbook.service";
 import { Router } from "@angular/router";
 import { Title } from "@angular/platform-browser";
+import { RecipeDialogService } from "../recipe-dialog/recipe-dialog.service";
 
 @Component({
   selector: "app-saved-recipes",
@@ -12,11 +13,19 @@ import { Title } from "@angular/platform-browser";
 })
 export class SavedRecipesComponent implements OnInit {
   userId: any;
-  recipes = { saved: [] };
+  recipes: any;
   usersCookbooks = {};
   contextMenuRecipe: any;
+  searchFilter: string;
+  searchFilter2: string;
+  savedFilter = [];
+  authorFilter = [];
 
-  constructor(private recipeService: RecipeService, private userService: UserService, private cookbookService: CookbookService, private router: Router, private title: Title) {}
+  @ViewChild("tableWrapper") tableWrapper: ElementRef<any>;
+  savedRecipes = true;
+  createdRecipes = false;
+
+  constructor(private recipeService: RecipeService, private userService: UserService, private cookbookService: CookbookService, private router: Router, private title: Title, private recipeDialog: RecipeDialogService) {}
 
   ngOnInit() {
     this.userId = JSON.parse(localStorage.getItem("user")).id;
@@ -24,6 +33,8 @@ export class SavedRecipesComponent implements OnInit {
 
     this.userService.getUserData().subscribe((data) => {
       this.recipes = data.recipes;
+      this.savedFilter = this.recipes.saved;
+      this.authorFilter = this.recipes.author;
       this.usersCookbooks = data.cookbooks;
     });
   }
@@ -32,10 +43,41 @@ export class SavedRecipesComponent implements OnInit {
     this.router.navigate(["recipe", recipe.recipe._id]);
   }
 
+  enterKey(type) {
+    if (this.searchFilter === undefined && this.searchFilter2 === undefined) {
+      return;
+    }
+    if (type === "saved") {
+      this.savedFilter = [];
+      this.recipes.saved.forEach((e) => {
+        let recipeTitle = e.recipe.title.toLowerCase();
+        recipeTitle = recipeTitle.replace(/[^\w\s]|_/g, "").replace(/\s+/g, " ");
+        if (recipeTitle.includes(this.searchFilter.toLowerCase())) {
+          this.savedFilter.push(e);
+        }
+      });
+    } else {
+      this.authorFilter = [];
+      this.recipes.author.forEach((e) => {
+        let recipeTitle = e.recipe.title.toLowerCase();
+        recipeTitle = recipeTitle.replace(/[^\w\s]|_/g, "").replace(/\s+/g, " ");
+        if (recipeTitle.includes(this.searchFilter2.toLowerCase())) {
+          this.authorFilter.push(e);
+        }
+      });
+    }
+  }
+
   removeSaved(recipe) {
     this.userService.addUserData({ id: this.userId, data: this.recipes }, { data: "recipes", type: "save" }, recipe.recipe._id).subscribe((data) => {
       this.recipes = data.recipes;
     });
+  }
+  removeCreated(recipe) {
+    const remove = confirm("Are you sure you want to delete this recipe? You won't be able to restore it once removed.");
+    if (remove) {
+      console.log("Remove");
+    }
   }
 
   viewAuthor(recipe) {
@@ -61,25 +103,10 @@ export class SavedRecipesComponent implements OnInit {
     // this.userService.addUserData(user, update, "a.cookbook._id").subscribe((data) => {});
   }
 
-  openMenu(e, contextMenu, recipe) {
-    this.contextMenuRecipe = recipe;
-    contextMenu.children[0].children[3].style.visibility = "";
-    if (contextMenu.style.visibility === "visible") {
-      contextMenu.style.visibility = "hidden";
-    } else {
-      contextMenu.style.top = e.clientY - 60 + "px";
-      contextMenu.style.left = e.clientX + "px";
-      contextMenu.style.visibility = "visible";
-    }
-  }
-  windowClick(e, contextMenu) {
-    // if (e.path.indexOf(contextMenu) > 1) {
-    // } else {
-    //   contextMenu.style.visibility = "hidden";
-    // }
-    contextMenu.style.visibility = "hidden";
-    contextMenu.children[0].children[3].style.visibility = "hidden";
-    this.contextMenuRecipe = undefined;
+  openRecipeOptions(recipe) {
+    this.recipeDialog.open(recipe).subscribe((data) => {
+      // console.log(data);
+    });
   }
 
   getTimeAgo(timeStamp) {
@@ -114,6 +141,16 @@ export class SavedRecipesComponent implements OnInit {
         return Math.round(diff) + " year ago";
       }
       return Math.round(diff) + " years ago";
+    }
+  }
+
+  scroll() {
+    if (this.savedRecipes) {
+      // Left
+      this.tableWrapper.nativeElement.scrollLeft = 0;
+    } else {
+      // Right
+      this.tableWrapper.nativeElement.scrollLeft = this.tableWrapper.nativeElement.scrollWidth;
     }
   }
 }

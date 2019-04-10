@@ -1,5 +1,9 @@
 <div class="dashboard">
   <!-- <div class="welcomeMessage"><label>Welcome back Thomas.</label></div> -->
+  <div class="searchArea">
+    <i class="fas fa-chart-line"></i>
+    <div class="searchItem" (click)="searchQuery(query.query)" *ngFor="let query of dash?.searches; let i = index">"{{ query.query }}"</div>
+  </div>
   <div class="wrapper">
     <div class="front wide" *ngFor="let library of dash?.libraries">
       <div class="topArea">
@@ -60,6 +64,6 @@
       </div>
     </div>
   </div>
-  <div class="discoverMore">Scroll to discover more</div>
-  <div class="moreRecipes"></div>
+  <!-- <div class="discoverMore">Scroll to discover more</div> -->
+  <!-- <div class="moreRecipes"></div> -->
 </div>
