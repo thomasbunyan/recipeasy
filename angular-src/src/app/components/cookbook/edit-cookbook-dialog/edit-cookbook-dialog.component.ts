@@ -42,7 +42,7 @@ export class EditCookbookDialogComponent implements OnInit {
 
   update() {
     const data = [];
-    if (this.cookbookImage) {
+    if (this.cookbookImage.type === "image/jpeg") {
       this.updateImage(data);
     } else {
       this.addData(data);
@@ -66,7 +66,6 @@ export class EditCookbookDialogComponent implements OnInit {
     const fd = new FormData();
     fd.append("cookbookImage", this.cookbookImage, this.cookbookImage.name);
     this.cookbookService.addCookbookImage(fd).subscribe((data) => {
-      console.log(data);
       dataA.push({ name: "image", value: data.path });
       this.addData(dataA);
     });

@@ -6,6 +6,7 @@ import { RecipeService } from "../../services/recipe.service";
 import { Router } from "@angular/router";
 import { MatDialog } from "@angular/material";
 import { EditCookbookDialogComponent } from "../cookbook/edit-cookbook-dialog/edit-cookbook-dialog.component";
+import { RecipeDialogService } from "../recipe-dialog/recipe-dialog.service";
 import { UserService } from "../../services/user.service";
 import { GeneralService } from "../../services/general.service";
 
@@ -32,7 +33,8 @@ export class CookbookComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog,
     private userService: UserService,
-    private generalService: GeneralService
+    private generalService: GeneralService,
+    private recipeDialog: RecipeDialogService
   ) {}
 
   ngOnInit() {
@@ -120,6 +122,7 @@ export class CookbookComponent implements OnInit {
       });
     }
   }
+
   toggleSave(recipe) {
     if (!this.saveLock) {
       this.saveLock = true;
@@ -135,38 +138,7 @@ export class CookbookComponent implements OnInit {
     }
   }
 
-  getTimeAgo(timeStamp) {
-    let diff = (new Date().getTime() - new Date(timeStamp).getTime()) / 60000;
-    if (isNaN(diff)) {
-      return "not a valid time";
-    } else if (diff < 1) {
-      return "less than a minute ago";
-    } else if (diff < 60) {
-      if (Math.round(diff) === 1) {
-        return Math.round(diff) + " minute ago";
-      }
-      return Math.round(diff) + " minutes ago";
-    } else if ((diff = diff / 60) < 24) {
-      if (Math.round(diff) === 1) {
-        return Math.round(diff) + " hour ago";
-      }
-      return Math.round(diff) + " hours ago";
-    } else if ((diff = diff / 24) < 30) {
-      if (Math.round(diff) === 1) {
-        return Math.round(diff) + " day ago";
-      }
-      return Math.round(diff) + " days ago";
-    } else if ((diff = diff / 30) < 12) {
-      if (Math.round(diff) === 1) {
-        return Math.round(diff) + " month ago";
-      }
-      return Math.round(diff) + " months ago";
-    } else {
-      diff = diff / 12;
-      if (Math.round(diff) === 1) {
-        return Math.round(diff) + " year ago";
-      }
-      return Math.round(diff) + " years ago";
-    }
+  openMenu(recipe) {
+    this.recipeDialog.open(recipe.recipe).subscribe((data) => {});
   }
 }

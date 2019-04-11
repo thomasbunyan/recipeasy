@@ -43,7 +43,11 @@
     </div>
     <div class="cookbookList">
       <div class="cookbookItem" *ngFor="let cookbook of userData?.cookbooks.author" (click)="addToCookbook(cookbook)">
-        <div class="cookbookImage"></div>
+        <div class="cookbookImage">
+          <div class="sImage">
+            <img [ngClass]="{ hidden: !cookbook?.cookbook.image }" src="{{ generalService.getImageLink(cookbook?.cookbook.image) }}" #cImg />
+          </div>
+        </div>
         <p>{{ cookbook.cookbook.title }}</p>
       </div>
     </div>

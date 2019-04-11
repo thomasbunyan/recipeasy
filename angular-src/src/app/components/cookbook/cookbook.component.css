@@ -113,16 +113,16 @@ td {
   justify-content: center;
   color: #3f3f3f;
   width: 30px;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.1s ease-in-out;
 }
 .remove:hover {
   color: #3f3f3f !important;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.1s ease-in-out;
 }
 
 .removet {
   color: #3f3f3f;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.1s ease-in-out;
 }
 .removet:hover {
   color: #3f3f3f !important;
@@ -145,6 +145,10 @@ td {
 
 .saved {
   color: #eb4d44;
+}
+
+.hidden {
+  visibility: hidden;
 }
 
 /* .clickable {

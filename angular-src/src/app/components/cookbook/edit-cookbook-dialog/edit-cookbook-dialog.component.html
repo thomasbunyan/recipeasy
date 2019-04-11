@@ -1,12 +1,7 @@
-<div class="edit-dialog">
+<!-- <div class="edit-dialog">
   <h2 style="padding-bottom: 10px">Edit cookbook</h2>
   <div class="edit-area">
     <div class="left">
-      <!-- <div class="mainImg">
-        <div class="image">
-          <img [ngClass]="{ hidden: !recipe.image }" src="{{ generalService.getImageLink(recipe.image) }}" #rImg />
-        </div>
-      </div> -->
       <div class="recipeImage" (mouseenter)="imageHover = true" (mouseleave)="imageHover = false" [ngClass]="{ pointer: imageHover }">
         <div class="recipeImageWrapper">
           <div class="image">
@@ -26,4 +21,68 @@
     </div>
   </div>
   <div class="button-area"><input class="submit-button" type="button" (click)="update()" value="Update" /> <input class="submit-button cancel" type="button" (click)="close()" value="Cancel" /></div>
+</div> -->
+
+<div class="dialogWindow">
+  <div class="topButtons">
+    <div><i class="fas fa-arrow-left" *ngIf="cookbookAreaOpen" (click)="cookbookAreaOpen = cookbookNameOpen = false; scrollAreaOpen = true"></i></div>
+    <div><i class="fas fa-times" (click)="dialog.close()"></i></div>
+  </div>
+  <div class="scrollArea">
+    <h1>Edit cookbook</h1>
+    <div class="cookbookImage">
+      <div class="cookbookImageWrapper" (mouseenter)="imageHover = true" (mouseleave)="imageHover = false">
+        <div class="imageOverlay" [ngClass]="{ oHidden: !imageHover }">
+          <i class="fas fa-file-upload"></i>
+        </div>
+        <div class="image">
+          <img [ngClass]="{ hidden: !cookbookImage }" src="{{ cookbookImage }}" #rImg />
+        </div>
+        <input type="file" accept="image/png, image/jpeg" (change)="uploadImage($event, rImg)" />
+      </div>
+    </div>
+    <div class="public-switch noselect">
+      <div class="switch-button" [ngClass]="{ 'switch-good': public }" (click)="public = true">Public</div>
+      <div class="switch-button switch-right" [ngClass]="{ 'switch-bad': !public }" (click)="public = false">Private</div>
+    </div>
+    <div class="inputFields">
+      <div class="inputArea"><input type="text" class="inputField" [(ngModel)]="title" name="title" placeholder="Title" maxlength="64" value="{{ title }}" /></div>
+      <div class="inputArea"><textarea class="inputField" [(ngModel)]="description" rows="8" type="text" maxlength="199" name="description" placeholder="Description"></textarea></div>
+    </div>
+    <!-- <div class="recipeInfo">
+      <div class="recipeImage">
+        <div class="image">
+          <img [ngClass]="{ hidden: !recipe?.image }" src="{{ generalService.getImageLink(recipe?.image) }}" #rImg />
+        </div>
+      </div>
+      <div class="recipeTitle">{{ recipe.title }}</div>
+    </div>
+    <div class="recipeButtons noselect">
+      <div class="recipeButton" (click)="saveRecipe()">
+        <i class="fas fa-heart" [ngClass]="{ saved: this.recipe.saved }"></i>
+        <p *ngIf="!this.recipe.saved">Save</p>
+        <p *ngIf="this.recipe.saved">Remove</p>
+      </div>
+      <div class="recipeButton" (click)="cookbookAreaOpen = true; scrollAreaOpen = false">
+        <i class="fas fa-plus"></i>
+        <p>Add to Cookbook</p>
+      </div>
+      <div class="recipeButton" (click)="viewAuthor()">
+        <i class="fas fa-user"></i>
+        <p>View Author</p>
+      </div>
+      <div class="recipeButton" (click)="getLink()">
+        <i class="fas fa-link"></i>
+        <p>Link</p>
+      </div>
+      <div class="recipeButton" (click)="report()">
+        <i class="fas fa-flag"></i>
+        <p>Report</p>
+      </div>
+    </div> -->
+  </div>
+  <div class="buttonArea">
+    <input class="submitButton cancel" type="button" (click)="close()" value="Cancel" />
+    <input class="submitButton" type="button" (click)="update()" value="Update" />
+  </div>
 </div>

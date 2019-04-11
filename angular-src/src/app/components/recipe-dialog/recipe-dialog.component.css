@@ -153,6 +153,16 @@
   margin-right: 10px;
   border-radius: 8px;
 }
+.sImage {
+  height: 50px;
+  width: 50px;
+}
+.sImage img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
 
 /*** Name cookbook ***/
 .newCookbook {
