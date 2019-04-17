@@ -20,6 +20,7 @@
 
 i {
   cursor: pointer;
+  color: #5e5e5e;
 }
 a {
   text-decoration: none;
@@ -75,8 +76,8 @@ a {
   width: 100%;
   text-align: center;
   font-size: 22px;
-  padding: 10px 0;
-  margin-top: 10px;
+  padding: 15px 0;
+  /* margin-top: 10px; */
   cursor: pointer;
   border-left: transparent 10px solid;
   margin-left: -10px;
@@ -107,4 +108,30 @@ a {
 .activeLink {
   border-left: var(--primary-color) 10px solid;
   color: var(--primary-color);
+}
+
+/*** Sub items ***/
+.subList {
+  /* background-color: red; */
+  width: 100%;
+  margin-left: 52px;
+  overflow: hidden;
+  border-left: #5e5e5e 3px solid;
+  padding-left: 7px;
+  box-sizing: border-box;
+  transition: all 0.2s ease-in-out;
+}
+.subItem {
+  white-space: nowrap;
+  font-size: 17px;
+  padding: 5px 0;
+  cursor: pointer;
+  color: #b1b1b1;
+}
+.subItem:hover {
+  color: #5e5e5e;
+}
+
+.hideDrop {
+  max-height: 0 !important;
 }

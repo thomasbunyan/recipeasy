@@ -70,10 +70,13 @@ app.use((error, req, res, next) => {
   });
 });
 
-// scheduleFunctions.startAnalytics();
+scheduleFunctions.startSimilarityMatching();
 schedule.scheduleJob("*/15 * * * * *", () => {
   scheduleFunctions.startAnalytics();
 });
+// schedule.scheduleJob("* 0 * * * *", () => {
+//   scheduleFunctions.startSimilarityMatching();
+// });
 // scheduleFunctions.addIngredient();
 
 // Start server

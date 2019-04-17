@@ -1,8 +1,10 @@
 <div class="recipes">
   <div class="pageArea">
     <div class="headerArea">
-      <h2 *ngIf="cookbooks.length || recipes.length">Showing results for "{{ searchQuery }}"</h2>
-      <h2 *ngIf="!cookbooks.length && !recipes.length">No results found for "{{ searchQuery }}"</h2>
+      <h2 *ngIf="recipes.length && cuisine">{{ cuisine | textCapitalise }} food.</h2>
+      <h2 *ngIf="!recipes.length && cuisine">No results found for {{ cuisine | textCapitalise }} food.</h2>
+      <h2 *ngIf="cookbooks.length || (recipes.length && !cuisine)">Showing results for "{{ searchQuery }}"</h2>
+      <h2 *ngIf="!cookbooks.length && !recipes.length && !cuisine">No results found for "{{ searchQuery }}"</h2>
       <div class="refineFilter noselect" *ngIf="cookbooks.length || recipes.length" (click)="filterOpen = !filterOpen"><i class="fas fa-filter"></i><span>Refine search</span></div>
     </div>
     <div class="filterArea" [ngClass]="{ filterOpen: filterOpen }">

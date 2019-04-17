@@ -21,6 +21,7 @@ export class ResultsComponent implements OnInit {
   usersCookbooks: any = "";
   usersRecipes: any;
   searchQuery: String;
+  cuisine: String;
   filterQuery: String;
   searchList = [];
 
@@ -37,6 +38,7 @@ export class ResultsComponent implements OnInit {
   loading = true;
   lastSeen = undefined;
   endOfPage = false;
+  page = 0;
 
   voteLock = false;
   saveLock = false;
@@ -58,8 +60,14 @@ export class ResultsComponent implements OnInit {
     this.userId = JSON.parse(localStorage.getItem("user")).id;
     this.activatedRoute.queryParams.subscribe((params) => {
       this.searchQuery = params["search_query"];
-      if (!this.searchQuery) {
+      this.cuisine = params["cuisine"];
+      if (!this.searchQuery && !this.cuisine) {
         this.router.navigate(["/"]);
+      } else if (this.cuisine) {
+        this.titleService.setTitle("" + this.cuisine);
+        this.lastSeen = undefined;
+        this.endOfPage = false;
+        this.getCuisineData();
       } else {
         this.titleService.setTitle("" + this.searchQuery);
         this.lastSeen = undefined;
@@ -96,14 +104,41 @@ export class ResultsComponent implements OnInit {
     });
   }
 
+  getCuisineData() {
+    this.recipeService.getRecipeCuisine(this.cuisine).subscribe((recipeData) => {
+      if (!recipeData.success) {
+        return console.log("Recipes could not be acquired");
+      }
+      this.recipes = recipeData.recipes;
+      this.searchList = this.recipes;
+      this.userService.getUserData().subscribe((data) => {
+        if (data.success) {
+          this.usersRecipes = data.recipes;
+          this.recipes = this.applyUserData(recipeData.recipes);
+          this.loading = false;
+          this.onScroll();
+        } else {
+          console.log("User data could not be acquired");
+        }
+      });
+    });
+  }
+
   onScroll() {
     if (this.endOfPage || this.recipes.length === 0) {
       return;
     }
+    let terms: String;
+    if (this.searchQuery) {
+      terms = this.searchQuery;
+    } else if (this.cuisine) {
+      terms = this.cuisine;
+    }
     this.lastSeen = this.recipes[this.recipes.length - 1]._id;
-    this.recipeService.getRecipeSearch(this.searchQuery, this.lastSeen).subscribe((recipeData) => {
+    this.recipeService.getRecipeSearch(terms, this.page).subscribe((recipeData) => {
       this.recipes = this.recipes.concat(this.applyUserData(recipeData.recipes));
       this.applyFilter();
+      this.page++;
       if (this.lastSeen === this.recipes[this.recipes.length - 1]._id) {
         this.endOfPage = true;
         return;

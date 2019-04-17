@@ -7,7 +7,7 @@ const Dash = require("../models/dash");
 
 router.get("/", (req, res, next) => {
   Dash.find({})
-    .populate("libraries recipes top.day top.week top.month")
+    .populate("recipes top.day top.week top.month")
     .populate({
       path: "libraries",
       populate: {

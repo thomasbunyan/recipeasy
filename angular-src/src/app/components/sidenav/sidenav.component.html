@@ -2,11 +2,26 @@
   <div class="wrapper">
     <div class="smallNav" [ngClass]="{ navWide: big }">
       <div class="topNav">
-        <div class="sidebarToggle"><i class="fas fa-bars" (click)="toggleSidenav()"></i><span># Recipeasy</span></div>
+        <div class="sidebarToggle"><i class="fas fa-bars" (click)="toggleSidenav(); histDrop = false; recDrop = false; cbDrop = false"></i><span># Recipeasy</span></div>
         <div class="navItem" [routerLinkActive]="['activeLink']" [routerLink]="['/dashboard']"><i class="fas fa-home"></i><span>Home</span></div>
-        <div class="navItem" [routerLinkActive]="['activeLink']" [routerLink]="['/history']"><i class="fas fa-history"></i> <span>History</span></div>
-        <div class="navItem" [routerLinkActive]="['activeLink']" [routerLink]="['/recipes']"><i class="fas fa-save"></i><span>Recipes</span></div>
-        <div class="navItem" [routerLinkActive]="['activeLink']" [routerLink]="['/cookbooks']"><i class="fas fa-book"></i><span>Cookbooks</span></div>
+        <div class="navItem" [routerLinkActive]="['activeLink']" [routerLink]="['/history']">
+          <i class="fas fa-history"></i><span>History</span><i class="fas fa-caret-down" (click)="$event.stopPropagation(); histDrop = !histDrop"></i>
+        </div>
+        <div class="subList" [ngClass]="{ hideDrop: histDrop != true }" [ngStyle]="{ 'max-height.px': 30 * history?.length }">
+          <div class="subItem" *ngFor="let hist of history" (click)="viewRecipe(hist?.recipe._id)">{{ hist.recipe?.title | textLimit: 30 }}</div>
+        </div>
+        <div class="navItem" [routerLinkActive]="['activeLink']" [routerLink]="['/recipes']">
+          <i class="fas fa-utensils"></i><span>Recipes</span><i class="fas fa-caret-down" (click)="$event.stopPropagation(); recDrop = !recDrop"></i>
+        </div>
+        <div class="subList" [ngClass]="{ hideDrop: recDrop != true }" [ngStyle]="{ 'max-height.px': 30 * recipes?.length }">
+          <div class="subItem" *ngFor="let recipe of recipes" (click)="viewRecipe(recipe?.recipe._id)">{{ recipe.recipe?.title | textLimit: 30 }}</div>
+        </div>
+        <div class="navItem" [routerLinkActive]="['activeLink']" [routerLink]="['/cookbooks']">
+          <i class="fas fa-book"></i><span>Cookbooks</span><i class="fas fa-caret-down" (click)="$event.stopPropagation(); cbDrop = !cbDrop"></i>
+        </div>
+        <div class="subList" [ngClass]="{ hideDrop: cbDrop != true }" [ngStyle]="{ 'max-height.px': 30 * cookbooks?.length }">
+          <div class="subItem" *ngFor="let cookbook of cookbooks" (click)="viewCookbook(cookbook?.cookbook._id)">{{ cookbook.cookbook?.title | textLimit: 30 }}</div>
+        </div>
         <div class="navItem" [routerLinkActive]="['activeLink']" [routerLink]="['/create']"><i class="fas fa-plus-square"></i><span>New recipe</span></div>
       </div>
       <div class="bottomNav">

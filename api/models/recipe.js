@@ -24,6 +24,10 @@ const RecipeSchema = mongoose.Schema({
     type: String,
     required: true
   },
+  cuisine: {
+    type: String,
+    required: true
+  },
   prepTime: {
     type: Number,
     required: true
@@ -80,7 +84,18 @@ const RecipeSchema = mongoose.Schema({
     type: Number,
     required: true,
     default: 0
-  }
+  },
+  tags: [
+    {
+      type: String
+    }
+  ],
+  similar: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Recipe"
+    }
+  ]
 });
 
 module.exports = mongoose.model("Recipe", RecipeSchema);

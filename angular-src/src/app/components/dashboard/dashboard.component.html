@@ -1,11 +1,14 @@
 <div class="dashboard">
-  <!-- <div class="welcomeMessage"><label>Welcome back Thomas.</label></div> -->
-  <div class="searchArea">
-    <i class="fas fa-chart-line"></i>
-    <div class="searchItem" (click)="searchQuery(query.query)" *ngFor="let query of dash?.searches; let i = index">"{{ query.query }}"</div>
+  <div class="categories">
+    <div class="categoryBox" *ngFor="let cuisine of cuisines">
+      <img src="../../../assets/images/cuisines/{{ cuisine }}.jpg" (click)="searchCuisine(cuisine)" [ngClass]="{ hidden: !cuisine }" />
+      <div class="catOverlay">
+        <p>{{ cuisine | textCapitalise }}</p>
+      </div>
+    </div>
   </div>
   <div class="wrapper">
-    <div class="front wide" *ngFor="let library of dash?.libraries">
+    <div class="front" *ngFor="let library of dash?.libraries">
       <div class="topArea">
         <div class="cookbookTitle">
           <h3>{{ library.title }}</h3>
@@ -34,7 +37,74 @@
         </div>
       </div>
     </div>
-    <div class="featured med">
+    <div class="recBox">
+      <div class="featuredRecipe">
+        <div class="searchArea">
+          <i class="fas fa-chart-line" title="Trending searches"></i>
+          <div class="searchItem" (click)="searchQuery(query.query)" *ngFor="let query of dash?.searches; let i = index">"{{ query.query }}"</div>
+        </div>
+        <div class="recipeScroll" #recipeScroll>
+          <div class="recipeCard" *ngFor="let recipe of promotedRecipes">
+            <div class="mainImg">
+              <img src="{{ generalService.getImageLink(recipe?.image) }}" [ngClass]="{ hidden: !recipe.image }" />
+            </div>
+            <div class="rInfo">
+              <div class="rTitle">{{ recipe.title }}</div>
+              <div class="rDetails">
+                {{ recipe.author }} ● <span>{{ recipe.mealType }}</span> ● {{ generalService.getTimeAgo(recipe.timestamp) }}
+              </div>
+              <div class="rInteraction">
+                <p>{{ recipe.score }} points</p>
+                <p><i class="far fa-clock" style="padding-right:3px"></i>{{ generalService.getTotalTime(recipe.cookTime, recipe.prepTime) }}</p>
+                <p>
+                  Servings: <span style="font-weight: bold">{{ recipe.servings }}</span>
+                </p>
+                <p>{{ generalService.getDifficulty(recipe.difficulty) }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="proMsg"><i class="fas fa-ad"></i> Promoted recipes</div>
+      </div>
+      <div class="topRec">
+        <div class="tableControls">
+          <div class="hotTopToggle">
+            <div class="httItem" (click)="topType = 'hot'; changeTableData()"><i class="fas fa-fire" [ngClass]="{ hotSelected: topType == 'hot' }"></i> hot</div>
+            <div class="httItem" (click)="topType = 'top'; changeTableData()"><i class="fas fa-arrow-up" [ngClass]="{ topSelected: topType == 'top' }"></i> top</div>
+          </div>
+          <div class="topLength" [ngClass]="{ shown: topType == 'top' }">
+            &nbsp;of<span *ngIf="topTime != 'all'">&nbsp;the</span>&nbsp;
+            <span>
+              <ul class="menu" (mouseleave)="openDrop = false">
+                <li class="menuItem">
+                  <span class="currentTime" (click)="openDrop = true">{{ topTime }}</span>
+                  <ul class="dropMenu" [ngClass]="{ showMenu: openDrop == true }">
+                    <li *ngFor="let time of topTimes">
+                      <span class="dropMenuItem" *ngIf="time != topTime" (click)="topTime = time; openDrop = false; changeTableData()">{{ time }}</span>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </span>
+          </div>
+        </div>
+        <table mat-table [dataSource]="topTable">
+          <ng-container matColumnDef="recipes">
+            <td mat-cell *matCellDef="let recipe; let i = index">
+              <div class="topRow">
+                <div class="counter">#{{ i + 1 }}</div>
+                <div class="topRowImage">
+                  <img [ngClass]="{ hidden: !recipe?.image }" src="{{ generalService.getImageLink(recipe?.image) }}" #rImg />
+                </div>
+                <div>{{ recipe.title | textLimit: 45 }}</div>
+              </div>
+            </td>
+          </ng-container>
+          <tr mat-row *matRowDef="let myRowData; columns: ['recipes']" (click)="viewRecipe(myRowData)" class="elementRow"></tr>
+        </table>
+      </div>
+    </div>
+    <!-- <div class="featured med">
       <h3>Feature recipes</h3>
       <div class="recipeCard">
         <div class="mainImg"></div>
@@ -62,8 +132,6 @@
           <div class="trendAmount">{{ recipe.views }}</div>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
-  <!-- <div class="discoverMore">Scroll to discover more</div> -->
-  <!-- <div class="moreRecipes"></div> -->
 </div>

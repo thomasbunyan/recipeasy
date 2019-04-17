@@ -30,6 +30,8 @@ import { RecipeDialogComponent } from "./components/recipe-dialog/recipe-dialog.
 import { IngredientDialogComponent } from "./components/create/ingredient-dialog/ingredient-dialog.component";
 
 import { TextLimitPipe } from "./pipes/text-limit.pipe";
+import { TextCapitalisePipe } from "./pipes/text-capitalise.pipe";
+import { FindImagePipe } from "./pipes/find-image.pipe";
 
 import { AuthGuard } from "./guards/auth.guard";
 import { AuthService } from "./services/auth.service";
@@ -37,6 +39,7 @@ import { UserValidateService } from "./services/user-validate.service";
 import { UserService } from "./services/user.service";
 import { RecipeValidateService } from "./services/recipe-validate.service";
 import { RecipeService } from "./services/recipe.service";
+import { RecipeCreateService } from "./services/recipe-create.service";
 import { CookbookService } from "./services/cookbook.service";
 import { SidenavService } from "./components/sidenav/sidenav.service";
 import { GeneralService } from "./services/general.service";
@@ -108,10 +111,12 @@ const appRoutes: Routes = [
     CookbooksComponent,
     CookbookComponent,
     HistoryComponent,
-    TextLimitPipe
+    TextLimitPipe,
+    TextCapitalisePipe,
+    FindImagePipe
   ],
   imports: [HttpModule, FormsModule, BrowserModule, RouterModule.forRoot(appRoutes), MatDialogModule, BrowserAnimationsModule, MaterialModule, ReactiveFormsModule, InfiniteScrollModule],
-  providers: [UserValidateService, RecipeValidateService, SidenavService, AuthService, UserService, RecipeService, CookbookService, GeneralService, RecipeDialogService, AuthGuard, Title],
+  providers: [UserValidateService, RecipeValidateService, SidenavService, AuthService, UserService, RecipeService, RecipeCreateService, CookbookService, GeneralService, RecipeDialogService, AuthGuard, Title],
   bootstrap: [AppComponent],
   entryComponents: [EditCookbookDialogComponent, RecipeDialogComponent, IngredientDialogComponent]
 })

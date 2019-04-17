@@ -1,23 +1,30 @@
 <div class="recipePage">
   <div class="recipePageArea">
-    <div class="breakLine"></div>
     <div class="recipeHeader">
-      <div class="recipeDetails">
-        <div class="recipeTitle">
-          <h1>{{ recipe?.title }}</h1>
-          <p>{{ recipe?.description }}</p>
-        </div>
-        <div class="recipeButtons">
-          <i class="fas fa-arrow-up" (click)="castVote('up')" [ngClass]="{ upvote: recipe?.vote == 'up' }"></i>
-          <i class="fas fa-arrow-down" (click)="castVote('down')" [ngClass]="{ downvote: recipe?.vote == 'down' }"></i>
-          <i class="fas fa-star" (click)="toggleSave()" [ngClass]="{ saved: recipe?.saved }"></i>
-          <i class="fas fa-ellipsis-v" (click)="openRecipeOptions()"></i>
-        </div>
+      <div class="recipeInfo">
+        <h1>{{ recipe?.title }}</h1>
+        <p>{{ recipe?.description }}</p>
+        <p class="recipeInfoSmall">Created by {{ recipe?.author }} {{ generalService.getTimeAgo(recipe?.timestamp) }}.</p>
       </div>
       <div class="mainImg">
-        <div class="image">
-          <img [ngClass]="{ hidden: !recipe?.image }" src="{{ generalService.getImageLink(recipe?.image) }}" #rImg />
+        <div class="imageOverlay">
+          <p><i class="fas fa-star" title="Score"></i> : {{ recipe?.score }}</p>
+          <p><i class="fas fa-eye" title="Views"></i> : {{ recipe?.views }}</p>
         </div>
+        <div class="image">
+          <img [ngClass]="{ hidden: !recipe?.image }" src="{{ generalService.getImageLink(recipe?.image) }}" />
+        </div>
+      </div>
+      <div class="recipeButtons">
+        <i class="fas fa-arrow-up" (click)="castVote('up')" [ngClass]="{ upvote: recipe?.vote == 'up' }"></i>
+        <i class="fas fa-arrow-down" (click)="castVote('down')" [ngClass]="{ downvote: recipe?.vote == 'down' }"></i>
+        <i class="fas fa-heart" (click)="toggleSave()" [ngClass]="{ saved: recipe?.saved }"></i>
+        <i class="fas fa-ellipsis-v" (click)="openRecipeOptions()"></i>
+      </div>
+      <div class="recipeDetails">
+        Prep-time: <span>{{ generalService.getTime(recipe?.prepTime) }}</span> • Cook-time: <span>{{ generalService.getTime(recipe?.cookTime) }}</span> • Difficulty:
+        <span>{{ generalService.getDifficulty(recipe?.difficulty) }}</span> • Servings:
+        <input type="number" min="1" max="99" [(ngModel)]="servings" />
       </div>
     </div>
     <div class="breakLine"></div>
@@ -29,37 +36,33 @@
     </div>
     <div class="breakLine"></div>
     <div class="recipeInformation">
-      <div class="recipeIngredients half">
-        <div class="ingredientsList">
-          <h2>Ingredients</h2>
-          <p *ngFor="let ingredient of recipe?.ingredients">{{ generalService.formatIngredient(ingredient) }}</p>
-        </div>
+      <div class="titles">
+        <h1 (click)="selected = 'ing'; scroll(ingPanel)" [ngClass]="{ deselected: selected != 'ing' }">Ingredients</h1>
+        <h1 (click)="selected = 'meth'; scroll(methPanel)" [ngClass]="{ deselected: selected != 'meth' }">Method</h1>
       </div>
-      <div class="recipeMethod half">
-        <div class="methodList">
-          <h2>Method</h2>
-          <p *ngFor="let step of recipe?.method; let i = index">{{ i + 1 }}. {{ step }}</p>
+      <div class="infoWrapper" #infoWrapper>
+        <div class="infoPanel">
+          <div #ingPanel>
+            <p *ngFor="let ingredient of recipe?.ingredients">{{ generalService.formatIngredient(ingredient, servings) }}</p>
+          </div>
+        </div>
+        <div class="infoPanel">
+          <div #methPanel>
+            <p *ngFor="let step of recipe?.method; let i = index">{{ i + 1 }}. {{ step }}</p>
+          </div>
         </div>
       </div>
     </div>
-    <!-- <div class="recipeCard">
-      <div class="recipeHeader">
-        <div class="recipeImage"></div>
-        <div class="heading">
-          <h1>{{ recipe.title }}</h1>
-          <small class="recipeAuthor">{{ recipe.author }}</small>
-          <p class="recipeDescription">{{ recipe.description }}</p>
+    <div class="breakLine"></div>
+    <h2 class="simTitle">Similar to this...</h2>
+    <div class="similarRecipes">
+      <div class="recommendedRecipe" *ngFor="let recommendedRecipe of recipe?.similar">
+        <div class="rImage" (click)="viewRecipe(recommendedRecipe._id)">
+          <img [ngClass]="{ hidden: !recommendedRecipe?.image }" src="{{ generalService.getImageLink(recommendedRecipe.image) }}" />
         </div>
+        <div class="rName" (click)="viewRecipe(recommendedRecipe._id)">{{ recommendedRecipe.title + "" | textLimit: 25 }}</div>
       </div>
-      <div class="recipeInfo">
-        <mat-tab-group md-stretch-tabs>
-          <mat-tab label="Ingredients"> Content 1 </mat-tab>
-          <mat-tab label="Method"> Content 2 </mat-tab>
-        </mat-tab-group>
-      </div>
-      <div class="recipeFooter">
-        <small>Posted: {{ recipe.date | date }}</small>
-      </div>
-    </div> -->
+    </div>
+    <div class="breakLine"></div>
   </div>
 </div>

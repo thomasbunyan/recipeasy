@@ -7,7 +7,6 @@ const storage = multer.diskStorage({
     cb(null, "uploads/");
   },
   filename: (req, file, cb) => {
-    console.log(file);
     cb(null, Date.now() + file.originalname);
   }
 });
@@ -130,7 +129,6 @@ router.get("/:id", checkAuth, (req, res, next) => {
 });
 
 router.post("/image", upload.single("cookbookImage"), (req, res, next) => {
-  console.log("hit");
   const path = req.file.path;
   res.status(200).json({
     success: true,

@@ -61,14 +61,15 @@ export class GeneralService {
   }
 
   getTotalTime(prep, cook): String {
-    if (isNaN(prep)) {
-      return cook;
+    try {
+      const a = prep + cook;
+    } catch (e) {
+      console.log(e);
+      return;
     }
-
     const timestamp = prep + cook;
-    let minutes = Math.floor(timestamp / 60);
-    const hours = minutes % 60;
-    minutes = minutes - hours * 60;
+    const minutes = Math.floor(timestamp / 60) % 60;
+    const hours = Math.floor(timestamp / 3600);
 
     let hoursFormatted, minsFormatted;
     if (hours < 10) {
@@ -125,20 +126,28 @@ export class GeneralService {
     return followers.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
   }
 
-  formatIngredient(ingredient) {
+  formatIngredient(ingredient, servings) {
+    if (!ingredient || !servings) {
+      return "loading...";
+    }
+    if (servings < 1) {
+      servings = 1;
+    } else if (servings > 99) {
+      servings = 99;
+    }
     let ing = ingredient.ingredient.ingredient;
     if (!ingredient.ingredient.ingredient) {
       ing = ingredient.name;
     }
     if (ingredient.unit === "1") {
-      return ingredient.amount + " " + ing;
+      return servings * ingredient.amount + " " + ing;
     } else {
-      return ingredient.amount + ingredient.unit + " " + ing;
+      return servings * ingredient.amount + ingredient.unit + " " + ing;
     }
   }
 
   getImageLink(image) {
-    if (!image) {
+    if (!image || image === null) {
       return;
     }
     return "http://localhost:3000/uploads/" + image.split("\\")[1];

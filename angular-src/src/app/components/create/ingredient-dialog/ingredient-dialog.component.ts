@@ -13,7 +13,27 @@ export class IngredientDialogComponent implements OnInit {
   unit: any;
   details: any;
 
-  units = [{ unit: "Kilogram", id: "kg" }, { unit: "Gram", id: "g" }, { unit: "Ounce", id: "oz" }, { unit: "Whole", id: "1" }];
+  // units = ["mcg", "mg", "g", "kg", "oz", "lb", "mt", "t", "ml", "l", "tsp", "Tbs", "fl-oz", "cup", "pnt", "qt", "gal"];
+  units = [
+    { unit: "Microgramme", id: "mcg" },
+    { unit: "Milligram", id: "mg" },
+    { unit: "Gram", id: "g" },
+    { unit: "Kilogram", id: "kg" },
+    { unit: "Ounce", id: "oz" },
+    { unit: "Pound", id: "lb" },
+    { unit: "Tonne", id: "mt" },
+    { unit: "Ton", id: "t" },
+    { unit: "Millilitre ", id: "ml" },
+    { unit: "Litre", id: "l" },
+    { unit: "Teaspoon", id: "tsp" },
+    { unit: "Tablespoon", id: "Tbs" },
+    { unit: "Fluid ounce", id: "fl-oz" },
+    { unit: "Cup", id: "cup" },
+    { unit: "Pint", id: "pnt" },
+    { unit: "Quart", id: "qt" },
+    { unit: "Gallon", id: "gal" },
+    { unit: "Whole", id: "1" }
+  ];
 
   errors: any = [];
 

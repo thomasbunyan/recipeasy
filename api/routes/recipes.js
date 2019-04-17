@@ -7,7 +7,6 @@ const storage = multer.diskStorage({
     cb(null, "uploads/");
   },
   filename: (req, file, cb) => {
-    console.log(file);
     cb(null, Date.now() + file.originalname);
   }
 });
@@ -66,31 +65,37 @@ router.post("/image", upload.single("recipeImage"), (req, res, next) => {
 // Get public recipes.
 router.get("/", checkAuth, (req, res, next) => {
   const search_query = req.query.search_query;
+  const cuisine = req.query.cuisine;
   const last_seen = req.query.last_seen;
   const regex = new RegExp(formatQuery(search_query), "gi");
   let query = { public: true };
   if (last_seen != undefined && search_query != undefined) {
-    query = { $and: [{ _id: { $lt: last_seen } }, { public: true }, { title: regex }] };
+    query = { $and: [{ public: true }, { title: regex }] };
   } else if (search_query != undefined) {
     query = { $and: [{ public: true }, { title: regex }] };
+  } else if (cuisine != undefined) {
+    query = { $and: [{ public: true }, { cuisine: cuisine }] };
   }
   Recipe.find(query)
-    .sort({ _id: -1 })
+    // .sort({ _id: -1 })
     .limit(6)
+    .skip(last_seen * 6)
     .exec()
     .then((recipes) => {
-      Dash.find({})
-        .exec()
-        .then((d) => {
-          let searches = d[0].searches;
-          if (searches == null) {
-            searches = [];
-          }
-          searches.push({ query: search_query, timestamp: new Date().getTime() });
-          Dash.findOneAndUpdate({}, { searches: searches })
-            .exec()
-            .then(() => {});
-        });
+      if (search_query != undefined) {
+        Dash.find({})
+          .exec()
+          .then((d) => {
+            let searches = d[0].searches;
+            if (searches == null) {
+              searches = [];
+            }
+            searches.push({ query: search_query, timestamp: new Date().getTime() });
+            Dash.findOneAndUpdate({}, { searches: searches })
+              .exec()
+              .then(() => {});
+          });
+      }
       res.status(200).json({
         success: true,
         recipes: recipes
@@ -104,6 +109,7 @@ router.get("/", checkAuth, (req, res, next) => {
     });
 });
 function formatQuery(text) {
+  if (text == undefined) return;
   return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 }
 
@@ -209,7 +215,7 @@ router.get("/:id", checkAuth, (req, res, next) => {
   const query = { $or: [{ $and: [{ _id: req.params.id }, { public: true }] }, { $and: [{ _id: req.params.id }, { author: user }] }] };
   const update = { $inc: { views: 1 } };
   Recipe.findOneAndUpdate(query, update)
-    .populate("ingredients.ingredient")
+    .populate("ingredients.ingredient similar")
     .exec()
     .then((recipe) => {
       // console.log(recipe);

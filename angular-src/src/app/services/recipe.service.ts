@@ -50,6 +50,21 @@ export class RecipeService {
       .map((res) => res.json());
   }
 
+  getRecipeCuisine(cuisine, last?: number) {
+    const headers = new Headers();
+    headers.append("Authorization", localStorage.getItem("id_token"));
+    headers.append("Content-Type", "application/json");
+    return this.http
+      .get("http://localhost:3000/recipes", {
+        headers: headers,
+        params: {
+          cuisine: cuisine,
+          last_seen: last
+        }
+      })
+      .map((res) => res.json());
+  }
+
   getRecipesBySelection(selection) {
     const headers = new Headers();
     headers.append("Authorization", localStorage.getItem("id_token"));
@@ -113,5 +128,16 @@ export class RecipeService {
       }
     }
     return nutritionArray;
+  }
+
+  getSimilarRecipes(id) {
+    const headers = new Headers();
+    headers.append("Authorization", localStorage.getItem("id_token"));
+    headers.append("Content-Type", "application/json");
+    return this.http
+      .get("http://localhost:3000/recipes/" + id + "/similar", {
+        headers: headers
+      })
+      .map((res) => res.json());
   }
 }

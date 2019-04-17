@@ -103,9 +103,6 @@ export class RecipeValidateService {
       method: recipeData.method,
       author: user
     };
-
-    // TODO: Nutritional info
-
     return recipe;
   }
 

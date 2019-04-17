@@ -1,4 +1,5 @@
 const schedule = {};
+const leven = require("leven");
 const Recipe = require("./models/recipe");
 const Dash = require("./models/dash");
 const Library = require("./models/library");
@@ -69,6 +70,7 @@ function addTop(d, callback) {
       .map((e) => {
         return e._id;
       });
+    // console.log(d.top);
     callback(d);
   });
 }
@@ -175,40 +177,104 @@ function calcSearches(d, callback) {
   callback(d);
 }
 
-// Add the ingredients.
-const fs = require("fs");
-const data = JSON.parse(fs.readFileSync("ingredients.json", "utf8"));
-const Ingredient = require("./models/ingredient");
-
-schedule.addIngredient = function() {
-  console.log("starting adding");
-  let i = 20000;
-  for (; i < data.length; i++) {
-    const ing = data[i];
-    const ingredient = new Ingredient({
-      ingredient: ing.ingredient,
-      nutrients: ing.nutrients,
-      servings: {
-        standard: {
-          amount: ing.servings[0].standard.amount,
-          uom: ing.servings[0].standard.uom
-        },
-        house: {
-          amount: ing.servings[0].house.amount,
-          uom: ing.servings[0].house.uom
-        }
-      }
-    });
-    ingredient
-      .save()
-      .then((e) => {
-        console.log("a");
-      })
-      .catch((err) => {
-        console.log("*******************Index:", i);
-        console.log(err);
+schedule.startSimilarityMatching = function() {
+  Recipe.find({})
+    .populate("ingredients.ingredient")
+    .exec()
+    .then((docs) => {
+      docs.forEach((recipe) => {
+        const compare = [...docs];
+        compare.forEach((recipeCompare) => {
+          if (recipe._id == recipeCompare._id) return;
+          recipe.tags.forEach((tag) => {
+            let score = 0;
+            recipeCompare.tags.forEach((tagCompare) => {
+              score = score + leven(tag.toUpperCase(), tagCompare.toUpperCase());
+            });
+            recipeCompare["score"] = score;
+            if (recipe.mealType != recipeCompare.mealType) {
+              recipeCompare.score = recipeCompare.score + 20;
+            }
+          });
+          compare.sort((a, b) => {
+            return a.score - b.score;
+          });
+          const res = compare.slice(0, 5);
+          Recipe.findByIdAndUpdate(recipe._id, { similar: res }).exec();
+        });
       });
-  }
+
+      // docs.forEach((recipe) => {
+      //   console.log(recipe.ingredients.length);
+      // });
+      // const recipe = docs[0];
+      // const ing = recipe.ingredients.map((e) => {
+      //   return e.ingredient.ingredient;
+      // });
+      // // console.log(ing);
+
+      // const ranking = [];
+      // docs.forEach((e) => {
+      //
+
+      //   const eIng = e.ingredients.map((e) => {
+      //     return e.ingredient.ingredient;
+      //   });
+      //   console.log(eIng);
+
+      //   let eIngSim = 0;
+      //   ing.forEach((ingName) => {
+      //     let score = 0;
+      //     eIng.forEach((i) => {
+      //       score = score + leven(i.toUpperCase(), ingName.toUpperCase());
+      //     });
+      //     eIngSim = eIngSim + score / eIng.length;
+      //   });
+
+      //   console.log(eIngSim);
+
+      //   ranking.push({ id: e._id, ingredients: e.ingredients, title: e.title });
+      // });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
+
+// Add the ingredients.
+// const fs = require("fs");
+// const data = JSON.parse(fs.readFileSync("ingredients.json", "utf8"));
+// const Ingredient = require("./models/ingredient");
+
+// schedule.addIngredient = function() {
+//   console.log("starting adding");
+//   let i = 20000;
+//   for (; i < data.length; i++) {
+//     const ing = data[i];
+//     const ingredient = new Ingredient({
+//       ingredient: ing.ingredient,
+//       nutrients: ing.nutrients,
+//       servings: {
+//         standard: {
+//           amount: ing.servings[0].standard.amount,
+//           uom: ing.servings[0].standard.uom
+//         },
+//         house: {
+//           amount: ing.servings[0].house.amount,
+//           uom: ing.servings[0].house.uom
+//         }
+//       }
+//     });
+//     ingredient
+//       .save()
+//       .then((e) => {
+//         console.log("a");
+//       })
+//       .catch((err) => {
+//         console.log("*******************Index:", i);
+//         console.log(err);
+//       });
+//   }
+// };
 
 module.exports = schedule;

@@ -7,6 +7,7 @@ import { UserService } from "../../services/user.service";
 import { MatTableDataSource, MatDialog } from "@angular/material";
 import { IngredientDialogComponent } from "./ingredient-dialog/ingredient-dialog.component";
 import { GeneralService } from "../../services/general.service";
+import * as convert from "convert-units";
 
 @Component({
   selector: "app-create",
@@ -36,7 +37,7 @@ export class CreateComponent implements OnInit {
   ingredients = [];
   ingredientsList = [];
   dropdownOpen = false;
-  units = ["kg", "g", "lbs", "ml", "oz", "floz"];
+  units = ["mcg", "mg", "g", "kg", "oz", "lb", "mt", "t", "ml", "l", "tsp", "Tbs", "fl-oz", "cup", "pnt", "qt", "gal"];
 
   method = [];
   recipeImage: File = null;
@@ -147,30 +148,6 @@ export class CreateComponent implements OnInit {
     return false;
   }
 
-  // addIngredient(ingField) {
-  //   const ingredient = {
-  //     food: this.food,
-  //     amount: this.amount,
-  //     unit: this.unit,
-  //     detail: this.detail
-  //   };
-  //   this.ingErrors = this.recipeValidateService.validateIngredient(ingredient);
-  //   const errs = this.ingErrors.filter((e) => {
-  //     return e.err;
-  //   });
-  //   if (errs.length === 0) {
-  //     this.ingredients.push(ingredient);
-  //     this.dataSource._updateChangeSubscription();
-  //     this.food = "";
-  //     this.amount = "";
-  //     this.unit = "";
-  //     ingField.focus();
-  //     if (this.ingredients.length > 0) {
-  //       this.canContinue = true;
-  //     }
-  //   }
-  // }
-
   addStep(step) {
     if (step === null || step === undefined) {
       return;
@@ -192,45 +169,6 @@ export class CreateComponent implements OnInit {
       this.canContinue = false;
     }
   }
-
-  // updateIngredient(ingredient, i, food, amount, unit) {
-  //   if (food.value !== undefined && food.value !== "") {
-  //     ingredient.food = food.value;
-  //   }
-  //   if (amount.value !== undefined && amount.value !== "") {
-  //     ingredient.amount = amount.value;
-  //   }
-  //   if (unit.value !== undefined && unit.value !== "") {
-  //     ingredient.unit = unit.value;
-  //   }
-  //   this.ingredients[i] = ingredient;
-  //   this.ingredientDetail = undefined;
-  // }
-  // addIngredientDetail(ingredient) {
-  //   let details, message;
-  //   if (this.ingredientDetail === undefined) {
-  //     this.ingredientDetail = "eg. Preferably fresh, can be frozen.";
-  //     message = "eg. Preferably fresh, can be frozen.";
-  //   } else {
-  //     if (ingredient !== undefined) {
-  //       message = ingredient.detail;
-  //     } else {
-  //       message = this.ingredientDetail;
-  //     }
-  //   }
-  //   details = prompt(
-  //     "Add some additional information about this ingredient:",
-  //     message
-  //   );
-  //   if (details === null) {
-  //   } else {
-  //     if (ingredient !== undefined) {
-  //       ingredient.detail = details;
-  //     } else {
-  //       this.ingredientDetail = details;
-  //     }
-  //   }
-  // }
 
   updateStep(step, index) {
     if (step === null || step === undefined) {
@@ -263,10 +201,21 @@ export class CreateComponent implements OnInit {
   }
 
   onRecipeSubmit() {
-    // TODO: Convert the amount and unit to gram.
-
     const ing = this.ingredients.map((e) => {
-      delete e.name;
+      if (e.unit === "1") {
+        // console.log(e);
+        e.amount = e.amount * e.i.servings.standard.amount;
+        e.unit = "g";
+      } else {
+        try {
+          e.amount = convert(e.amount)
+            .from(e.unit)
+            .to("g");
+          e.unit = "g";
+        } catch (e) {
+          console.log("Can't convert");
+        }
+      }
       return e;
     });
 
@@ -280,7 +229,7 @@ export class CreateComponent implements OnInit {
       cookTime: this.generalService.getSeconds(this.cookTime),
       difficulty: this.difficulty,
       servings: parseInt(this.servings, 10),
-      ingredients: this.ingredients,
+      ingredients: ing,
       method: this.method
     };
 
@@ -294,12 +243,12 @@ export class CreateComponent implements OnInit {
     }
 
     if (!anyError) {
+      recipeData["tags"] = this.addTags(recipeData);
       if (this.recipeImage) {
         const fd = new FormData();
         fd.append("recipeImage", this.recipeImage, this.recipeImage.name);
         this.recipeService.addRecipeImage(fd).subscribe((data) => {
           recipeData.image = data.path;
-          // console.log(recipeData.image);
           const username = JSON.parse(localStorage.getItem("user")).username;
           const recipe = this.recipeValidateService.generateRecipe(recipeData, username);
           this.recipeService.addRecipe(recipe).subscribe((data) => {
@@ -310,7 +259,6 @@ export class CreateComponent implements OnInit {
           });
         });
       } else {
-        // console.log(recipeData);
         const username = JSON.parse(localStorage.getItem("user")).username;
         const recipe = this.recipeValidateService.generateRecipe(recipeData, username);
         this.recipeService.addRecipe(recipe).subscribe((data) => {
@@ -321,6 +269,55 @@ export class CreateComponent implements OnInit {
       }
     }
     return;
+  }
+
+  addTags(recipe) {
+    const tags = [];
+
+    // User defined types.
+    tags.push(recipe.mealType);
+    // tags.push(recipe.cuisine);
+
+    // Time.
+    const time = recipe.cookTime + recipe.prepTime;
+    if (time < 900) {
+      tags.push("quick", "instant", "15 minutes", "15");
+    } else if (time < 1800) {
+      tags.push("quick", "short", "30 minutes", "30", "half hour");
+    } else if (time < 3600) {
+      tags.push("average", "60 minutes", "hour");
+    } else {
+      tags.push("long", "time consuming", "lengthy", "slow cooking", "slow cook");
+    }
+
+    // Difficulty.
+    switch (recipe.difficulty) {
+      case 0:
+        tags.push("easy", "simple", "beginner", "novice", "accessible", "straightforward");
+        break;
+      case 1:
+        tags.push("medium", "average", "experienced", "skill", "complicated", "resources");
+        break;
+      case 2:
+        tags.push("difficult", "ambitious", "challenging", "tough", "professional");
+        break;
+    }
+
+    const ings = recipe.ingredients.map((e) => {
+      const name = e.name;
+      // delete e.name;
+      delete e.i;
+      return { ing: name, amount: e.amount };
+    });
+    ings.sort((a, b) => {
+      return b.amount - a.amount;
+    });
+    for (let i = 0; i < 5 && i < ings.length; i++) {
+      const name = ings[i].ing;
+      tags.push(name);
+    }
+
+    return tags;
   }
 
   // Formatting for the time inputs.
@@ -440,6 +437,7 @@ export class CreateComponent implements OnInit {
   }
 
   addIngredient(ingredient) {
+    // console.log(ingredient);
     const ingredientDialog = this.dialog.open(IngredientDialogComponent, {
       data: {
         ingredient: ingredient
@@ -449,6 +447,7 @@ export class CreateComponent implements OnInit {
       if (data !== undefined) {
         data["ingredient"] = ingredient._id;
         data["name"] = ingredient.ingredient;
+        data["i"] = ingredient;
         this.dropdownOpen = false;
         this.food = undefined;
         this.ingredients.push(data);
@@ -482,6 +481,6 @@ export class CreateComponent implements OnInit {
       this.recipeValidateService.getIngredients(query).subscribe((data) => {
         this.ingredientsList = data.ingredients;
       });
-    }, 1000);
+    }, 200);
   }
 }

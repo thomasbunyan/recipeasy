@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ElementRef, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { RecipeService } from "../../services/recipe.service";
 import { RecipeValidateService } from "../../services/recipe-validate.service";
@@ -22,6 +22,13 @@ export class RecipeComponent implements OnInit {
   voteLock = false;
   saveLock = false;
 
+  servings = 0;
+
+  @ViewChild("infoWrapper") infoWrapper: ElementRef<any>;
+  @ViewChild("ingPanel") ingPanel: ElementRef<any>;
+  @ViewChild("methPanel") methPanel: ElementRef<any>;
+  selected = "ing";
+
   constructor(
     private route: ActivatedRoute,
     private recipeService: RecipeService,
@@ -34,30 +41,41 @@ export class RecipeComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.recipeId = this.route.snapshot.paramMap.get("id");
-    this.user = JSON.parse(localStorage.getItem("user"));
-    this.recipeService.getRecipe(this.recipeId).subscribe((data) => {
-      if (!data.success) {
-        this.router.navigate(["/recipes"]);
-      } else {
-        this.recipe = data.recipe;
-        this.recipe["nutrition"] = this.recipeService.getNutrition(this.recipe);
-        this.titleService.setTitle(this.recipe.title);
-        this.userService.getUserData().subscribe((data) => {
-          if (data.success) {
-            this.usersRecipes = data.recipes;
-            this.userService.addToHistory(this.recipeId, "recipes");
-            const indexVote = this.usersRecipes.voted.findIndex((y) => y.recipe._id === this.recipe._id);
-            const indexSave = this.usersRecipes.saved.findIndex((y) => y.recipe._id === this.recipe._id);
-            if (indexVote !== -1) {
-              this.recipe.vote = this.usersRecipes.voted[indexVote].vote;
+    this.route.params.subscribe((val) => {
+      this.recipeId = this.route.snapshot.paramMap.get("id");
+      this.user = JSON.parse(localStorage.getItem("user"));
+      this.recipeService.getRecipe(this.recipeId).subscribe((data) => {
+        if (!data.success) {
+          this.router.navigate(["/recipes"]);
+        } else {
+          this.recipe = data.recipe;
+          this.formatServings();
+          this.recipe["nutrition"] = this.recipeService.getNutrition(this.recipe);
+          this.titleService.setTitle(this.recipe.title);
+          this.userService.getUserData().subscribe((data) => {
+            if (data.success) {
+              this.usersRecipes = data.recipes;
+              this.userService.addToHistory(this.recipeId, "recipes");
+              const indexVote = this.usersRecipes.voted.findIndex((y) => y.recipe._id === this.recipe._id);
+              const indexSave = this.usersRecipes.saved.findIndex((y) => y.recipe._id === this.recipe._id);
+              if (indexVote !== -1) {
+                this.recipe.vote = this.usersRecipes.voted[indexVote].vote;
+              }
+              if (indexSave !== -1) {
+                this.recipe.saved = true;
+              }
+              this.scroll();
             }
-            if (indexSave !== -1) {
-              this.recipe.saved = true;
-            }
-          }
-        });
-      }
+          });
+        }
+      });
+    });
+  }
+
+  formatServings() {
+    this.servings = this.recipe.servings;
+    this.recipe.ingredients.forEach((ingredient) => {
+      ingredient.amount = ingredient.amount / this.servings;
     });
   }
 
@@ -91,6 +109,20 @@ export class RecipeComponent implements OnInit {
         }
         this.saveLock = false;
       });
+    }
+  }
+
+  viewRecipe(id) {
+    this.router.navigate(["/recipe/" + id]);
+  }
+
+  scroll() {
+    if (this.selected === "ing") {
+      this.infoWrapper.nativeElement.scrollLeft = 0;
+      this.infoWrapper.nativeElement.style.height = this.ingPanel.nativeElement.offsetHeight + "px";
+    } else {
+      this.infoWrapper.nativeElement.scrollLeft = this.infoWrapper.nativeElement.scrollWidth;
+      this.infoWrapper.nativeElement.style.height = this.methPanel.nativeElement.offsetHeight + "px";
     }
   }
 }
