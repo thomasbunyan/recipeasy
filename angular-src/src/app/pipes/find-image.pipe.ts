@@ -7,9 +7,9 @@ export class FindImagePipe implements PipeTransform {
       return;
     }
     if (type === "recipe") {
-      return "http://localhost:3000/uploads/recipes/" + value.split("\\")[1];
+      return "/uploads/recipes/" + value.split("\\")[1];
     } else if (type === "cookbook") {
-      return "http://localhost:3000/uploads/cookbooks/" + value.split("\\")[1];
+      return "/uploads/cookbooks/" + value.split("\\")[1];
     }
   }
 }

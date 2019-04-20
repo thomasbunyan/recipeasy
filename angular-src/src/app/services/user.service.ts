@@ -15,7 +15,7 @@ export class UserService {
     headers.append("Authorization", localStorage.getItem("id_token"));
     headers.append("Content-Type", "application/json");
     return this.http
-      .get("http://localhost:3000/users/" + user, {
+      .get("/users/" + user, {
         headers: headers
       })
       .map((res) => res.json());
@@ -26,7 +26,7 @@ export class UserService {
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
     return this.http
-      .get("http://localhost:3000/users/unique/" + query, {
+      .get("/users/unique/" + query, {
         headers: headers
       })
       .map((res) => res.json());
@@ -59,7 +59,7 @@ export class UserService {
     headers.append("Authorization", localStorage.getItem("id_token"));
     headers.append("Content-Type", "application/json");
     return this.http
-      .patch("http://localhost:3000/users/" + user, update, {
+      .patch("/users/" + user, update, {
         headers: headers
       })
       .map((res) => res.json());
@@ -205,7 +205,7 @@ export class UserService {
     headers.append("Content-Type", "application/json");
     // Remove populated fields.
     return this.http
-      .patch("http://localhost:3000/users/" + user.id, data, {
+      .patch("/users/" + user.id, data, {
         headers: headers
       })
       .map((res) => res.json());

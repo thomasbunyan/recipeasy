@@ -22,7 +22,7 @@ export class CookbookService {
     headers.append("Authorization", localStorage.getItem("id_token"));
     headers.append("Content-Type", "application/json");
     return this.http
-      .post("http://localhost:3000/cookbooks", cookbook, {
+      .post("/cookbooks", cookbook, {
         headers: headers
       })
       .map((res) => res.json());
@@ -47,7 +47,7 @@ export class CookbookService {
     headers.append("Authorization", localStorage.getItem("id_token"));
     headers.append("Content-Type", "application/json");
     return this.http
-      .patch("http://localhost:3000/cookbooks/" + cookbookID, update, {
+      .patch("/cookbooks/" + cookbookID, update, {
         headers: headers
       })
       .map((res) => res.json());
@@ -57,7 +57,7 @@ export class CookbookService {
     const headers = new Headers();
     headers.append("Authorization", localStorage.getItem("id_token"));
     return this.http
-      .post("http://localhost:3000/cookbooks/image", cookbookImage, {
+      .post("/cookbooks/image", cookbookImage, {
         headers: headers
       })
       .map((res) => res.json());
@@ -68,7 +68,7 @@ export class CookbookService {
     headers.append("Authorization", localStorage.getItem("id_token"));
     headers.append("Content-Type", "application/json");
     return this.http
-      .get("http://localhost:3000/cookbooks/", {
+      .get("/cookbooks/", {
         headers: headers
       })
       .map((res) => res.json());
@@ -79,7 +79,7 @@ export class CookbookService {
     headers.append("Authorization", localStorage.getItem("id_token"));
     headers.append("Content-Type", "application/json");
     return this.http
-      .get("http://localhost:3000/cookbooks", {
+      .get("/cookbooks", {
         headers: headers,
         params: {
           search_query: query
@@ -93,7 +93,7 @@ export class CookbookService {
     headers.append("Authorization", localStorage.getItem("id_token"));
     headers.append("Content-Type", "application/json");
     return this.http
-      .get("http://localhost:3000/cookbooks/" + cookbookId, {
+      .get("/cookbooks/" + cookbookId, {
         headers: headers
       })
       .map((res) => res.json());
@@ -104,7 +104,7 @@ export class CookbookService {
     headers.append("Authorization", localStorage.getItem("id_token"));
     headers.append("Content-Type", "application/json");
     return this.http
-      .get("http://localhost:3000/cookbooks/selection", {
+      .get("/cookbooks/selection", {
         headers: headers,
         params: {
           selection: selection
@@ -147,7 +147,7 @@ export class CookbookService {
     headers.append("Authorization", localStorage.getItem("id_token"));
     headers.append("Content-Type", "application/json");
     return this.http
-      .patch("http://localhost:3000/cookbooks/" + cookbookID, update, {
+      .patch("/cookbooks/" + cookbookID, update, {
         headers: headers
       })
       .map((res) => res.json());

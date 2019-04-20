@@ -66,30 +66,30 @@ router.post("/", (req, res) => {
                           message: "User added"
                         });
                         // TODO: Re-add this.
-                        const url = "http://localhost:4200/verify?token=" + emailToken;
+                        const url = "/verify?token=" + emailToken;
                         console.log(url);
-                        // transporter.sendMail(
-                        //   {
-                        //     from: "Recipeasy <" + process.env.EMAIL_USER + ">",
-                        //     to: doc.email,
-                        //     subject: "Confirm email",
-                        //     html: "Click to confirm: <a href='" + url + "'>" + url + "</a>"
-                        //   },
-                        //   (error, info) => {
-                        //     if (error) {
-                        //       // TODO: Remove the user from the DB.
-                        //       res.status(500).json({
-                        //         success: false,
-                        //         error: error
-                        //       });
-                        //     } else {
-                        //       res.status(201).json({
-                        //         success: true,
-                        //         message: "User added"
-                        //       });
-                        //     }
-                        //   }
-                        // );
+                        transporter.sendMail(
+                          {
+                            from: "Recipeasy <" + process.env.EMAIL_USER + ">",
+                            to: doc.email,
+                            subject: "Confirm email",
+                            html: "Click to confirm: <a href='" + url + "'>" + url + "</a>"
+                          },
+                          (error, info) => {
+                            if (error) {
+                              // TODO: Remove the user from the DB.
+                              res.status(500).json({
+                                success: false,
+                                error: error
+                              });
+                            } else {
+                              res.status(201).json({
+                                success: true,
+                                message: "User added"
+                              });
+                            }
+                          }
+                        );
                       }
                     }
                   );

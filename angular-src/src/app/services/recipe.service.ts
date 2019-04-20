@@ -11,7 +11,7 @@ export class RecipeService {
     headers.append("Authorization", localStorage.getItem("id_token"));
     headers.append("Content-Type", "application/json");
     return this.http
-      .post("http://localhost:3000/recipes/", recipe, {
+      .post("/recipes/", recipe, {
         headers: headers
       })
       .map((res) => res.json());
@@ -22,7 +22,7 @@ export class RecipeService {
     headers.append("Authorization", localStorage.getItem("id_token"));
     // headers.append("Content-Type", "multipart/form-data");
     return this.http
-      .post("http://localhost:3000/recipes/image", recipeImage, {
+      .post("/recipes/image", recipeImage, {
         headers: headers
       })
       .map((res) => res.json());
@@ -32,7 +32,7 @@ export class RecipeService {
     const headers = new Headers();
     headers.append("Authorization", localStorage.getItem("id_token"));
     headers.append("Content-Type", "application/json");
-    return this.http.get("http://localhost:3000/recipes", { headers: headers }).map((res) => res.json());
+    return this.http.get("/recipes", { headers: headers }).map((res) => res.json());
   }
 
   getRecipeSearch(query, last?: number) {
@@ -40,7 +40,7 @@ export class RecipeService {
     headers.append("Authorization", localStorage.getItem("id_token"));
     headers.append("Content-Type", "application/json");
     return this.http
-      .get("http://localhost:3000/recipes", {
+      .get("/recipes", {
         headers: headers,
         params: {
           search_query: query,
@@ -55,7 +55,7 @@ export class RecipeService {
     headers.append("Authorization", localStorage.getItem("id_token"));
     headers.append("Content-Type", "application/json");
     return this.http
-      .get("http://localhost:3000/recipes", {
+      .get("/recipes", {
         headers: headers,
         params: {
           cuisine: cuisine,
@@ -69,7 +69,7 @@ export class RecipeService {
     const headers = new Headers();
     headers.append("Authorization", localStorage.getItem("id_token"));
     headers.append("Content-Type", "application/json");
-    return this.http.get("http://localhost:3000/recipes/recommended", { headers: headers }).map((res) => res.json());
+    return this.http.get("/recipes/recommended", { headers: headers }).map((res) => res.json());
   }
 
   getRecipesBySelection(selection) {
@@ -77,7 +77,7 @@ export class RecipeService {
     headers.append("Authorization", localStorage.getItem("id_token"));
     headers.append("Content-Type", "application/json");
     return this.http
-      .get("http://localhost:3000/recipes/selection", {
+      .get("/recipes/selection", {
         headers: headers,
         params: {
           selection: selection
@@ -91,7 +91,7 @@ export class RecipeService {
     headers.append("Authorization", localStorage.getItem("id_token"));
     headers.append("Content-Type", "application/json");
     return this.http
-      .get("http://localhost:3000/recipes/" + id, {
+      .get("/recipes/" + id, {
         headers: headers
       })
       .map((res) => res.json());
@@ -103,7 +103,7 @@ export class RecipeService {
     headers.append("Content-Type", "application/json");
     return this.http
       .patch(
-        "http://localhost:3000/recipes/" + id + "/" + vote,
+        "/recipes/" + id + "/" + vote,
         {},
         {
           headers: headers
@@ -142,7 +142,7 @@ export class RecipeService {
     headers.append("Authorization", localStorage.getItem("id_token"));
     headers.append("Content-Type", "application/json");
     return this.http
-      .get("http://localhost:3000/recipes/" + id + "/similar", {
+      .get("/recipes/" + id + "/similar", {
         headers: headers
       })
       .map((res) => res.json());

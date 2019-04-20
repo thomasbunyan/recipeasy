@@ -12,7 +12,7 @@ export class GeneralService {
     headers.append("Authorization", localStorage.getItem("id_token"));
     headers.append("Content-Type", "application/json");
     return this.http
-      .get("http://localhost:3000/libraries/dash", {
+      .get("/libraries/dash", {
         headers: headers
       })
       .map((res) => res.json());
@@ -162,6 +162,6 @@ export class GeneralService {
     if (image.includes("http")) {
       return image;
     }
-    return "http://localhost:3000/uploads/" + image.split("\\")[1];
+    return "/uploads/" + image.split("\\")[1];
   }
 }

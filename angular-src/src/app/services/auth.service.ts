@@ -13,21 +13,21 @@ export class AuthService {
   registerUser(user) {
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
-    return this.http.post("http://localhost:3000/users/", user, { headers: headers }).map((res) => res.json());
+    return this.http.post("/users/", user, { headers: headers }).map((res) => res.json());
   }
 
   // Verify the user to activate the account
   verifyUser(token) {
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
-    return this.http.patch("http://localhost:3000/users/verify/", { token }, { headers: headers }).map((res) => res.json());
+    return this.http.patch("/users/verify/", { token }, { headers: headers }).map((res) => res.json());
   }
 
   // Resend the email verification.
   resendVerification(email) {
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
-    return this.http.patch("http://localhost:3000/users/verify/resend", { email }, { headers: headers }).map((res) => res.json());
+    return this.http.patch("/users/verify/resend", { email }, { headers: headers }).map((res) => res.json());
   }
 
   // Authenticate the login for the user.
@@ -35,7 +35,7 @@ export class AuthService {
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
     return this.http
-      .post("http://localhost:3000/users/authenticate", user, {
+      .post("/users/authenticate", user, {
         headers: headers
       })
       .map((res) => res.json());
@@ -49,7 +49,7 @@ export class AuthService {
     headers.append("Authorization", this.authToken);
     headers.append("Content-Type", "application/json");
     return this.http
-      .get("http://localhost:3000/users/" + user + "/profile", {
+      .get("/users/" + user + "/profile", {
         headers: headers,
         params: {
           item: "profile"
