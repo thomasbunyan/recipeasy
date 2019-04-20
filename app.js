@@ -9,12 +9,12 @@ const scheduleFunctions = require("./api/schedule");
 require("dotenv").config();
 
 // Connect to database
-mongoose.connect(process.env.MLAB_DB, {
+mongoose.connect(process.env.MONGO_URI, {
   useCreateIndex: true,
   useNewUrlParser: true
 });
 mongoose.connection.on("connected", () => {
-  console.log("Connected to database: " + process.env.MLAB_DB);
+  console.log("Connected to database: " + process.env.MONGO_URI);
 });
 mongoose.connection.on("error", (err) => {
   console.log("Database error: " + err);
