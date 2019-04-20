@@ -32,6 +32,16 @@
 }
 
 /*** Logo area ***/
+@media screen and (max-width: 1000px) {
+  .leftNav {
+    display: none !important;
+  }
+}
+@media screen and (max-width: 600px) {
+  .searchBar input:focus {
+    width: 200px !important;
+  }
+}
 .leftNav {
   display: flex;
   /* background-color: #4286f5; */

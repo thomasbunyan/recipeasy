@@ -51,6 +51,9 @@
   background-color: #f1f1f5;
   position: relative;
 }
+.categoryBox:nth-child(1) {
+  margin-left: 0;
+}
 .categoryBox img {
   height: 100%;
   width: 100%;
@@ -413,6 +416,7 @@ td {
 .topRowImage {
   height: 50px;
   width: 50px;
+  min-width: 50px;
   margin-right: 10px;
   border-radius: 8px;
   background-color: #f1f1f5;
