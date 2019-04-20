@@ -66,7 +66,7 @@ router.post("/", (req, res) => {
                           message: "User added"
                         });
                         // TODO: Re-add this.
-                        const url = "/verify?token=" + emailToken;
+                        const url = "http://www.recipeazy.uk/verify?token=" + emailToken;
                         console.log(url);
                         transporter.sendMail(
                           {

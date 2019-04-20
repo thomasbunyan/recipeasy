@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const schedule = require("node-schedule");
+const path = require("path");
 const scheduleFunctions = require("./api/schedule");
 require("dotenv").config();
 
@@ -46,6 +47,7 @@ app.use(bodyParser.json());
 
 // Uploaded images.
 app.use("/uploads", express.static("uploads"));
+app.use(express.static(path.join(__dirname, "public")));
 
 // Routes
 app.use("/users", users);
@@ -56,19 +58,23 @@ app.use("/libraries", libraries);
 app.use("/dashes", dashes);
 
 // Invalid route.
-app.use((req, res, next) => {
-  const error = new Error("Not found");
-  error.status = 404;
-  next(error);
+// Invalid route.
+app.get("/", (req, res) => {
+  res.send("invaild endpoint");
 });
-app.use((error, req, res, next) => {
-  res.status(error.status || 500);
-  res.json({
-    error: {
-      message: error.message
-    }
-  });
-});
+// app.use((req, res, next) => {
+//   const error = new Error("Not found");
+//   error.status = 404;
+//   next(error);
+// });
+// app.use((error, req, res, next) => {
+//   res.status(error.status || 500);
+//   res.json({
+//     error: {
+//       message: error.message
+//     }
+//   });
+// });
 
 // scheduleFunctions.startAnalytics();
 // scheduleFunctions.startSimilarityMatching();
@@ -77,6 +83,10 @@ schedule.scheduleJob("*/25 * * * *", () => {
 });
 schedule.scheduleJob("*/5 * * * *", () => {
   // scheduleFunctions.startSimilarityMatching();
+});
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "public/index.html"));
 });
 
 // Start server
