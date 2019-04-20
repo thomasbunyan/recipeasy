@@ -19,6 +19,7 @@ import { DashboardComponent } from "./components/dashboard/dashboard.component";
 import { ProfileComponent } from "./components/profile/profile.component";
 import { ResultsComponent } from "./components/results/results.component";
 import { HistoryComponent } from "./components/history/history.component";
+import { RecommendedComponent } from "./components/recommended/recommended.component";
 import { CreateComponent } from "./components/create/create.component";
 import { RecipeComponent } from "./components/recipe/recipe.component";
 import { CookbooksComponent } from "./components/saved-cookbooks/cookbooks.component";
@@ -71,6 +72,7 @@ const appRoutes: Routes = [
     canActivate: [AuthGuard]
   },
   { path: "history", component: HistoryComponent, canActivate: [AuthGuard] },
+  { path: "recommended", component: RecommendedComponent, canActivate: [AuthGuard] },
   { path: "profile", component: ProfileComponent, canActivate: [AuthGuard] },
   {
     path: "create",
@@ -111,6 +113,7 @@ const appRoutes: Routes = [
     CookbooksComponent,
     CookbookComponent,
     HistoryComponent,
+    RecommendedComponent,
     TextLimitPipe,
     TextCapitalisePipe,
     FindImagePipe

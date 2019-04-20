@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
 import { CookbookService } from "../../../services/cookbook.service";
 import { GeneralService } from "../../../services/general.service";
+import { RecipeValidateService } from "../../../services/recipe-validate.service";
 
 @Component({
   selector: "app-edit-cookbook-dialog",
@@ -14,7 +15,13 @@ export class EditCookbookDialogComponent implements OnInit {
   public = true;
   cookbookImage: any;
 
-  constructor(private dialog: MatDialogRef<EditCookbookDialogComponent>, @Inject(MAT_DIALOG_DATA) private data: any, private cookbookService: CookbookService, private generalService: GeneralService) {}
+  constructor(
+    private dialog: MatDialogRef<EditCookbookDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) private data: any,
+    private cookbookService: CookbookService,
+    private generalService: GeneralService,
+    private recipeService: RecipeValidateService
+  ) {}
 
   ngOnInit() {
     this.title = this.data.title;
@@ -32,6 +39,14 @@ export class EditCookbookDialogComponent implements OnInit {
   uploadImage(e, image) {
     if (e.target.files && e.target.files[0]) {
       this.cookbookImage = <File>e.target.files[0];
+      if (this.cookbookImage.type.split("/")[0] !== "image") {
+        if (this.data.image) {
+          this.cookbookImage = this.generalService.getImageLink(this.data.image);
+        } else {
+          this.cookbookImage = undefined;
+        }
+        return;
+      }
       const reader = new FileReader();
       reader.onload = (e: any) => {
         image.src = e.target.result;
@@ -42,7 +57,7 @@ export class EditCookbookDialogComponent implements OnInit {
 
   update() {
     const data = [];
-    if (this.cookbookImage.type === "image/jpeg") {
+    if (this.cookbookImage) {
       this.updateImage(data);
     } else {
       this.addData(data);
@@ -50,10 +65,10 @@ export class EditCookbookDialogComponent implements OnInit {
   }
 
   addData(data) {
-    if (this.title !== this.data.title) {
+    if (this.title !== this.data.title && !this.recipeService.validateTitle(this.title).err) {
       data.push({ name: "title", value: this.title });
     }
-    if (this.description !== this.data.description) {
+    if (this.description !== this.data.description && !this.recipeService.validateTitle(this.description).err) {
       data.push({ name: "description", value: this.description });
     }
     if (this.public !== this.data.public) {

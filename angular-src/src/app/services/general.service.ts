@@ -136,19 +136,31 @@ export class GeneralService {
       servings = 99;
     }
     let ing = ingredient.ingredient.ingredient;
-    if (!ingredient.ingredient.ingredient) {
+    if (!ing) {
       ing = ingredient.name;
     }
-    if (ingredient.unit === "1") {
-      return servings * ingredient.amount + " " + ing;
+    if (!ing) {
+      ing = ingredient.ingredient;
+    }
+    let notes = ingredient.notes;
+    if (!notes) {
+      notes = "";
     } else {
-      return servings * ingredient.amount + ingredient.unit + " " + ing;
+      notes = " (" + notes + ")";
+    }
+    if (ingredient.unit === "1") {
+      return servings * ingredient.amount + " " + ing + notes;
+    } else {
+      return servings * ingredient.amount + ingredient.unit + " " + ing + notes;
     }
   }
 
   getImageLink(image) {
     if (!image || image === null) {
       return;
+    }
+    if (image.includes("http")) {
+      return image;
     }
     return "http://localhost:3000/uploads/" + image.split("\\")[1];
   }

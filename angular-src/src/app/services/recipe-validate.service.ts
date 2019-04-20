@@ -53,6 +53,55 @@ export class RecipeValidateService {
     return errors;
   }
 
+  validateTitle(title) {
+    const testRe = /^[A-Za-z0-9,\.\-/()'# ]+$/;
+    if (!title || !testRe.test(title) || title === "" || title.length < 6 || title.split(" ").length < 1) {
+      return { err: true, msg: "Title not valid. Must be greater than 6 and contain only valid characters." };
+    } else {
+      return { err: false };
+    }
+  }
+  validateDescription(description) {
+    const testRe = /^[A-Za-z0-9,\.\-/()'# ]+$/;
+    if (!description || !testRe.test(description) || description === "" || description.length < 6 || description.split(" ").length < 1) {
+      return { err: true, msg: "Description not valid." };
+    } else {
+      return { err: false };
+    }
+  }
+  validateTime(time) {
+    const errs = { err: false };
+    const timeRe = /^[0-9]{2}:[0-5][0-9]$/;
+    if (!timeRe.test(time.prepTime) && !timeRe.test(time.cookTime)) {
+      errs["err"] = true;
+      errs["msg"] = "Preparation and cooking time not valid.";
+    } else {
+      if (!timeRe.test(time.prepTime)) {
+        errs["err"] = true;
+        errs["msg"] = "Preparation time not valid.";
+      }
+      if (!timeRe.test(time.cookTime)) {
+        errs["err"] = true;
+        errs["msg"] = "Cooking time not valid.";
+      }
+    }
+    return errs;
+  }
+  validateDifficulty(difficulty) {
+    if (difficulty !== 0 && !difficulty) {
+      return { err: true, msg: "Select a difficulty." };
+    } else {
+      return { err: false };
+    }
+  }
+  validateServings(servings) {
+    if (!servings || servings < 1) {
+      return { err: true, msg: "Number of servings not valid." };
+    } else {
+      return { err: false };
+    }
+  }
+
   validateRecipe(recipe) {
     const errors = new Array(9).fill({ err: false });
     const testRe = /^[A-Za-z0-9,\.\-/()'# ]+$/;

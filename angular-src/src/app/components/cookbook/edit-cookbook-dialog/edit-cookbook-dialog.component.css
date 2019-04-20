@@ -225,6 +225,10 @@
   background-color: #dadada;
 }
 
+.hidden {
+  visibility: hidden;
+}
+
 .noselect {
   -webkit-touch-callout: none;
   -webkit-user-select: none;

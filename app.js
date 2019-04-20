@@ -70,14 +70,14 @@ app.use((error, req, res, next) => {
   });
 });
 
-scheduleFunctions.startSimilarityMatching();
-schedule.scheduleJob("*/15 * * * * *", () => {
-  scheduleFunctions.startAnalytics();
+// scheduleFunctions.startAnalytics();
+// scheduleFunctions.startSimilarityMatching();
+schedule.scheduleJob("*/25 * * * *", () => {
+  // scheduleFunctions.startAnalytics();
 });
-// schedule.scheduleJob("* 0 * * * *", () => {
-//   scheduleFunctions.startSimilarityMatching();
-// });
-// scheduleFunctions.addIngredient();
+schedule.scheduleJob("*/5 * * * *", () => {
+  // scheduleFunctions.startSimilarityMatching();
+});
 
 // Start server
 app.listen(port, () => {

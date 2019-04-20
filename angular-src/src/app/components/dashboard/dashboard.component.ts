@@ -48,7 +48,7 @@ export class DashboardComponent implements OnInit {
       this.dash.top.day = this.dash.top.day.splice(0, 5);
       this.userService.getUserData().subscribe((data) => {
         this.userCookbooks = data.cookbooks;
-        this.topTable = this.dash.top.all;
+        this.topTable = this.dash.trending;
         this.scrollRecipes();
         this.dash.libraries.forEach((e) => {
           e.cookbooks.forEach((x) => {
@@ -121,7 +121,7 @@ export class DashboardComponent implements OnInit {
           break;
       }
     } else {
-      this.topTable = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+      this.topTable = this.dash.trending;
     }
   }
 }

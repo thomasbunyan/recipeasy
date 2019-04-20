@@ -10,6 +10,7 @@
         <div class="subList" [ngClass]="{ hideDrop: histDrop != true }" [ngStyle]="{ 'max-height.px': 30 * history?.length }">
           <div class="subItem" *ngFor="let hist of history" (click)="viewRecipe(hist?.recipe._id)">{{ hist.recipe?.title | textLimit: 30 }}</div>
         </div>
+        <div class="navItem" [routerLinkActive]="['activeLink']" [routerLink]="['/recommended']"><i class="fas fa-user"></i><span>Recommended</span></div>
         <div class="navItem" [routerLinkActive]="['activeLink']" [routerLink]="['/recipes']">
           <i class="fas fa-utensils"></i><span>Recipes</span><i class="fas fa-caret-down" (click)="$event.stopPropagation(); recDrop = !recDrop"></i>
         </div>

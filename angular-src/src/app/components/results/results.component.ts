@@ -38,7 +38,7 @@ export class ResultsComponent implements OnInit {
   loading = true;
   lastSeen = undefined;
   endOfPage = false;
-  page = 0;
+  page = 1;
 
   voteLock = false;
   saveLock = false;
@@ -61,6 +61,7 @@ export class ResultsComponent implements OnInit {
     this.activatedRoute.queryParams.subscribe((params) => {
       this.searchQuery = params["search_query"];
       this.cuisine = params["cuisine"];
+      this.page = 1;
       if (!this.searchQuery && !this.cuisine) {
         this.router.navigate(["/"]);
       } else if (this.cuisine) {

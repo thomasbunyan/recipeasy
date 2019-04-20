@@ -150,14 +150,18 @@ mat-icon {
   display: flex;
   flex-direction: row;
   padding: 8px;
+  overflow: hidden;
 }
 .nut {
-  margin: auto;
+  margin: auto 5px;
   font-size: 13px;
   border-radius: 8px;
   color: rgb(68, 68, 68);
   text-align: center;
   padding: 2px;
+  white-space: nowrap;
+  display: flex;
+  flex-direction: row;
 }
 
 /*** Lower recipe information ***/

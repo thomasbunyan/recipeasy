@@ -65,15 +65,24 @@ export class RecipeDialogComponent implements OnInit {
     this.dialog.close();
   }
 
-  viewAuthor() {
-    console.log("author");
-  }
-
   getLink() {
-    console.log("link");
+    /*** Credit: https://hackernoon.com/copying-text-to-clipboard-with-javascript-df4d4988697f ***/
+    const selectionBox = document.createElement("textarea");
+    selectionBox.style.position = "fixed";
+    selectionBox.style.left = "0";
+    selectionBox.style.top = "0";
+    selectionBox.style.opacity = "0";
+    selectionBox.value = "http://recipeazy.uk/recipe/" + this.recipe._id;
+    document.body.appendChild(selectionBox);
+    selectionBox.focus();
+    selectionBox.select();
+    document.execCommand("copy");
+    document.body.removeChild(selectionBox);
+    this.dialog.close();
   }
 
   report() {
-    console.log("report");
+    console.log("Report sent.");
+    this.dialog.close();
   }
 }

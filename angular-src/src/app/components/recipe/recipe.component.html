@@ -30,7 +30,7 @@
     <div class="breakLine"></div>
     <div class="nutrition">
       <div class="nut" *ngFor="let nut of recipe?.nutrition">
-        <div class="nutName">{{ nut.nutrient }}</div>
+        <div class="nutName">{{ nut.nutrient }}&nbsp;</div>
         <div class="nutVal">{{ nut.val }} {{ nut.uom }}</div>
       </div>
     </div>
@@ -53,9 +53,9 @@
         </div>
       </div>
     </div>
-    <div class="breakLine"></div>
-    <h2 class="simTitle">Similar to this...</h2>
-    <div class="similarRecipes">
+    <div class="breakLine" *ngIf="recipe?.similar.length != 0"></div>
+    <h2 class="simTitle" *ngIf="recipe?.similar.length != 0">Similar to this...</h2>
+    <div class="similarRecipes" *ngIf="recipe?.similar.length != 0">
       <div class="recommendedRecipe" *ngFor="let recommendedRecipe of recipe?.similar">
         <div class="rImage" (click)="viewRecipe(recommendedRecipe._id)">
           <img [ngClass]="{ hidden: !recommendedRecipe?.image }" src="{{ generalService.getImageLink(recommendedRecipe.image) }}" />

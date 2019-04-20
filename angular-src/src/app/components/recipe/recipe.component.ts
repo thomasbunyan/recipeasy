@@ -49,8 +49,13 @@ export class RecipeComponent implements OnInit {
           this.router.navigate(["/recipes"]);
         } else {
           this.recipe = data.recipe;
+          if (this.recipe.original.ingredients.length !== 0) {
+            this.recipe.ingredients = this.recipe.original.ingredients;
+            this.recipe.nutrition = this.recipe.original.nutrients;
+          } else {
+            this.recipe["nutrition"] = this.recipeService.getNutrition(this.recipe);
+          }
           this.formatServings();
-          this.recipe["nutrition"] = this.recipeService.getNutrition(this.recipe);
           this.titleService.setTitle(this.recipe.title);
           this.userService.getUserData().subscribe((data) => {
             if (data.success) {

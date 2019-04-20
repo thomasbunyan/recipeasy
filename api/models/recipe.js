@@ -48,16 +48,13 @@ const RecipeSchema = mongoose.Schema({
     {
       ingredient: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Ingredient",
-        required: true
+        ref: "Ingredient"
       },
       unit: {
-        type: String,
-        required: true
+        type: String
       },
       amount: {
-        type: Number,
-        required: true
+        type: Number
       }
     }
   ],
@@ -72,7 +69,7 @@ const RecipeSchema = mongoose.Schema({
     required: true
   },
   timestamp: {
-    type: Date,
+    type: Number,
     required: true
   },
   score: {
@@ -84,6 +81,16 @@ const RecipeSchema = mongoose.Schema({
     type: Number,
     required: true,
     default: 0
+  },
+  original: {
+    ingredients: {
+      type: Array,
+      required: false
+    },
+    nutrients: {
+      type: Array,
+      required: false
+    }
   },
   tags: [
     {

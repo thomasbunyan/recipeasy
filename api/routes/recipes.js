@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const checkAuth = require("../middleware/check-auth");
+const leven = require("leven");
 const multer = require("multer");
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -25,6 +26,7 @@ router.post("/", checkAuth, (req, res, next) => {
     image: req.body.image,
     public: req.body.public,
     mealType: req.body.mealType,
+    cuisine: req.body.cuisine,
     prepTime: req.body.prepTime,
     cookTime: req.body.cookTime,
     difficulty: req.body.difficulty,
@@ -32,14 +34,13 @@ router.post("/", checkAuth, (req, res, next) => {
     ingredients: req.body.ingredients,
     method: req.body.method,
     author: req.userData.user.username,
-    timestamp: new Date(),
+    timestamp: new Date().getTime(),
     score: 0,
     views: 0
   });
   recipe
     .save()
     .then((doc) => {
-      console.log(doc.image);
       res.status(201).json({
         success: true,
         message: "Recipe added",
@@ -133,75 +134,59 @@ router.get("/selection", checkAuth, (req, res, next) => {
 });
 
 router.get("/recommended", (req, res, next) => {
-  const query = { username: "tom" };
+  const query = { username: "Recipeasy" };
   User.findOne(query)
     .populate("recipes.saved.recipe recipes.history.recipe")
     .exec()
     .then((user) => {
       getRecommended(user.recipes.saved, user.recipes.history, (recipes) => {
-        res.status(200).json({
+        return res.status(200).json({
           success: true,
           recipes: recipes
         });
       });
     })
     .catch((err) => {
-      res.status(500).json({
+      return res.status(500).json({
         success: false,
         error: err
       });
     });
 });
 function getRecommended(saved, history, cb) {
-  let ingredients = getIngredients(saved);
-  ingredients = ingredients.concat(getIngredients(history));
+  const combinedRecipes = [];
+  saved.forEach((e) => {
+    combinedRecipes.push(e.recipe);
+  });
+  history.forEach((e) => {
+    combinedRecipes.push(e.recipe);
+  });
   const savedId = saved.map((e) => {
     return e.recipe._id;
   });
-  Recipe.find({ $and: [{ "ingredients.ingredient": { $in: ingredients } }, { _id: { $nin: savedId } }] })
+  Recipe.find({ _id: { $nin: savedId } })
     .exec()
-    .then((recipes) => {
-      recipes.sort((a, b) => {
-        return matches(ingredients, a) - matches(ingredients, b);
+    .then((docs) => {
+      combinedRecipes.forEach((recipe) => {
+        docs.forEach((recipeCompare) => {
+          if (recipe._id == recipeCompare._id) return cb("none");
+          recipe.tags.forEach((tag) => {
+            let score = 0;
+            recipeCompare.tags.forEach((tagCompare) => {
+              score = score + leven(tag.toUpperCase(), tagCompare.toUpperCase());
+            });
+            recipeCompare["likenessScore"] = score;
+            if (recipe.mealType != recipeCompare.mealType) {
+              recipeCompare.likenessScore = recipeCompare.likenessScore + 20;
+            }
+          });
+          docs.sort((a, b) => {
+            return a.likenessScore - b.likenessScore;
+          });
+          return cb(docs.slice(0, 30));
+        });
       });
-      cb(recipes);
     });
-}
-function matches(list, recipe) {
-  let counter = 0;
-  recipe.ingredients.forEach((e) => {
-    if (list.indexOf(e.ingredient) > -1) {
-      counter++;
-    }
-  });
-  return counter;
-}
-function getIngredients(recipes) {
-  const ingredients = {};
-  recipes.forEach((recipe) => {
-    recipe.recipe.ingredients.forEach((ingredient) => {
-      const key = ingredient.ingredient;
-      if (ingredients[key]) {
-        ingredients[key] = ingredients[key] + 1;
-      } else {
-        ingredients[key] = 1;
-      }
-    });
-  });
-
-  let ingredientCount = [];
-  for (var key in ingredients) {
-    ingredientCount.push({ ingredient: key, count: ingredients[key] });
-  }
-  ingredientCount = ingredientCount
-    .sort((a, b) => {
-      return b.count - a.count;
-    })
-    .slice(0, 10);
-  const ingredientsList = ingredientCount.map((e) => {
-    return e.ingredient;
-  });
-  return ingredientsList;
 }
 
 // Get the recipe and update the views.

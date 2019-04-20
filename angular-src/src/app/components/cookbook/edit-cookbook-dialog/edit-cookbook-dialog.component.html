@@ -38,7 +38,7 @@
         <div class="image">
           <img [ngClass]="{ hidden: !cookbookImage }" src="{{ cookbookImage }}" #rImg />
         </div>
-        <input type="file" accept="image/png, image/jpeg" (change)="uploadImage($event, rImg)" />
+        <input type="file" accept="image/*" (change)="uploadImage($event, rImg)" />
       </div>
     </div>
     <div class="public-switch noselect">

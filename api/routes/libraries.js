@@ -44,7 +44,7 @@ router.delete("/:id", (req, res, next) => {
 
 router.get("/dash", (req, res, next) => {
   Dash.find({})
-    .populate("libraries recipes top.day top.week top.month top.all")
+    .populate("libraries recipes trending top.day top.week top.month top.all")
     .populate({
       path: "libraries",
       populate: {

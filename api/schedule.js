@@ -19,9 +19,14 @@ function updateDash() {
       }
       addTop(d, (d) => {
         addLibraries(d, (d) => {
+          console.log("Libraries added");
           addRecipes(d, (d) => {
+            console.log("Recipes added");
             calcTrending(d, (d) => {
+              console.log("Trending added");
               calcSearches(d, (d) => {
+                console.log("Searches added");
+                // console.log(d);
                 Dash.findByIdAndUpdate(d._id, d)
                   .exec()
                   .then((doc) => {});
@@ -53,6 +58,7 @@ function addTop(d, callback) {
       .filter((e) => {
         return e.timestamp > tsMonth;
       })
+      .slice(0, 10)
       .map((e) => {
         return e._id;
       });
@@ -60,6 +66,7 @@ function addTop(d, callback) {
       .filter((e) => {
         return e.timestamp > tsWeek;
       })
+      .slice(0, 10)
       .map((e) => {
         return e._id;
       });
@@ -67,6 +74,7 @@ function addTop(d, callback) {
       .filter((e) => {
         return e.timestamp > tsDay;
       })
+      .slice(0, 10)
       .map((e) => {
         return e._id;
       });
@@ -133,12 +141,13 @@ function addRecipes(d, callback) {
 }
 
 function calcTrending(d, callback) {
-  Recipe.find()
+  Recipe.find({ score: { $gte: 5 } })
     .exec()
     .then((recipes) => {
-      const ratings = recipes.map((e) => {
-        const start = 1536588468;
-        const t = start - e.date;
+      console.log(recipes[0]);
+      let ratings = recipes.map((e) => {
+        const start = 1550448000;
+        const t = e.timestamp - start;
         const x = e.score;
         let y = 0;
         if (x > 0) y = 1;
@@ -148,12 +157,15 @@ function calcTrending(d, callback) {
         const score = Math.log10(z) + (y * t) / 45000;
         return { id: e._id, score: score };
       });
-      ratings
+      ratings = ratings
         .sort((a, b) => {
           return a.score - b.score;
         })
         .slice(0, 10);
-      // console.log(ratings);
+      console.log(ratings);
+      d.trending = ratings.map((e) => {
+        return e.id;
+      });
       callback(d);
     })
     .catch((err) => {
@@ -179,7 +191,7 @@ function calcSearches(d, callback) {
 
 schedule.startSimilarityMatching = function() {
   Recipe.find({})
-    .populate("ingredients.ingredient")
+    .populate()
     .exec()
     .then((docs) => {
       docs.forEach((recipe) => {
@@ -276,5 +288,112 @@ schedule.startSimilarityMatching = function() {
 //       });
 //   }
 // };
+
+// Add the recipes.
+const fs = require("fs");
+const data = JSON.parse(fs.readFileSync("recipes.txt", "utf8"));
+
+schedule.addRecipes = function() {
+  return;
+  const i = 0;
+  for (let i = 0; i < 10000; i++) {
+    let recipe = new Recipe({
+      title: data[i].title,
+      description: "Enjoy one of our own recipes!",
+      image: data[i].image,
+      public: true,
+      mealType: data[i].mealType,
+      cuisine: data[i].cuisine,
+      prepTime: data[i].prepTime,
+      cookTime: data[i].cookTime,
+      difficulty: data[i].difficulty,
+      servings: data[i].servings,
+      original: {
+        nutrients: data[i].nutrition,
+        ingredients: data[i].ingredients
+      },
+      author: data[i].author,
+      timestamp: randomDate(new Date(2019, 1, 18), new Date()),
+      score: data[i].score,
+      views: data[i].views
+    });
+    recipe
+      .save()
+      .then((e) => {
+        // console.log("a");
+      })
+      .catch((err) => {
+        console.log("*******************Index:", i);
+        // console.log(err);
+      });
+  }
+};
+
+function randomDate(start, end) {
+  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime())).getTime();
+}
+
+schedule.applyTags = function() {
+  Recipe.find({})
+    .exec()
+    .then((recipes) => {
+      recipes.forEach((e) => {
+        const tags = addTags(e);
+        Recipe.findByIdAndUpdate(e._id, { tags: tags })
+          .exec()
+          .then((update) => {});
+      });
+    })
+    .catch((err) => {
+      console.log("error");
+    });
+};
+
+function addTags(recipe) {
+  const tags = [];
+
+  // User defined types.
+  tags.push(recipe.mealType);
+  // tags.push(recipe.cuisine);
+
+  // Time.
+  const time = recipe.cookTime + recipe.prepTime;
+  if (time < 900) {
+    tags.push("quick", "instant", "15 minutes", "15");
+  } else if (time < 1800) {
+    tags.push("quick", "short", "30 minutes", "30", "half hour");
+  } else if (time < 3600) {
+    tags.push("average", "60 minutes", "hour");
+  } else {
+    tags.push("long", "time consuming", "lengthy", "slow cooking", "slow cook");
+  }
+
+  // Difficulty.
+  switch (recipe.difficulty) {
+    case 0:
+      tags.push("easy", "simple", "beginner", "novice", "accessible", "straightforward");
+      break;
+    case 1:
+      tags.push("medium", "average", "experienced", "skill", "complicated", "resources");
+      break;
+    case 2:
+      tags.push("difficult", "ambitious", "challenging", "tough", "professional");
+      break;
+  }
+
+  const ings = recipe.original.ingredients.map((e) => {
+    const name = e.ingredient;
+    return { ing: name, amount: e.amount };
+  });
+  ings.sort((a, b) => {
+    return b.amount - a.amount;
+  });
+  for (let i = 0; i < 10 && i < ings.length; i++) {
+    const name = ings[i].ing;
+    tags.push(name);
+  }
+
+  return tags;
+}
 
 module.exports = schedule;

@@ -19,7 +19,9 @@ export class CreateComponent implements OnInit {
 
   // Fields for the recipe object.
   mealType: string;
-  recipeTypes = ["Meal", "Snack", "Side", "Dessert", "Drink"];
+  cuisineType: string;
+  recipeTypes = ["main", "salad", "side", "dessert", "soup", "appetizer", "bread", "lunch", "breakfast", "beverage", "cocktail", "tea"];
+  cuisineTypes = ["american", "british", "caribbean", "chinese", "french", "greek", "indian", "italian", "japanese", "mediterranean", "mexican", "moroccan", "spanish", "thai", "turkish", "vietnamese"];
 
   title: string;
   description: string;
@@ -41,15 +43,16 @@ export class CreateComponent implements OnInit {
 
   method = [];
   recipeImage: File = null;
+  loading = false;
 
   dataSource;
   dataSource2;
   timeout: any;
 
+  page = 0;
+
   mealError = false;
-  errors = new Array(6).fill({ err: false });
-  ingErrors = new Array(5).fill({ err: false });
-  methErrors = new Array(4).fill({ err: false });
+  newErrors = new Array(9).fill({ err: false });
   canContinue = false;
 
   constructor(
@@ -70,81 +73,102 @@ export class CreateComponent implements OnInit {
   }
 
   nextPage(stepper) {
-    if (this.checkErrors(stepper, "all")) {
-      stepper.next();
-      this.canContinue = false;
-    } else {
-      console.log("Errors");
+    if (!this.checkErrors2()) {
+      const amount = stepper.scrollLeft + stepper.offsetWidth + 40;
+      if (amount + stepper.offsetWidth + 40 <= stepper.scrollWidth && stepper.scrollLeft % (stepper.offsetWidth + 40) === 0) {
+        this.page++;
+        this.canContinue = false;
+        stepper.scrollLeft = amount;
+      }
     }
   }
 
   prevPage(stepper) {
-    stepper.previous();
-    if (this.checkErrors(stepper, "all")) {
-      this.canContinue = true;
-    } else {
-      this.canContinue = false;
+    const amount = stepper.scrollLeft - (stepper.offsetWidth + 40);
+    if (amount >= 0 && stepper.scrollLeft % (stepper.offsetWidth + 40) === 0) {
+      this.page--;
+      stepper.scrollLeft = amount;
     }
   }
 
-  checkErrors(stepper, index) {
-    this.canContinue = false;
-    const page = stepper.selectedIndex;
-    if (page === 0) {
-      if (this.mealType !== undefined) {
-        this.errors[0] = false;
-        return true;
-      } else {
-        this.errors[0] = true;
-      }
-    } else if (page === 1) {
-      const details = {
-        title: this.title,
-        description: this.description,
-        prepTime: this.prepTime,
-        cookTime: this.cookTime,
-        difficulty: this.difficulty,
-        servings: this.servings
-      };
-      const allErrs = this.recipeValidateService.validateDetails(details);
-      if (index !== "all") {
-        this.errors[index] = allErrs[index];
-      } else {
-        this.errors = allErrs;
-      }
-      const errs = allErrs.filter((e) => {
-        return e.err;
-      });
-      if (errs.length === 0) {
-        this.canContinue = true;
-        return true;
-      }
-    } else if (page === 2) {
-      const ingredient = {
-        food: this.food,
-        amount: this.amount,
-        unit: this.unit,
-        detail: this.detail
-      };
-      const allErrs = this.recipeValidateService.validateIngredient(ingredient);
-      if (index !== "all") {
-        this.ingErrors[index] = allErrs[index];
-      } else {
-        if (this.ingredients.length > 0) {
-          return true;
+  checkErrors2() {
+    let err: any;
+    switch (this.page) {
+      case 0:
+        err = this.recipeValidateService.validateTitle(this.title);
+        this.newErrors[0] = err;
+        if (!err.err) {
+          this.canContinue = true;
         }
-        this.ingErrors[4] = { err: true };
-      }
-      const errs = allErrs.filter((e) => {
-        return e.err;
-      });
-    } else if (page === 3) {
-      if (this.method.length === 0) {
-        this.methErrors[0] = { err: true, msg: "Please add some instructions for the recipe." };
-      } else {
-        return true;
-      }
+        return err.err;
+      case 1:
+        err = this.recipeValidateService.validateDescription(this.description);
+        this.newErrors[1] = err;
+        if (!err.err) {
+          this.canContinue = true;
+        }
+        return err.err;
+      case 2:
+        if (!this.mealType) {
+          this.newErrors[2] = true;
+          return true;
+        } else {
+          this.newErrors[2] = false;
+          this.canContinue = true;
+          return false;
+        }
+      case 3:
+        if (!this.cuisineType) {
+          this.newErrors[3] = true;
+          return true;
+        } else {
+          this.newErrors[3] = false;
+          this.canContinue = true;
+          return false;
+        }
+      case 4:
+        err = this.recipeValidateService.validateTime({ prepTime: this.prepTime, cookTime: this.cookTime });
+        this.newErrors[4] = err;
+        if (!err.err) {
+          this.canContinue = true;
+        }
+        return err.err;
+      case 5:
+        err = this.recipeValidateService.validateServings(this.servings);
+        this.newErrors[5] = err;
+        if (!err.err) {
+          this.canContinue = true;
+        }
+        return err.err;
+      case 6:
+        err = this.recipeValidateService.validateDifficulty(this.difficulty);
+        this.newErrors[6] = err;
+        if (!err.err) {
+          this.canContinue = true;
+        }
+        return err.err;
+      case 7:
+        if (this.ingredients.length === 0) {
+          this.newErrors[7] = { err: true, msg: "Please add some ingredients to your recipe." };
+          this.canContinue = false;
+        } else {
+          this.newErrors[7] = { err: false };
+          this.canContinue = true;
+        }
+        return this.newErrors[7].err;
+      case 8:
+        if (this.method.length === 0) {
+          this.newErrors[8] = { err: true, msg: "Please add some instructions for your recipe." };
+          this.canContinue = false;
+        } else {
+          this.newErrors[8] = { err: false };
+          this.canContinue = true;
+        }
+        return this.newErrors[8].err;
+      default:
+        console.log("Error page");
     }
+
     return false;
   }
 
@@ -159,7 +183,6 @@ export class CreateComponent implements OnInit {
       this.method.push(step);
       this.dataSource2._updateChangeSubscription();
       this.canContinue = true;
-      this.methErrors[0].err = false;
     }
   }
   removeStep(i) {
@@ -192,6 +215,12 @@ export class CreateComponent implements OnInit {
   uploadImage(e, image) {
     if (e.target.files && e.target.files[0]) {
       this.recipeImage = <File>e.target.files[0];
+      if (this.recipeImage.type.split("/")[0] !== "image") {
+        this.recipeImage = undefined;
+        this.newErrors[9] = { err: true, msg: "Bad file type, make sure it's an image" };
+        return;
+      }
+      this.newErrors[9] = { err: false };
       const reader = new FileReader();
       reader.onload = (e: any) => {
         image.src = e.target.result;
@@ -213,7 +242,7 @@ export class CreateComponent implements OnInit {
             .to("g");
           e.unit = "g";
         } catch (e) {
-          console.log("Can't convert");
+          // console.log("Can't convert");
         }
       }
       return e;
@@ -225,48 +254,43 @@ export class CreateComponent implements OnInit {
       image: "",
       public: this.public,
       mealType: this.mealType,
+      cuisine: this.cuisineType,
       prepTime: this.generalService.getSeconds(this.prepTime),
       cookTime: this.generalService.getSeconds(this.cookTime),
       difficulty: this.difficulty,
       servings: parseInt(this.servings, 10),
       ingredients: ing,
-      method: this.method
+      method: this.method,
+      author: JSON.parse(localStorage.getItem("user")).username
     };
+    recipeData["tags"] = this.addTags(recipeData);
 
-    this.errors = this.recipeValidateService.validateRecipe(recipeData);
-    let anyError = false;
-    for (let i = 0; i < this.errors.length; i++) {
-      if (this.errors[i].err) {
-        anyError = true;
-        console.log("Validation errors", this.errors[i].msg);
-      }
-    }
+    // this.errors = this.recipeValidateService.validateRecipe(recipeData);
+    // let anyError = false;
+    // for (let i = 0; i < this.errors.length; i++) {
+    //   if (this.errors[i].err) {
+    //     anyError = true;
+    //     console.log("Validation errors", this.errors[i].msg);
+    //   }
+    // }
 
-    if (!anyError) {
-      recipeData["tags"] = this.addTags(recipeData);
-      if (this.recipeImage) {
-        const fd = new FormData();
-        fd.append("recipeImage", this.recipeImage, this.recipeImage.name);
-        this.recipeService.addRecipeImage(fd).subscribe((data) => {
-          recipeData.image = data.path;
-          const username = JSON.parse(localStorage.getItem("user")).username;
-          const recipe = this.recipeValidateService.generateRecipe(recipeData, username);
-          this.recipeService.addRecipe(recipe).subscribe((data) => {
-            if (data.success) {
-              this.userService.addToAuthor(data.recipe._id, "recipes");
-              this.router.navigate(["/recipe" + data.recipe._id]);
-            }
-          });
-        });
-      } else {
-        const username = JSON.parse(localStorage.getItem("user")).username;
-        const recipe = this.recipeValidateService.generateRecipe(recipeData, username);
-        this.recipeService.addRecipe(recipe).subscribe((data) => {
+    if (this.recipeImage) {
+      this.newErrors[9] = { err: false };
+      const fd = new FormData();
+      fd.append("recipeImage", this.recipeImage, this.recipeImage.name);
+      this.recipeService.addRecipeImage(fd).subscribe((data) => {
+        recipeData.image = data.path;
+        // const username = JSON.parse(localStorage.getItem("user")).username;
+        // const recipe = this.recipeValidateService.generateRecipe(recipeData, username);
+        this.recipeService.addRecipe(recipeData).subscribe((data) => {
           if (data.success) {
+            this.userService.addToAuthor(data.recipe._id, "recipes");
             this.router.navigate(["/recipe" + data.recipe._id]);
           }
         });
-      }
+      });
+    } else {
+      this.newErrors[9] = { err: true, msg: "Please upload an image for your recipe" };
     }
     return;
   }
@@ -409,16 +433,14 @@ export class CreateComponent implements OnInit {
         time = value;
       }
     }
-    let num = 3;
     if (type === "prep") {
       this.prepTime = time;
-      num = 2;
     } else {
       this.cookTime = time;
-      this.errors[num] = { err: false };
+      this.newErrors[this.page] = { err: false };
     }
     if (time !== "") {
-      this.checkErrors(stepper, num);
+      this.checkErrors2();
     }
   }
   enterInt(key) {
@@ -452,10 +474,12 @@ export class CreateComponent implements OnInit {
         this.food = undefined;
         this.ingredients.push(data);
         this.dataSource._updateChangeSubscription();
+        this.checkErrors2();
       }
     });
   }
   removeIngredient(i) {
+    this.checkErrors2();
     this.ingredients.splice(i, 1);
     this.dataSource._updateChangeSubscription();
   }
@@ -469,6 +493,7 @@ export class CreateComponent implements OnInit {
   }
 
   getIngredients() {
+    this.loading = true;
     const query = this.food;
     if (query === "" || query === undefined) {
       return false;
@@ -480,6 +505,7 @@ export class CreateComponent implements OnInit {
     this.timeout = setTimeout(() => {
       this.recipeValidateService.getIngredients(query).subscribe((data) => {
         this.ingredientsList = data.ingredients;
+        this.loading = false;
       });
     }, 200);
   }

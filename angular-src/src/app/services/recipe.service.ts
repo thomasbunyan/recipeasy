@@ -65,6 +65,13 @@ export class RecipeService {
       .map((res) => res.json());
   }
 
+  getRecommended() {
+    const headers = new Headers();
+    headers.append("Authorization", localStorage.getItem("id_token"));
+    headers.append("Content-Type", "application/json");
+    return this.http.get("http://localhost:3000/recipes/recommended", { headers: headers }).map((res) => res.json());
+  }
+
   getRecipesBySelection(selection) {
     const headers = new Headers();
     headers.append("Authorization", localStorage.getItem("id_token"));

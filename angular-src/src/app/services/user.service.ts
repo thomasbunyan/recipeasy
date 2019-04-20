@@ -117,11 +117,11 @@ export class UserService {
     // console.log(user);
     // console.log(update);
     // console.log(dataID);
-    const userData = Object.assign({}, user.data);
+    const userData = this.reduceData(Object.assign({}, user.data), update.data);
     const data = [];
     if (update.data === "recipes") {
       if (update.type === "save") {
-        const index = userData.saved.findIndex((x) => x.recipe === dataID || x.recipe._id === dataID);
+        const index = userData.saved.findIndex((x) => x.recipe === dataID);
         if (index === -1) {
           userData.saved.push({
             recipe: dataID,
@@ -131,7 +131,7 @@ export class UserService {
           userData.saved.splice(index, 1);
         }
       } else if (update.type === "vote") {
-        const index = userData.voted.findIndex((x) => x.recipe === dataID || x.recipe._id === dataID);
+        const index = userData.voted.findIndex((x) => x.recipe === dataID);
         if (index === -1) {
           userData.voted.push({
             recipe: dataID,
@@ -151,7 +151,7 @@ export class UserService {
         });
       } else if (update.type === "history") {
         const index = userData.history.findIndex((e) => {
-          if (e.recipe._id === dataID) {
+          if (e.recipe === dataID) {
             return true;
           }
         });
@@ -203,11 +203,39 @@ export class UserService {
     const headers = new Headers();
     headers.append("Authorization", localStorage.getItem("id_token"));
     headers.append("Content-Type", "application/json");
+    // Remove populated fields.
     return this.http
       .patch("http://localhost:3000/users/" + user.id, data, {
         headers: headers
       })
       .map((res) => res.json());
+  }
+
+  private reduceData(userData, type) {
+    if (type === "recipes") {
+      userData.saved.forEach((e) => {
+        if (e.recipe._id) {
+          e.recipe = e.recipe._id;
+        }
+      });
+      userData.history.forEach((e) => {
+        if (e.recipe._id) {
+          e.recipe = e.recipe._id;
+        }
+      });
+      userData.author.forEach((e) => {
+        if (e.recipe._id) {
+          e.recipe = e.recipe._id;
+        }
+      });
+      userData.voted.forEach((e) => {
+        if (e.recipe._id) {
+          e.recipe = e.recipe._id;
+        }
+      });
+    } else if (type === "cookbooks") {
+    }
+    return userData;
   }
 
   // ? Private functions
