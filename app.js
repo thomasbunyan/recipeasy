@@ -29,7 +29,7 @@ const libraries = require("./api/routes/libraries");
 const dashes = require("./api/routes/dashes");
 
 //Port
-const port = process.env.POST || 8080;
+const port = process.env.PORT || 8080;
 
 app.use(cors());
 // app.use((req, res, next) => {
