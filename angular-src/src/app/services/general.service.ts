@@ -1,14 +1,13 @@
 import { Injectable } from "@angular/core";
 import { Http, Headers } from "@angular/http";
 import { CookieService } from "ngx-cookie-service";
-import { AuthService } from "./auth.service";
 import { Router } from "@angular/router";
 
 @Injectable({
   providedIn: "root"
 })
 export class GeneralService {
-  constructor(private http: Http, private cookies: CookieService, private authService: AuthService, private router: Router) {}
+  constructor(private http: Http, private cookies: CookieService, private router: Router) {}
 
   getDash() {
     const headers = new Headers();
@@ -32,7 +31,6 @@ export class GeneralService {
       const user = JSON.parse(this.cookies.get("user"));
       return user;
     } catch (e) {
-      this.authService.logout();
       this.router.navigate(["/"]);
     }
   }
