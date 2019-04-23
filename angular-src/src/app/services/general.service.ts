@@ -171,6 +171,6 @@ export class GeneralService {
     if (image.includes("http")) {
       return image;
     }
-    return "http://www.recipeazy.uk/uploads/" + image;
+    return "http://www.recipeazy.uk/" + image;
   }
 }
