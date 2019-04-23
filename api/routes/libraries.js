@@ -5,7 +5,7 @@ const checkAuth = require("../middleware/check-auth");
 const Library = require("../models/library");
 const Dash = require("../models/dash");
 
-router.post("/", checkAuth, (req, res, next) => {
+router.post("/", (req, res, next) => {
   const library = new Library({
     title: req.body.title,
     description: req.body.description,
