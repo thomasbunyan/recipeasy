@@ -13,11 +13,10 @@ export class UserService {
   getUserData() {
     const user = this.generalService.getUser().id;
     const headers = new Headers();
-    console.log(localStorage.getItem("id_token"));
     headers.append("Authorization", localStorage.getItem("id_token"));
     headers.append("Content-Type", "application/json");
     return this.http
-      .get("users/" + user, {
+      .get("/users/" + user, {
         headers: headers
       })
       .map((res) => res.json());

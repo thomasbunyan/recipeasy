@@ -5267,11 +5267,10 @@ var UserService = /** @class */ (function () {
     UserService.prototype.getUserData = function () {
         var user = this.generalService.getUser().id;
         var headers = new _angular_http__WEBPACK_IMPORTED_MODULE_1__["Headers"]();
-        console.log(localStorage.getItem("id_token"));
         headers.append("Authorization", localStorage.getItem("id_token"));
         headers.append("Content-Type", "application/json");
         return this.http
-            .get("users/" + user, {
+            .get("/users/" + user, {
             headers: headers
         })
             .map(function (res) { return res.json(); });
