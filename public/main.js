@@ -4417,6 +4417,7 @@ var GeneralService = /** @class */ (function () {
     GeneralService.prototype.getUser = function () {
         try {
             var user = JSON.parse(this.cookies.get("user"));
+            console.log(user);
             return user;
         }
         catch (e) {
