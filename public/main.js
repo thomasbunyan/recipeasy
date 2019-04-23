@@ -4567,7 +4567,7 @@ var GeneralService = /** @class */ (function () {
         if (image.includes("http")) {
             return image;
         }
-        return "http://www.recipeazy.uk/uploads/" + image.split("\\")[1];
+        return "http://www.recipeazy.uk/uploads/" + image;
     };
     GeneralService = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({
