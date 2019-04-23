@@ -29,7 +29,6 @@ export class GeneralService {
   getUser() {
     try {
       const user = JSON.parse(this.cookies.get("user"));
-      console.log(user);
       return user;
     } catch (e) {
       this.router.navigate(["/"]);

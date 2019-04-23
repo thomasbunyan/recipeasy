@@ -4417,7 +4417,6 @@ var GeneralService = /** @class */ (function () {
     GeneralService.prototype.getUser = function () {
         try {
             var user = JSON.parse(this.cookies.get("user"));
-            console.log(user);
             return user;
         }
         catch (e) {
@@ -5268,6 +5267,7 @@ var UserService = /** @class */ (function () {
     UserService.prototype.getUserData = function () {
         var user = this.generalService.getUser().id;
         var headers = new _angular_http__WEBPACK_IMPORTED_MODULE_1__["Headers"]();
+        console.log(localStorage.getItem("id_token"));
         headers.append("Authorization", localStorage.getItem("id_token"));
         headers.append("Content-Type", "application/json");
         return this.http
