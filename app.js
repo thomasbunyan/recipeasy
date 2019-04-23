@@ -5,15 +5,16 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const schedule = require("node-schedule");
 const scheduleFunctions = require("./api/schedule");
+const path = require("path");
 require("dotenv").config();
 
 // Connect to database
-mongoose.connect(process.env.MLAB_DB, {
+mongoose.connect(process.env.MONGO_URI, {
   useCreateIndex: true,
   useNewUrlParser: true
 });
 mongoose.connection.on("connected", () => {
-  console.log("Connected to database: " + process.env.MLAB_DB);
+  console.log("Connected to database: " + process.env.MONGO_URI);
 });
 mongoose.connection.on("error", (err) => {
   console.log("Database error: " + err);
@@ -28,7 +29,7 @@ const libraries = require("./api/routes/libraries");
 const dashes = require("./api/routes/dashes");
 
 //Port
-const port = 3000;
+const port = process.env.PORT || 8080;
 
 app.use(cors());
 // app.use((req, res, next) => {
@@ -46,6 +47,7 @@ app.use(bodyParser.json());
 
 // Uploaded images.
 app.use("/uploads", express.static("uploads"));
+app.use(express.static(path.join(__dirname, "public")));
 
 // Routes
 app.use("/users", users);
@@ -56,27 +58,32 @@ app.use("/libraries", libraries);
 app.use("/dashes", dashes);
 
 // Invalid route.
-app.use((req, res, next) => {
-  const error = new Error("Not found");
-  error.status = 404;
-  next(error);
+app.get("/", (req, res) => {
+  res.send("Not found");
 });
-app.use((error, req, res, next) => {
-  res.status(error.status || 500);
-  res.json({
-    error: {
-      message: error.message
-    }
-  });
+// app.use((req, res, next) => {
+//   const error = new Error("Not found");
+//   error.status = 404;
+//   next(error);
+// });
+// app.use((error, req, res, next) => {
+//   res.status(error.status || 500);
+//   res.json({
+//     error: {
+//       message: error.message
+//     }
+//   });
+// });
+
+schedule.scheduleJob("*/15 * * * *", () => {
+  scheduleFunctions.startAnalytics();
+});
+schedule.scheduleJob("*/20 * * * *", () => {
+  scheduleFunctions.startSimilarityMatching();
 });
 
-// scheduleFunctions.startAnalytics();
-// scheduleFunctions.startSimilarityMatching();
-schedule.scheduleJob("*/25 * * * *", () => {
-  // scheduleFunctions.startAnalytics();
-});
-schedule.scheduleJob("*/5 * * * *", () => {
-  // scheduleFunctions.startSimilarityMatching();
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "public/index.html"));
 });
 
 // Start server

@@ -66,30 +66,29 @@ router.post("/", (req, res) => {
                           message: "User added"
                         });
                         // TODO: Re-add this.
-                        const url = "http://localhost:4200/verify?token=" + emailToken;
-                        console.log(url);
-                        // transporter.sendMail(
-                        //   {
-                        //     from: "Recipeasy <" + process.env.EMAIL_USER + ">",
-                        //     to: doc.email,
-                        //     subject: "Confirm email",
-                        //     html: "Click to confirm: <a href='" + url + "'>" + url + "</a>"
-                        //   },
-                        //   (error, info) => {
-                        //     if (error) {
-                        //       // TODO: Remove the user from the DB.
-                        //       res.status(500).json({
-                        //         success: false,
-                        //         error: error
-                        //       });
-                        //     } else {
-                        //       res.status(201).json({
-                        //         success: true,
-                        //         message: "User added"
-                        //       });
-                        //     }
-                        //   }
-                        // );
+                        const url = "http://www.recipeazy.uk/verify?token=" + emailToken;
+                        transporter.sendMail(
+                          {
+                            from: "Recipeasy <" + process.env.EMAIL_USER + ">",
+                            to: doc.email,
+                            subject: "Confirm email",
+                            html: "Click to confirm: <a href='" + url + "'>" + url + "</a>"
+                          },
+                          (error, info) => {
+                            if (error) {
+                              // TODO: Remove the user from the DB.
+                              res.status(500).json({
+                                success: false,
+                                error: error
+                              });
+                            } else {
+                              res.status(201).json({
+                                success: true,
+                                message: "User added"
+                              });
+                            }
+                          }
+                        );
                       }
                     }
                   );
@@ -218,7 +217,6 @@ router.patch("/verify", (req, res, next) => {
 
 router.patch("/verify/resend", (req, res, next) => {
   const email = req.body.email;
-  console.log(email);
   res.status(200).json({
     success: true
   });
