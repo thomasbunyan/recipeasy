@@ -31,7 +31,6 @@ export class LoginComponent implements OnInit {
   }
 
   onLoginSubmit() {
-    console.log("here");
     const user = {
       username: this.username,
       password: this.password
@@ -57,10 +56,9 @@ export class LoginComponent implements OnInit {
   onRecoverSubmit() {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (re.test(String(this.recovery).toLowerCase())) {
-      console.log("here");
+      this.router.navigate(["/"]);
     } else {
-      // Don't recover.
-      console.log("aler");
+      this.router.navigate(["/"]);
     }
   }
 }

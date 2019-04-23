@@ -41,7 +41,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.titleService.setTitle("Dashboard");
     this.sidenavService.open();
-    this.userId = JSON.parse(localStorage.getItem("user")).id;
+    this.userId = this.generalService.getUser().id;
     this.generalService.getDash().subscribe((data) => {
       this.dash = data.dash;
       this.promotedRecipes = this.dash.recipes;

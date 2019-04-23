@@ -128,7 +128,7 @@ router.get("/:id", checkAuth, (req, res, next) => {
     });
 });
 
-router.post("/image", upload.single("cookbookImage"), (req, res, next) => {
+router.post("/image", checkAuth, upload.single("cookbookImage"), (req, res, next) => {
   const path = req.file.path;
   res.status(200).json({
     success: true,

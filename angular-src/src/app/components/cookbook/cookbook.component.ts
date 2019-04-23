@@ -38,37 +38,39 @@ export class CookbookComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.userId = JSON.parse(localStorage.getItem("user")).id;
-    this.cookbookId = this.route.snapshot.paramMap.get("id");
-    this.userService.addToHistory(this.cookbookId, "cookbooks");
-    this.cookbookService.getCookBookById(this.cookbookId).subscribe((data) => {
-      if (!data.success) {
-        this.router.navigate([""]);
-      } else {
-        this.cookbook = data.cookbook;
-        this.titleService.setTitle(this.cookbook.title);
-        if (JSON.parse(localStorage.getItem("user")).username === this.cookbook.author) {
-          this.owner = true;
+    this.route.params.subscribe((val) => {
+      this.userId = this.generalService.getUser().id;
+      this.cookbookId = this.route.snapshot.paramMap.get("id");
+      this.userService.addToHistory(this.cookbookId, "cookbooks");
+      this.cookbookService.getCookBookById(this.cookbookId).subscribe((data) => {
+        if (!data.success) {
+          this.router.navigate([""]);
         } else {
-          this.owner = false;
+          this.cookbook = data.cookbook;
+          this.titleService.setTitle(this.cookbook.title);
+          if (this.generalService.getUser().username === this.cookbook.author) {
+            this.owner = true;
+          } else {
+            this.owner = false;
+          }
+          this.userService.getUserData().subscribe((data) => {
+            this.usersData = data;
+            this.usersData.cookbooks.saved.map((e) => {
+              if (e.cookbook._id === this.cookbookId) {
+                this.saved = true;
+              }
+            });
+            const savedRecipes = this.usersData.recipes.saved.map((e) => {
+              return e.recipe._id;
+            });
+            this.cookbook.recipes.forEach((recipe) => {
+              if (savedRecipes.indexOf(recipe.recipe._id) > -1) {
+                recipe.recipe.saved = true;
+              }
+            });
+          });
         }
-        this.userService.getUserData().subscribe((data) => {
-          this.usersData = data;
-          this.usersData.cookbooks.saved.map((e) => {
-            if (e.cookbook._id === this.cookbookId) {
-              this.saved = true;
-            }
-          });
-          const savedRecipes = this.usersData.recipes.saved.map((e) => {
-            return e.recipe._id;
-          });
-          this.cookbook.recipes.forEach((recipe) => {
-            if (savedRecipes.indexOf(recipe.recipe._id) > -1) {
-              recipe.recipe.saved = true;
-            }
-          });
-        });
-      }
+      });
     });
   }
 

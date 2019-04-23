@@ -3,12 +3,13 @@ import { UserService } from "./user.service";
 import { RecipeService } from "./recipe.service";
 import { Observable } from "rxjs";
 import { Http, Headers } from "@angular/http";
+import { GeneralService } from "./general.service";
 
 @Injectable()
 export class RecipeValidateService {
   saveLock = false;
 
-  constructor(private userService: UserService, private recipeService: RecipeService, private http: Http) {}
+  constructor(private userService: UserService, private recipeService: RecipeService, private http: Http, private generalService: GeneralService) {}
 
   validateIngredient(ingredient) {
     const errors = new Array(4).fill({ err: false });
@@ -200,7 +201,7 @@ export class RecipeValidateService {
     return new Observable((o) => {
       if (!this.saveLock) {
         this.saveLock = true;
-        const userData = { id: JSON.parse(localStorage.getItem("user")).id, data: data.recipes };
+        const userData = { id: this.generalService.getUser().id, data: data.recipes };
         this.userService.addUserData(userData, { data: "recipes", type: "save" }, recipe._id).subscribe((data) => {
           if (!data.success) {
             console.log("Failed to toggle save");

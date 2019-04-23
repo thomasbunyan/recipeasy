@@ -55,7 +55,7 @@ router.post("/", checkAuth, (req, res, next) => {
     });
 });
 
-router.post("/image", upload.single("recipeImage"), (req, res, next) => {
+router.post("/image", checkAuth, upload.single("recipeImage"), (req, res, next) => {
   const path = req.file.path;
   res.status(200).json({
     success: true,
@@ -133,8 +133,8 @@ router.get("/selection", checkAuth, (req, res, next) => {
     });
 });
 
-router.get("/recommended", (req, res, next) => {
-  const query = { username: "Recipeasy" };
+router.get("/recommended", checkAuth, (req, res, next) => {
+  const query = { username: req.userData.user.username };
   User.findOne(query)
     .populate("recipes.saved.recipe recipes.history.recipe")
     .exec()

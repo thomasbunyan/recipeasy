@@ -7,6 +7,7 @@ import { MatDialogModule } from "@angular/material/dialog";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { MaterialModule } from "./material.module";
 import { InfiniteScrollModule } from "ngx-infinite-scroll";
+import { CookieService } from "ngx-cookie-service";
 
 import { AppComponent } from "./app.component";
 import { NavbarComponent } from "./components/navbar/navbar.component";
@@ -25,6 +26,7 @@ import { RecipeComponent } from "./components/recipe/recipe.component";
 import { CookbooksComponent } from "./components/saved-cookbooks/cookbooks.component";
 import { SavedRecipesComponent } from "./components/saved-recipes/saved-recipes.component";
 import { CookbookComponent } from "./components/cookbook/cookbook.component";
+import { InfoComponent } from "./components/info/info.component";
 
 import { EditCookbookDialogComponent } from "./components/cookbook/edit-cookbook-dialog/edit-cookbook-dialog.component";
 import { RecipeDialogComponent } from "./components/recipe-dialog/recipe-dialog.component";
@@ -49,6 +51,7 @@ import { RecipeDialogService } from "./components/recipe-dialog/recipe-dialog.se
 const appRoutes: Routes = [
   { path: "", component: HomeComponent, pathMatch: "full" },
   { path: "register", component: RegisterComponent },
+  { path: "info", component: InfoComponent },
   { path: "verify", component: VerifyComponent },
   { path: "login", component: LoginComponent },
   {
@@ -112,6 +115,7 @@ const appRoutes: Routes = [
     VerifyComponent,
     CookbooksComponent,
     CookbookComponent,
+    InfoComponent,
     HistoryComponent,
     RecommendedComponent,
     TextLimitPipe,
@@ -119,7 +123,21 @@ const appRoutes: Routes = [
     FindImagePipe
   ],
   imports: [HttpModule, FormsModule, BrowserModule, RouterModule.forRoot(appRoutes), MatDialogModule, BrowserAnimationsModule, MaterialModule, ReactiveFormsModule, InfiniteScrollModule],
-  providers: [UserValidateService, RecipeValidateService, SidenavService, AuthService, UserService, RecipeService, RecipeCreateService, CookbookService, GeneralService, RecipeDialogService, AuthGuard, Title],
+  providers: [
+    UserValidateService,
+    RecipeValidateService,
+    SidenavService,
+    AuthService,
+    UserService,
+    RecipeService,
+    RecipeCreateService,
+    CookbookService,
+    GeneralService,
+    RecipeDialogService,
+    AuthGuard,
+    Title,
+    CookieService
+  ],
   bootstrap: [AppComponent],
   entryComponents: [EditCookbookDialogComponent, RecipeDialogComponent, IngredientDialogComponent]
 })

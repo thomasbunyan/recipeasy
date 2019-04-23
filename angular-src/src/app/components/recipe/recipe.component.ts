@@ -43,7 +43,7 @@ export class RecipeComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe((val) => {
       this.recipeId = this.route.snapshot.paramMap.get("id");
-      this.user = JSON.parse(localStorage.getItem("user"));
+      this.user = this.generalService.getUser();
       this.recipeService.getRecipe(this.recipeId).subscribe((data) => {
         if (!data.success) {
           this.router.navigate(["/recipes"]);

@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 import { RecipeService } from "../../services/recipe.service";
 import { UserService } from "../../services/user.service";
 import { CookbookService } from "../../services/cookbook.service";
+import { GeneralService } from "../../services/general.service";
 import { Router } from "@angular/router";
 import { Title } from "@angular/platform-browser";
 import { RecipeDialogService } from "../recipe-dialog/recipe-dialog.service";
@@ -25,10 +26,18 @@ export class SavedRecipesComponent implements OnInit {
   savedRecipes = true;
   createdRecipes = false;
 
-  constructor(private recipeService: RecipeService, private userService: UserService, private cookbookService: CookbookService, private router: Router, private title: Title, private recipeDialog: RecipeDialogService) {}
+  constructor(
+    private recipeService: RecipeService,
+    private userService: UserService,
+    private cookbookService: CookbookService,
+    private router: Router,
+    private title: Title,
+    private recipeDialog: RecipeDialogService,
+    private generalService: GeneralService
+  ) {}
 
   ngOnInit() {
-    this.userId = JSON.parse(localStorage.getItem("user")).id;
+    this.userId = this.generalService.getUser().id;
     this.title.setTitle("Saved recipes");
 
     this.userService.getUserData().subscribe((data) => {

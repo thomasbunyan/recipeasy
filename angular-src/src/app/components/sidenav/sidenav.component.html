@@ -2,7 +2,7 @@
   <div class="wrapper">
     <div class="smallNav" [ngClass]="{ navWide: big }">
       <div class="topNav">
-        <div class="sidebarToggle"><i class="fas fa-bars" (click)="toggleSidenav(); histDrop = false; recDrop = false; cbDrop = false"></i><span># Recipeasy</span></div>
+        <div class="sidebarToggle"><i class="fas fa-bars" (click)="toggleSidenav(); histDrop = false; recDrop = false; cbDrop = false"></i><span>Recipeasy</span></div>
         <div class="navItem" [routerLinkActive]="['activeLink']" [routerLink]="['/dashboard']"><i class="fas fa-home"></i><span>Home</span></div>
         <div class="navItem" [routerLinkActive]="['activeLink']" [routerLink]="['/history']">
           <i class="fas fa-history"></i><span>History</span><i class="fas fa-caret-down" (click)="$event.stopPropagation(); histDrop = !histDrop"></i>

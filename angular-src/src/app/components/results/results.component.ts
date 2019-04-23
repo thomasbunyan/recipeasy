@@ -57,7 +57,7 @@ export class ResultsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.userId = JSON.parse(localStorage.getItem("user")).id;
+    this.userId = this.generalService.getUser().id;
     this.activatedRoute.queryParams.subscribe((params) => {
       this.searchQuery = params["search_query"];
       this.cuisine = params["cuisine"];
@@ -75,6 +75,7 @@ export class ResultsComponent implements OnInit {
         this.endOfPage = false;
         this.getData();
       }
+      this.onScroll();
     });
   }
 
@@ -197,12 +198,15 @@ export class ResultsComponent implements OnInit {
           filter["difficulty"] = parseInt(this.difficulty, 10);
         }
       }
-      if (this.timeMin !== undefined) {
+      const timeRe = /^[0-9]{2}:[0-5][0-9]$/;
+      if (this.timeMin !== undefined && timeRe.test(this.timeMin)) {
+        filter["timeMin"] = this.generalService.getSeconds(this.timeMin);
       }
-      if (this.timeMax !== undefined) {
+      if (this.timeMax !== undefined && timeRe.test(this.timeMax)) {
+        filter["timeMax"] = this.generalService.getSeconds(this.timeMax);
       }
       this.filter = filter;
-      // console.log(filter);
+      console.log(filter);
       this.filterOpen = false;
     } else {
       this.ingredients = this.servings = this.difficulty = this.timeMin = this.timeMax = undefined;
@@ -234,6 +238,14 @@ export class ResultsComponent implements OnInit {
           }
         } else if (key === "difficulty") {
           if (this.filter.difficulty !== parseInt(x.difficulty, 10)) {
+            return false;
+          }
+        } else if (key === "timeMin") {
+          if (this.filter.timeMin < x.prepTime + x.cookTime) {
+            return false;
+          }
+        } else if (key === "timeMax") {
+          if (this.filter.timeMax > x.prepTime + x.cookTime) {
             return false;
           }
         }

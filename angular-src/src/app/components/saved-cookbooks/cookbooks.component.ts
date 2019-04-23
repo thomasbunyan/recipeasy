@@ -19,7 +19,7 @@ export class CookbooksComponent implements OnInit {
   constructor(private userService: UserService, private cookbookService: CookbookService, private titleService: Title, private router: Router, private generalService: GeneralService) {}
 
   ngOnInit() {
-    this.userId = JSON.parse(localStorage.getItem("user")).id;
+    this.userId = this.generalService.getUser().id;
     this.titleService.setTitle("Your cookbooks");
     this.userService.getUserData().subscribe((data) => {
       if (!data.success) {

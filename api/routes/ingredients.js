@@ -6,7 +6,7 @@ const Ingredient = require("../models/ingredient");
 const leven = require("leven");
 
 // Get a selection of relevant recipes from a query.
-router.get("/", (req, res, next) => {
+router.get("/", checkAuth, (req, res, next) => {
   const search_query = req.query.search_query;
   const regex = new RegExp(formatQuery(search_query), "gi");
   const query = { ingredient: regex };

@@ -5,7 +5,7 @@ const checkAuth = require("../middleware/check-auth");
 const Library = require("../models/library");
 const Dash = require("../models/dash");
 
-router.post("/", (req, res, next) => {
+router.post("/", checkAuth, (req, res, next) => {
   const library = new Library({
     title: req.body.title,
     description: req.body.description,
@@ -27,7 +27,7 @@ router.post("/", (req, res, next) => {
     });
 });
 
-router.delete("/:id", (req, res, next) => {
+router.delete("/:id", checkAuth, (req, res, next) => {
   Library.findOneAndDelete(req.param.id)
     .exec()
     .then((del) => {
@@ -42,7 +42,7 @@ router.delete("/:id", (req, res, next) => {
     });
 });
 
-router.get("/dash", (req, res, next) => {
+router.get("/dash", checkAuth, (req, res, next) => {
   Dash.find({})
     .populate("libraries recipes trending top.day top.week top.month top.all")
     .populate({
@@ -76,7 +76,7 @@ router.get("/dash", (req, res, next) => {
     });
 });
 
-router.patch("/dash", (req, res, next) => {
+router.patch("/dash", checkAuth, (req, res, next) => {
   const recipes = req.body.recipes;
   res.status(200).json({
     success: true,

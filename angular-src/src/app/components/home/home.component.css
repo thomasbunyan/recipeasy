@@ -35,6 +35,38 @@
 }
 
 /******* Nav *******/
+@media screen and (max-width: 800px) {
+  #nav {
+    display: none !important;
+  }
+  #nav2 {
+    display: inline-block !important;
+  }
+}
+#nav2 {
+  display: none;
+  width: 100%;
+  padding-left: 20px;
+  font-size: 24px;
+}
+#nav2 i {
+  cursor: pointer;
+}
+.extraNav {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin-top: 20px;
+  height: auto;
+  max-height: 0px;
+  transition: all 0.3s ease-in-out;
+}
+.shown {
+  height: auto;
+  transition: all 0.3s ease-in-out;
+  max-height: 100px;
+}
+
 nav {
   width: 80%;
   margin: auto;
@@ -155,7 +187,7 @@ a {
 }
 .imageBox {
   margin: 0;
-  height: 500px;
+  height: 400px;
   min-width: 500px;
   /* background-color: rgba(0, 0, 0, 0.274); */
 }
@@ -230,6 +262,10 @@ a {
   margin: auto;
   width: 1170px;
   height: 100%;
+}
+.affiliate {
+  font-size: 24px;
+  color: #a3a3a3;
 }
 
 /******* More info *******/

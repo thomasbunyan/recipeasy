@@ -5,7 +5,7 @@ const checkAuth = require("../middleware/check-auth");
 const Library = require("../models/library");
 const Dash = require("../models/dash");
 
-router.get("/", (req, res, next) => {
+router.get("/", checkAuth, (req, res, next) => {
   Dash.find({})
     .populate("recipes top.day top.week top.month")
     .populate({
@@ -30,7 +30,7 @@ router.get("/", (req, res, next) => {
     });
 });
 
-router.patch("/", (req, res, next) => {
+router.patch("/", checkAuth, (req, res, next) => {
   const recipes = req.body.recipes;
   const libraries = req.body.libraries;
   let update = {};

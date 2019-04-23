@@ -2,15 +2,16 @@ import { Injectable } from "@angular/core";
 import { Http, Headers } from "@angular/http";
 import { Observable } from "rxjs";
 import { EmptyObservable } from "rxjs/observable/EmptyObservable";
+import { GeneralService } from "./general.service";
 
 @Injectable()
 export class UserService {
   userData: any;
-  constructor(private http: Http) {}
+  constructor(private http: Http, private generalService: GeneralService) {}
 
   // Returns the users data.
   getUserData() {
-    const user = JSON.parse(localStorage.getItem("user")).id;
+    const user = this.generalService.getUser().id;
     const headers = new Headers();
     headers.append("Authorization", localStorage.getItem("id_token"));
     headers.append("Content-Type", "application/json");
@@ -55,7 +56,7 @@ export class UserService {
 
     const update = [{ name: "history", value: history }];
     const headers = new Headers();
-    const user = JSON.parse(localStorage.getItem("user")).id;
+    const user = this.generalService.getUser().id;
     headers.append("Authorization", localStorage.getItem("id_token"));
     headers.append("Content-Type", "application/json");
     return this.http
@@ -72,7 +73,7 @@ export class UserService {
       } else {
         data = data.cookbooks;
       }
-      const user = JSON.parse(localStorage.getItem("user")).id;
+      const user = this.generalService.getUser().id;
       this.addUserData({ id: user, data: data }, { data: type, type: "history" }, id).subscribe((data) => {
         // console.log(data);
       });
@@ -86,7 +87,7 @@ export class UserService {
       } else {
         data = data.cookbooks;
       }
-      const user = JSON.parse(localStorage.getItem("user")).id;
+      const user = this.generalService.getUser().id;
       this.addUserData({ id: user, data: data }, { data: type, type: "author" }, id).subscribe((data) => {
         // console.log(data);
       });
@@ -104,7 +105,7 @@ export class UserService {
       } else {
         cookbooks.push(cookbook._id);
       }
-      const user = JSON.parse(localStorage.getItem("user")).id;
+      const user = this.generalService.getUser().id;
       this.addUserData({ id: user, data: data.cookbooks }, { data: "cookbooks", type: "save" }, cookbook._id).subscribe((data) => {});
     });
   }

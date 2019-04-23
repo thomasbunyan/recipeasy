@@ -1,6 +1,8 @@
 <div class="register">
   <nav id="nav">
-    <div class="navLeft"><a href="#" class="logo">Recipeasy</a> <a href="#" class="subPoint">About</a> <a href="#" class="subPoint">How it works</a> <a href="#" class="subPoint">Contact</a></div>
+    <div class="navLeft">
+      <a href="#" class="logo">Recipeasy</a> <a [routerLink]="['/info']" class="subPoint">About</a> <a [routerLink]="['/info']" class="subPoint">How it works</a> <a [routerLink]="['/info']" class="subPoint">Contact</a>
+    </div>
     <div class="navRight"><a class="subPoint" [routerLinkActive]="['active']" [routerLink]="['/login']">Login</a></div>
   </nav>
   <div class="content-area">

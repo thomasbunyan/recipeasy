@@ -67,7 +67,7 @@ export class CreateComponent implements OnInit {
 
   ngOnInit() {
     this.titleService.setTitle("Create a recipe");
-    this.user = JSON.parse(localStorage.getItem("user")).id;
+    this.user = this.generalService.getUser().id;
     this.dataSource = new MatTableDataSource(this.ingredients);
     this.dataSource2 = new MatTableDataSource(this.method);
   }
@@ -261,7 +261,7 @@ export class CreateComponent implements OnInit {
       servings: parseInt(this.servings, 10),
       ingredients: ing,
       method: this.method,
-      author: JSON.parse(localStorage.getItem("user")).username
+      author: this.generalService.getUser().username
     };
     recipeData["tags"] = this.addTags(recipeData);
 
@@ -280,8 +280,6 @@ export class CreateComponent implements OnInit {
       fd.append("recipeImage", this.recipeImage, this.recipeImage.name);
       this.recipeService.addRecipeImage(fd).subscribe((data) => {
         recipeData.image = data.path;
-        // const username = JSON.parse(localStorage.getItem("user")).username;
-        // const recipe = this.recipeValidateService.generateRecipe(recipeData, username);
         this.recipeService.addRecipe(recipeData).subscribe((data) => {
           if (data.success) {
             this.userService.addToAuthor(data.recipe._id, "recipes");

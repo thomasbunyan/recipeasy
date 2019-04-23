@@ -1,11 +1,12 @@
 import { Injectable } from "@angular/core";
 import { Http, Headers } from "@angular/http";
+import { CookieService } from "ngx-cookie-service";
 
 @Injectable({
   providedIn: "root"
 })
 export class GeneralService {
-  constructor(private http: Http) {}
+  constructor(private http: Http, private cookies: CookieService) {}
 
   getDash() {
     const headers = new Headers();
@@ -20,8 +21,12 @@ export class GeneralService {
 
   // Returns the phrase that is displayed on the dashboard.
   getDashPhrase() {
-    const phrase = "Welcome back Thomas";
+    const phrase = "Welcome back!";
     return phrase;
+  }
+
+  getUser() {
+    return JSON.parse(this.cookies.get("user"));
   }
 
   // Returns the time ago, from a given timestamp.

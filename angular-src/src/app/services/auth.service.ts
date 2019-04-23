@@ -1,13 +1,15 @@
 import { Injectable } from "@angular/core";
 import { Http, Headers } from "@angular/http";
 import { tokenNotExpired } from "angular2-jwt";
+import { CookieService } from "ngx-cookie-service";
+import { GeneralService } from "./general.service";
 
 @Injectable()
 export class AuthService {
   authToken: any;
   user: any;
 
-  constructor(private http: Http) {}
+  constructor(private http: Http, private cookies: CookieService, private generalService: GeneralService) {}
 
   // Register the user.
   registerUser(user) {
@@ -43,7 +45,7 @@ export class AuthService {
 
   // Get profile.
   getProfile() {
-    const user = JSON.parse(localStorage.getItem("user")).id;
+    const user = this.generalService.getUser().id;
     const headers = new Headers();
     this.loadToken();
     headers.append("Authorization", this.authToken);
@@ -64,8 +66,10 @@ export class AuthService {
       id: user.id,
       username: user.username
     };
+    this.cookies.set("user", JSON.stringify(storeUser));
+
     localStorage.setItem("id_token", "bearer " + token);
-    localStorage.setItem("user", JSON.stringify(storeUser));
+    // localStorage.setItem("user", JSON.stringify(storeUser));
     this.authToken = token;
     this.user = user;
   }
@@ -86,5 +90,6 @@ export class AuthService {
     this.user = null;
     localStorage.clear();
     sessionStorage.clear();
+    this.cookies.deleteAll();
   }
 }

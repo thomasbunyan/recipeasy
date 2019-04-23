@@ -3,6 +3,7 @@ import { AuthService } from "../../services/auth.service";
 import { SidenavService } from "../sidenav/sidenav.service";
 import { Router } from "@angular/router";
 import { UserService } from "../../services/user.service";
+import { GeneralService } from "../../services/general.service";
 
 @Component({
   selector: "app-navbar",
@@ -17,10 +18,10 @@ export class NavbarComponent implements OnInit {
   big = false;
   deleteText = false;
 
-  constructor(private authService: AuthService, private router: Router, private sidenav: SidenavService, private userService: UserService) {}
+  constructor(private authService: AuthService, private router: Router, private sidenav: SidenavService, private userService: UserService, private generalService: GeneralService) {}
 
   ngOnInit() {
-    this.user = JSON.parse(localStorage.getItem("user")).username;
+    this.user = this.generalService.getUser().username;
     this.userService.getUserData().subscribe((data) => {
       this.userData = data;
     });

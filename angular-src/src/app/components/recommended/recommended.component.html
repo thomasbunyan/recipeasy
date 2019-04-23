@@ -2,8 +2,13 @@
   <div class="wrapper">
     <h1>Recommended</h1>
     <div class="breakLine"></div>
-    <div *ngIf="loading">
-      Loading
+    <div class="loading" *ngIf="loading">
+      <div class="lds-ring">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
     </div>
     <div class="historyArea" *ngIf="!loading">
       <div class="historyTile" *ngFor="let item of recipeData">
