@@ -75,10 +75,10 @@ app.get("/", (req, res) => {
 //   });
 // });
 
-schedule.scheduleJob("*/15 * * * *", () => {
+schedule.scheduleJob("0 0 * * * *", () => {
   scheduleFunctions.startAnalytics();
 });
-schedule.scheduleJob("*/20 * * * *", () => {
+schedule.scheduleJob("0 0 0 * * *", () => {
   scheduleFunctions.startSimilarityMatching();
 });
 
