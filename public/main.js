@@ -1722,7 +1722,7 @@ var HomeComponent = /** @class */ (function () {
     }
     HomeComponent.prototype.ngOnInit = function () {
         if (this.authService.loggedIn()) {
-            this.router.navigate(["/dashboard"]);
+            // this.router.navigate(["/dashboard"]);
         }
     };
     HomeComponent = __decorate([
