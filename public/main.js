@@ -1722,7 +1722,7 @@ var HomeComponent = /** @class */ (function () {
     }
     HomeComponent.prototype.ngOnInit = function () {
         if (this.authService.loggedIn()) {
-            // this.router.navigate(["/dashboard"]);
+            this.router.navigate(["/dashboard"]);
         }
     };
     HomeComponent = __decorate([
@@ -4419,9 +4419,7 @@ var GeneralService = /** @class */ (function () {
             var user = JSON.parse(this.cookies.get("user"));
             return user;
         }
-        catch (e) {
-            this.router.navigate(["/"]);
-        }
+        catch (e) { }
     };
     // Returns the time ago, from a given timestamp.
     GeneralService.prototype.getTimeAgo = function (timeStamp) {

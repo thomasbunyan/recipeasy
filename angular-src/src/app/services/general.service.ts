@@ -30,9 +30,7 @@ export class GeneralService {
     try {
       const user = JSON.parse(this.cookies.get("user"));
       return user;
-    } catch (e) {
-      this.router.navigate(["/"]);
-    }
+    } catch (e) {}
   }
 
   // Returns the time ago, from a given timestamp.
